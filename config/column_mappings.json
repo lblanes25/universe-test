@@ -1,0 +1,55 @@
+{
+  "_comment": "Maps logical field names used by the pipeline to the raw column headers in the source CSV. When the source system changes (e.g. Archer -> new GRC), update the right-hand values only.",
+
+  "entity_id": "Audit Entity ID",
+  "entity_name": "Audit Entity Name",
+  "entity_type": "Audit Entity Type",
+  "entity_status": "Audit Entity Status",
+
+  "business_unit": "Business Unit",
+  "line_of_defense": "Line of Defense",
+  "subsidiary_bank": "Subsidiary Bank",
+  "core_audit_team": "Core Audit Team",
+  "integrated_team": "Integrated Team",
+  "audit_leader": "Audit Leader",
+  "pga_asl": "PGA/ASL",
+
+  "overall_inherent_risk": ["Overall Inherent Risk Rating", "Overall Inherent Risk"],
+  "overall_residual_risk": ["Overall Residual Risk Rating", "Overall Residual Risk"],
+
+  "handoff_to": "Hand-offs to Other Audit Entities",
+  "handoff_from": "Hand-offs from Other Audit Entities",
+
+  "primary_app": "PRIMARY IT APPLICATIONS (MAPPED)",
+  "secondary_app": "SECONDARY IT APPLICATIONS (RELATED OR RELIED ON)",
+  "primary_vendor": "PRIMARY TLM THIRD PARTY ENGAGEMENT",
+  "secondary_vendor": "SECONDARY TLM THIRD PARTY ENGAGEMENTS (RELATED)",
+  "models": "Models",
+  "prsa": "PRSA",
+  "policies": "POLICIES/STANDARDS/PROCEDURES",
+
+  "min_audit_frequency": "Minimum Audit Frequency",
+  "override_question": "Do you want to override the Minimum Audit Frequency?",
+  "override_value": "Override Minimum Audit Frequency",
+  "last_audit_date": "Last AXP (Most Recent) Audit Report Issued Date",
+
+  "risks": [
+    "Compliance",
+    "Country",
+    "Credit",
+    "External Fraud",
+    "Financial Reporting",
+    "Funding & Liquidity",
+    "Information Technology",
+    "Information Security",
+    "Model",
+    "Market",
+    "Operational",
+    "Reputational",
+    "Strategic & Business",
+    "Third Party"
+  ],
+  "risk_inherent_suffix": " Inherent Risk",
+  "risk_residual_suffix": " Residual Risk",
+  "risk_control_suffix": " Control Assessment"
+}

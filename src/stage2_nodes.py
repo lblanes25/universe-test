@@ -1,4 +1,9 @@
-"""Stage 2: build Node table."""
+"""Stage 2: build Node table.
+
+Output columns are canonical internal names. Raw CSV headers are looked up
+through :mod:`src.utils.columns` and renamed so downstream stages never
+touch source-system naming.
+"""
 from __future__ import annotations
 
 import json
@@ -6,24 +11,22 @@ from pathlib import Path
 
 import pandas as pd
 
-IDENTITY_COLS = [
-    "Audit Entity ID",
-    "Audit Entity Name",
-    "Audit Entity Type",
-    "Audit Entity Status",
-    "Business Unit",
-    "Line of Defense",
-    "Subsidiary Bank",
-    "Core Audit Team",
-    "Integrated Team",
-    "Audit Leader",
-    "PGA/ASL",
-]
+from src.utils.columns import col, resolve
 
-OVERALL_COLS_CANDIDATES = [
-    ("Overall Inherent Risk Rating", ["Overall Inherent Risk", "Overall Inherent Risk Rating"]),
-    ("Overall Residual Risk Rating", ["Overall Residual Risk", "Overall Residual Risk Rating"]),
-]
+# Canonical internal name -> config key for the raw CSV column.
+IDENTITY_MAP: dict[str, str] = {
+    "Audit Entity ID": "entity_id",
+    "Audit Entity Name": "entity_name",
+    "Audit Entity Type": "entity_type",
+    "Audit Entity Status": "entity_status",
+    "Business Unit": "business_unit",
+    "Line of Defense": "line_of_defense",
+    "Subsidiary Bank": "subsidiary_bank",
+    "Core Audit Team": "core_audit_team",
+    "Integrated Team": "integrated_team",
+    "Audit Leader": "audit_leader",
+    "PGA/ASL": "pga_asl",
+}
 
 
 def _horizontal_flag(name: str, keywords: list[str]) -> str:
@@ -36,16 +39,19 @@ def _horizontal_flag(name: str, keywords: list[str]) -> str:
 
 def build_nodes(df: pd.DataFrame, keywords_path: Path) -> pd.DataFrame:
     keywords = json.loads(Path(keywords_path).read_text(encoding="utf-8"))
-    cols = [c for c in IDENTITY_COLS if c in df.columns]
-    nodes = df[cols].copy()
+
+    nodes = pd.DataFrame()
+    for internal, key in IDENTITY_MAP.items():
+        raw = col(key)
+        if raw in df.columns:
+            nodes[internal] = df[raw].values
+
     nodes["Horizontal Flag"] = nodes["Audit Entity Name"].apply(
         lambda n: _horizontal_flag(n, keywords)
     )
-    for out_name, candidates in OVERALL_COLS_CANDIDATES:
-        for c in candidates:
-            if c in df.columns:
-                nodes[out_name] = df[c].values
-                break
-        else:
-            nodes[out_name] = None
+
+    inh_src = resolve(df, "overall_inherent_risk")
+    nodes["Overall Inherent Risk Rating"] = df[inh_src].values if inh_src else None
+    res_src = resolve(df, "overall_residual_risk")
+    nodes["Overall Residual Risk Rating"] = df[res_src].values if res_src else None
     return nodes

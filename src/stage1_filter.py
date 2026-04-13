@@ -3,14 +3,21 @@ from __future__ import annotations
 
 import pandas as pd
 
+from src.utils.columns import col
+
 SPECIAL_REVIEW_TYPES = {"Special Review", "Advisory", "Consulting", "Continuous Monitoring"}
 
 
 def filter_entities(df: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
-    type_mask = df["Audit Entity Type"].isin(SPECIAL_REVIEW_TYPES) | (
-        df["Audit Entity Type"].str.lower() != "audit"
+    type_col = col("entity_type")
+    status_col = col("entity_status")
+    id_col = col("entity_id")
+    name_col = col("entity_name")
+
+    type_mask = df[type_col].isin(SPECIAL_REVIEW_TYPES) | (
+        df[type_col].str.lower() != "audit"
     )
-    status_mask = df["Audit Entity Status"] != "Active"
+    status_mask = df[status_col] != "Active"
 
     removed_type = df[type_mask & ~status_mask]
     removed_status = df[status_mask & ~type_mask]
@@ -21,14 +28,14 @@ def filter_entities(df: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
     log_rows = []
     for _, row in removed.iterrows():
         reasons = []
-        if row["Audit Entity Type"] != "Audit":
-            reasons.append(f"type={row['Audit Entity Type']}")
-        if row["Audit Entity Status"] != "Active":
-            reasons.append(f"status={row['Audit Entity Status']}")
+        if row[type_col] != "Audit":
+            reasons.append(f"type={row[type_col]}")
+        if row[status_col] != "Active":
+            reasons.append(f"status={row[status_col]}")
         log_rows.append(
             {
-                "Audit Entity ID": row["Audit Entity ID"],
-                "Audit Entity Name": row["Audit Entity Name"],
+                "Audit Entity ID": row[id_col],
+                "Audit Entity Name": row[name_col],
                 "Removal Reason": "; ".join(reasons),
             }
         )

@@ -3,22 +3,7 @@ from __future__ import annotations
 
 import pandas as pd
 
-RISKS = [
-    "Compliance",
-    "Country",
-    "Credit",
-    "External Fraud",
-    "Financial Reporting",
-    "Funding & Liquidity",
-    "Information Technology",
-    "Information Security",
-    "Model",
-    "Market",
-    "Operational",
-    "Reputational",
-    "Strategic & Business",
-    "Third Party",
-]
+from src.utils.columns import RISKS, col, risk_cols
 
 NOT_APPLICABLE = {"not applicable", "n/a", "na", ""}
 
@@ -33,13 +18,15 @@ def _is_applicable(v) -> bool:
 
 
 def build_risk_map(df: pd.DataFrame) -> pd.DataFrame:
+    id_col = col("entity_id")
     rows = []
     for _, row in df.iterrows():
-        ent = row["Audit Entity ID"]
+        ent = row[id_col]
         for risk in RISKS:
-            inh = row.get(f"{risk} Inherent Risk")
-            res = row.get(f"{risk} Residual Risk")
-            ctrl = row.get(f"{risk} Control Assessment")
+            inh_c, res_c, ctrl_c = risk_cols(risk)
+            inh = row.get(inh_c)
+            res = row.get(res_c)
+            ctrl = row.get(ctrl_c)
             if _is_applicable(res):
                 rows.append(
                     {
