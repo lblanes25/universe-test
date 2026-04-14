@@ -52,9 +52,16 @@ OUTPUT_DIR = ROOT / "data" / "output"
 KEYWORDS = ROOT / "config" / "horizontal_keywords.json"
 
 
+def _read_table(path: Path) -> pd.DataFrame:
+    suffix = path.suffix.lower()
+    if suffix in (".xlsx", ".xlsm", ".xls"):
+        return pd.read_excel(path, dtype=str)
+    return pd.read_csv(path, dtype=str)
+
+
 def run(input_path: Path, plan_path: Path, output_dir: Path) -> dict:
     print(f"[pipeline] loading {input_path}")
-    df = pd.read_csv(input_path)
+    df = _read_table(input_path)
     print(f"[pipeline] {len(df)} rows, {len(df.columns)} columns")
 
     # Stage 1
@@ -223,7 +230,7 @@ def _load_plan(plan_path: Path) -> set[str]:
     if not plan_path.exists():
         return set()
     try:
-        pdf = pd.read_csv(plan_path)
+        pdf = _read_table(plan_path)
     except Exception:
         return set(line.strip() for line in plan_path.read_text().splitlines() if line.strip())
     col = pdf.columns[0]
