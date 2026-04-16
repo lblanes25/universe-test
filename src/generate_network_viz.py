@@ -207,41 +207,142 @@ def build_chord_data(dfs):
 
 
 
+def _group_small(values, counts, threshold=3, label="Other"):
+    """Group values with <= threshold entities into a single 'Other' bucket."""
+    keep = [v for v in values if counts.get(v, 0) > threshold]
+    small = [v for v in values if counts.get(v, 0) <= threshold]
+    mapping = {v: v for v in keep}
+    for v in small:
+        mapping[v] = label
+    result = sorted(keep)
+    if small:
+        result.append(label)
+    return result, mapping
+
+
 def build_heatmap_data(dfs):
-    """Build JSON data for the coverage heatmap."""
+    """Build JSON data for the PGA x Audit Leader coverage heatmap."""
     cov_idx = dfs["coverage"].set_index("Audit Entity ID")
+
+    # Count entities per PGA and per leader for grouping
+    pga_counts = {}
+    leader_counts = {}
+    for _, r in dfs["nodes"].iterrows():
+        pga = str(r["PGA/ASL"]).strip() if pd.notna(r.get("PGA/ASL")) and str(r["PGA/ASL"]).strip() else "Unassigned"
+        leader = str(r["Audit Leader"]).strip() if pd.notna(r.get("Audit Leader")) else "Unknown"
+        pga_counts[pga] = pga_counts.get(pga, 0) + 1
+        leader_counts[leader] = leader_counts.get(leader, 0) + 1
+
+    pgas_ordered, pga_map = _group_small(list(pga_counts.keys()), pga_counts)
+    leaders_ordered, leader_map = _group_small(list(leader_counts.keys()), leader_counts)
+
     cells = {}
     for _, r in dfs["nodes"].iterrows():
         eid = str(r["Audit Entity ID"])
-        leader = str(r["Audit Leader"])
-        bu = str(r["Business Unit"])
+        raw_pga = str(r["PGA/ASL"]).strip() if pd.notna(r.get("PGA/ASL")) and str(r["PGA/ASL"]).strip() else "Unassigned"
+        raw_leader = str(r["Audit Leader"]).strip() if pd.notna(r.get("Audit Leader")) else "Unknown"
+        pga = pga_map.get(raw_pga, "Other")
+        leader = leader_map.get(raw_leader, "Other")
         c = cov_idx.loc[eid] if eid in cov_idx.index else None
         inScope = str(c["In Scope"]) == "Yes" if c is not None else False
         overdue = str(c["Overdue Flag"]) == "Yes" if c is not None else False
         risk = str(c["Overall Residual Risk"]) if c is not None and pd.notna(c.get("Overall Residual Risk")) else "N/A"
-        key = (leader, bu)
+        key = (pga, leader)
         if key not in cells:
-            cells[key] = dict(leader=leader, bu=bu, total=0, inScope=0, overdue=0, notInScope=0, entities=[])
+            cells[key] = dict(pga=pga, leader=leader, total=0, inScope=0, overdue=0, notInScope=0, entities=[])
         cells[key]["total"] += 1
-        if inScope: cells[key]["inScope"] += 1
-        else: cells[key]["notInScope"] += 1
-        if overdue: cells[key]["overdue"] += 1
+        if inScope:
+            cells[key]["inScope"] += 1
+        else:
+            cells[key]["notInScope"] += 1
+        if overdue:
+            cells[key]["overdue"] += 1
         cells[key]["entities"].append(dict(id=eid, name=str(r["Audit Entity Name"]), risk=risk, inScope=inScope, overdue=overdue))
 
-    leaders = sorted(set(c["leader"] for c in cells.values()))
-    bus = sorted(set(c["bu"] for c in cells.values()))
     cell_list = list(cells.values())
-    leader_totals, bu_totals = {}, {}
+    pga_totals, leader_totals = {}, {}
     for c in cell_list:
-        for d, k in [(leader_totals, c["leader"]), (bu_totals, c["bu"])]:
-            if k not in d: d[k] = dict(total=0, inScope=0, overdue=0, notInScope=0)
-            d[k]["total"] += c["total"]; d[k]["inScope"] += c["inScope"]
-            d[k]["overdue"] += c["overdue"]; d[k]["notInScope"] += c["notInScope"]
-    gt = dict(total=sum(t["total"] for t in leader_totals.values()),
-              inScope=sum(t["inScope"] for t in leader_totals.values()),
-              overdue=sum(t["overdue"] for t in leader_totals.values()),
-              notInScope=sum(t["notInScope"] for t in leader_totals.values()))
-    return dict(leaders=leaders, bus=bus, cells=cell_list, leaderTotals=leader_totals, buTotals=bu_totals, grandTotal=gt)
+        for d, k in [(pga_totals, c["pga"]), (leader_totals, c["leader"])]:
+            if k not in d:
+                d[k] = dict(total=0, inScope=0, overdue=0, notInScope=0)
+            d[k]["total"] += c["total"]
+            d[k]["inScope"] += c["inScope"]
+            d[k]["overdue"] += c["overdue"]
+            d[k]["notInScope"] += c["notInScope"]
+    gt = dict(total=sum(t["total"] for t in pga_totals.values()),
+              inScope=sum(t["inScope"] for t in pga_totals.values()),
+              overdue=sum(t["overdue"] for t in pga_totals.values()),
+              notInScope=sum(t["notInScope"] for t in pga_totals.values()))
+    return dict(pgas=pgas_ordered, leaders=leaders_ordered, cells=cell_list,
+                pgaTotals=pga_totals, leaderTotals=leader_totals, grandTotal=gt)
+
+
+def build_treemap_data(dfs):
+    """Build JSON data for the coverage treemap (PGA > Audit Leader > Entity)."""
+    cov_idx = dfs["coverage"].set_index("Audit Entity ID")
+
+    pga_counts = {}
+    leader_counts = {}
+    for _, r in dfs["nodes"].iterrows():
+        pga = str(r["PGA/ASL"]).strip() if pd.notna(r.get("PGA/ASL")) and str(r["PGA/ASL"]).strip() else "Unassigned"
+        leader = str(r["Audit Leader"]).strip() if pd.notna(r.get("Audit Leader")) else "Unknown"
+        pga_counts[pga] = pga_counts.get(pga, 0) + 1
+        leader_counts[leader] = leader_counts.get(leader, 0) + 1
+
+    _, pga_map = _group_small(list(pga_counts.keys()), pga_counts)
+    _, leader_map = _group_small(list(leader_counts.keys()), leader_counts)
+
+    # Build hierarchy: PGA -> Leader -> entities
+    tree = {}
+    for _, r in dfs["nodes"].iterrows():
+        eid = str(r["Audit Entity ID"])
+        raw_pga = str(r["PGA/ASL"]).strip() if pd.notna(r.get("PGA/ASL")) and str(r["PGA/ASL"]).strip() else "Unassigned"
+        raw_leader = str(r["Audit Leader"]).strip() if pd.notna(r.get("Audit Leader")) else "Unknown"
+        pga = pga_map.get(raw_pga, "Other")
+        leader = leader_map.get(raw_leader, "Other")
+        c = cov_idx.loc[eid] if eid in cov_idx.index else None
+        inScope = str(c["In Scope"]) == "Yes" if c is not None else False
+        overdue = str(c["Overdue Flag"]) == "Yes" if c is not None else False
+        risk = str(c["Overall Residual Risk"]) if c is not None and pd.notna(c.get("Overall Residual Risk")) else "N/A"
+        conn = int(c["Connectivity Total"]) if c is not None and pd.notna(c.get("Connectivity Total")) else 0
+
+        if pga not in tree:
+            tree[pga] = {}
+        if leader not in tree[pga]:
+            tree[pga][leader] = []
+        tree[pga][leader].append(dict(id=eid, name=str(r["Audit Entity Name"]),
+                                       risk=risk, inScope=inScope, overdue=overdue, connectivity=conn))
+
+    # Convert to nested children format for D3 treemap
+    children = []
+    for pga in sorted(tree.keys()):
+        pga_children = []
+        for leader in sorted(tree[pga].keys()):
+            entities = tree[pga][leader]
+            total = len(entities)
+            in_scope = sum(1 for e in entities if e["inScope"])
+            pga_children.append(dict(
+                name=leader, children=entities,
+                total=total, inScope=in_scope,
+                coverageRate=round(in_scope / total * 100) if total else 0
+            ))
+        pga_total = sum(c["total"] for c in pga_children)
+        pga_in_scope = sum(c["inScope"] for c in pga_children)
+        children.append(dict(
+            name=pga, children=pga_children,
+            total=pga_total, inScope=pga_in_scope,
+            coverageRate=round(pga_in_scope / pga_total * 100) if pga_total else 0
+        ))
+    return dict(name="Audit Universe", children=children)
+
+
+def nodeTotal_py(node):
+    """Count total entities in a treemap node (Python-side helper)."""
+    if "total" in node:
+        return node["total"]
+    if "children" not in node:
+        return 1
+    return sum(nodeTotal_py(c) for c in node["children"])
 
 
 def generate(input_dir, output_dir):
@@ -269,14 +370,27 @@ def generate(input_dir, output_dir):
     print(f"  -> {chord_path} ({len(chord_html):,} bytes)")
 
 
-    # === Coverage Heatmap ===
+    # === Coverage Heatmap (PGA x Audit Leader) ===
     hm_data = build_heatmap_data(dfs)
-    print(f"  Heatmap: {len(hm_data['leaders'])} leaders x {len(hm_data['bus'])} BUs, {hm_data['grandTotal']['total']} entities")
+    print(f"  Heatmap: {len(hm_data['pgas'])} PGAs x {len(hm_data['leaders'])} leaders, {hm_data['grandTotal']['total']} entities")
     hm_json = json.dumps(hm_data, separators=(",",":"))
-    hm_html = _dec(_HM_B) + "const DATA = " + hm_json + ";\n" + _dec(_HM_A)
+    tpl_dir = os.path.dirname(os.path.abspath(__file__))
+    with open(os.path.join(tpl_dir, "_heatmap_template.html"), "r", encoding="utf-8") as f:
+        hm_html = f.read().replace("%%DATA_INJECTION%%", "const DATA = " + hm_json + ";")
     hm_path = os.path.join(output_dir, f"coverage_heatmap_{date_stamp}.html")
     with open(hm_path, "w", encoding="utf-8") as f: f.write(hm_html)
     print(f"  -> {hm_path} ({len(hm_html):,} bytes)")
+
+    # === Coverage Treemap ===
+    tm_data = build_treemap_data(dfs)
+    tm_total = sum(nodeTotal_py(c) for c in tm_data["children"])
+    print(f"  Treemap: {len(tm_data['children'])} PGA groups, {tm_total} entities")
+    tm_json = json.dumps(tm_data, separators=(",",":"))
+    with open(os.path.join(tpl_dir, "_treemap_template.html"), "r", encoding="utf-8") as f:
+        tm_html = f.read().replace("%%DATA_INJECTION%%", "const DATA = " + tm_json + ";")
+    tm_path = os.path.join(output_dir, f"coverage_treemap_{date_stamp}.html")
+    with open(tm_path, "w", encoding="utf-8") as f: f.write(tm_html)
+    print(f"  -> {tm_path} ({len(tm_html):,} bytes)")
 
     print(f"Done. All visualizations written to {output_dir}")
 

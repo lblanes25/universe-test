@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coverage Treemap — PGA / Audit Leader / Entity</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+:root { --bg:#0c0e13; --surface:#14171f; --border:#2a2e3a; --text:#c9d1d9; --dim:#6b7280; --bright:#f0f2f7; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; display:flex; flex-direction:column; }
+.header { text-align:center; padding:24px 32px 12px; }
+.header h1 { font-size:22px; font-weight:700; color:var(--bright); }
+.header p { font-size:13px; color:var(--dim); margin-top:6px; }
+.controls { display:flex; justify-content:center; gap:6px; padding:0 32px 16px; flex-wrap:wrap; align-items:center; }
+.controls .btn { background:#21262d; border:1px solid var(--border); color:var(--text); padding:6px 14px; border-radius:6px; font-size:11.5px; cursor:pointer; font-family:inherit; transition:all 0.15s; }
+.controls .btn:hover { background:#30363d; color:var(--bright); }
+.controls .btn.active { background:#1f6feb; border-color:#1f6feb; color:#fff; }
+.controls .sep { color:var(--border); margin:0 4px; }
+#breadcrumb { font-size:12px; color:var(--dim); padding:0 32px 8px; text-align:center; }
+#breadcrumb span { cursor:pointer; color:var(--text); }
+#breadcrumb span:hover { color:var(--bright); text-decoration:underline; }
+#breadcrumb .bc-current { color:var(--bright); font-weight:600; cursor:default; }
+#breadcrumb .bc-current:hover { text-decoration:none; }
+.treemap-wrap { flex:1; padding:0 32px 24px; min-height:0; }
+#treemap { width:100%; height:100%; min-height:500px; position:relative; }
+.tm-cell { position:absolute; overflow:hidden; border-radius:4px; border:1px solid rgba(0,0,0,0.3); cursor:pointer; transition:opacity 0.15s; display:flex; align-items:center; justify-content:center; text-align:center; }
+.tm-cell:hover { opacity:0.85; z-index:2; box-shadow:0 0 8px rgba(255,255,255,0.15); }
+.tm-label { font-size:11px; font-weight:600; color:#fff; text-shadow:0 1px 3px rgba(0,0,0,0.7); padding:4px; pointer-events:none; line-height:1.3; word-break:break-word; }
+.tm-label .tm-sub { font-size:9px; font-weight:400; opacity:0.8; display:block; margin-top:2px; font-family:'JetBrains Mono',monospace; }
+.legend { display:flex; justify-content:center; gap:14px; padding:0 32px 20px; flex-wrap:wrap; }
+.legend-item { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--dim); }
+.legend-swatch { width:14px; height:14px; border-radius:3px; }
+#tooltip { position:fixed; display:none; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px 18px; font-size:12px; line-height:1.6; pointer-events:none; z-index:100; box-shadow:0 8px 24px rgba(0,0,0,0.5); max-width:340px; }
+#tooltip .tt-title { font-size:14px; font-weight:700; color:var(--bright); margin-bottom:6px; }
+#tooltip .tt-row { display:flex; justify-content:space-between; gap:16px; }
+#tooltip .tt-label { color:var(--dim); }
+#tooltip .tt-val { color:var(--bright); font-weight:600; font-family:'JetBrains Mono',monospace; }
+.risk-dot { display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:4px; vertical-align:middle; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Audit Coverage Treemap</h1>
+  <p>Size = entity count. Color = coverage rate. Click to drill down (PGA &rarr; Audit Leader &rarr; Entities).</p>
+</div>
+<div class="controls">
+  <span style="font-size:11px;color:var(--dim);margin-right:4px;">Color by:</span>
+  <button class="btn active" data-color="coverage">Coverage Rate</button>
+  <button class="btn" data-color="risk">Risk Level</button>
+</div>
+<div id="breadcrumb"></div>
+<div class="treemap-wrap">
+  <div id="treemap"></div>
+</div>
+<div class="legend" id="legend"></div>
+<div id="tooltip"></div>
+<script>
+%%DATA_INJECTION%%
+const RISK_COLORS = {'Critical':'#ef4444','High':'#f59e0b','Medium':'#eab308','Low':'#22c55e','N/A':'#6b7280'};
+let colorMode = 'coverage';
+let currentNode = DATA;
+let navStack = [];
+
+function coverageColor(rate) {
+  if (rate >= 80) return '#166534';
+  if (rate >= 50) return '#15803d';
+  if (rate >= 25) return '#a16207';
+  if (rate > 0) return '#b45309';
+  return '#991b1b';
+}
+
+function riskColor(node) {
+  if (node.risk) return RISK_COLORS[node.risk] || RISK_COLORS['N/A'];
+  // For groups, use worst risk among children
+  const risks = flattenEntities(node);
+  const order = ['Critical','High','Medium','Low','N/A'];
+  let worst = 'N/A';
+  for (const e of risks) {
+    if (order.indexOf(e.risk) < order.indexOf(worst)) worst = e.risk;
+  }
+  return RISK_COLORS[worst] || RISK_COLORS['N/A'];
+}
+
+function flattenEntities(node) {
+  if (!node.children) return [node];
+  let result = [];
+  for (const c of node.children) result = result.concat(flattenEntities(c));
+  return result;
+}
+
+function nodeTotal(node) {
+  if (node.total !== undefined) return node.total;
+  if (!node.children) return 1;
+  return node.children.reduce((s,c) => s + nodeTotal(c), 0);
+}
+
+function nodeCovRate(node) {
+  if (node.coverageRate !== undefined) return node.coverageRate;
+  if (!node.children) return node.inScope ? 100 : 0;
+  const t = nodeTotal(node);
+  const inS = flattenEntities(node).filter(e => e.inScope).length;
+  return t > 0 ? Math.round(inS / t * 100) : 0;
+}
+
+function getColor(node) {
+  if (colorMode === 'risk') return riskColor(node);
+  return coverageColor(nodeCovRate(node));
+}
+
+// Simple squarified treemap layout
+function squarify(children, x, y, w, h) {
+  const total = children.reduce((s,c) => s + nodeTotal(c), 0);
+  if (total === 0 || children.length === 0) return [];
+  const rects = [];
+  let items = children.map(c => ({node:c, val:nodeTotal(c)})).sort((a,b) => b.val - a.val);
+  layoutStrip(items, x, y, w, h, total, rects);
+  return rects;
+}
+
+function layoutStrip(items, x, y, w, h, total, rects) {
+  if (items.length === 0) return;
+  if (items.length === 1) {
+    rects.push({node:items[0].node, x, y, w, h});
+    return;
+  }
+  const horiz = w >= h;
+  const side = horiz ? h : w;
+  let strip = [], stripSum = 0, remaining = total;
+  let bestRatio = Infinity;
+
+  for (let i = 0; i < items.length; i++) {
+    const test = [...strip, items[i]];
+    const testSum = stripSum + items[i].val;
+    const stripLen = (testSum / total) * (horiz ? w : h);
+    let worstRatio = 0;
+    for (const s of test) {
+      const dim = (s.val / testSum) * side;
+      const ratio = Math.max(stripLen / dim, dim / stripLen);
+      if (ratio > worstRatio) worstRatio = ratio;
+    }
+    if (worstRatio <= bestRatio) {
+      strip = test;
+      stripSum = testSum;
+      bestRatio = worstRatio;
+    } else {
+      // Lay out the strip
+      const stripLen = (stripSum / total) * (horiz ? w : h);
+      let offset = 0;
+      for (const s of strip) {
+        const dim = (s.val / stripSum) * side;
+        if (horiz) {
+          rects.push({node:s.node, x:x+offset*0, y:y+offset, w:stripLen, h:dim});
+          // fix: along the short side
+          rects.pop();
+          rects.push({node:s.node, x, y:y+offset, w:stripLen, h:dim});
+        } else {
+          rects.push({node:s.node, x:x+offset, y, w:dim, h:stripLen});
+        }
+        offset += dim;
+      }
+      const rest = items.slice(strip.length - 0);
+      // recalculate: strip was from 0..strip.length-1, rest is strip.length..end
+      // Actually let me redo this properly
+      rects.length -= strip.length; // undo
+      break;
+    }
+  }
+  // Simplified: just do slice-and-dice for reliability
+  rects.length = rects.length; // keep what we have...
+  // Let me use a simpler reliable algorithm
+  sliceDice(items, x, y, w, h, total, rects, 0);
+}
+
+function sliceDice(items, x, y, w, h, total, rects, depth) {
+  if (items.length === 0) return;
+  if (items.length === 1) {
+    rects.push({node:items[0].node, x, y, w, h});
+    return;
+  }
+  const horiz = w >= h;
+  let offset = 0;
+  for (const item of items) {
+    const frac = item.val / total;
+    if (horiz) {
+      const cw = frac * w;
+      rects.push({node:item.node, x:x+offset, y, w:cw, h});
+      offset += cw;
+    } else {
+      const ch = frac * h;
+      rects.push({node:item.node, x, y:y+offset, w, h:ch});
+      offset += ch;
+    }
+  }
+}
+
+function render() {
+  const container = document.getElementById('treemap');
+  const W = container.clientWidth;
+  const H = container.clientHeight || 500;
+  container.innerHTML = '';
+
+  if (!currentNode.children || currentNode.children.length === 0) {
+    container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--dim);">No data</div>';
+    return;
+  }
+
+  const sorted = [...currentNode.children].sort((a,b) => nodeTotal(b) - nodeTotal(a));
+  const rects = [];
+  const total = sorted.reduce((s,c) => s + nodeTotal(c), 0);
+  // Use a proper squarified layout
+  squarifiedLayout(sorted.map(c => ({node:c, val:nodeTotal(c)})), 0, 0, W, H, total, rects);
+
+  for (const r of rects) {
+    if (r.w < 2 || r.h < 2) continue;
+    const div = document.createElement('div');
+    div.className = 'tm-cell';
+    div.style.left = r.x + 'px';
+    div.style.top = r.y + 'px';
+    div.style.width = r.w + 'px';
+    div.style.height = r.h + 'px';
+    div.style.background = getColor(r.node);
+
+    const t = nodeTotal(r.node);
+    const cr = nodeCovRate(r.node);
+    const name = r.node.name || r.node.id || '';
+    let label = '';
+    if (r.w > 50 && r.h > 30) {
+      label = `<div class="tm-label">${name}`;
+      if (r.w > 70 && r.h > 44) {
+        label += `<span class="tm-sub">${t} entities · ${cr}%</span>`;
+      }
+      label += '</div>';
+    }
+    div.innerHTML = label;
+
+    // Tooltip
+    div.addEventListener('mouseenter', (e) => {
+      const tt = document.getElementById('tooltip');
+      let h = `<div class="tt-title">${name}</div>`;
+      if (r.node.children) {
+        const ents = flattenEntities(r.node);
+        const inS = ents.filter(e => e.inScope).length;
+        const od = ents.filter(e => e.overdue).length;
+        h += `<div class="tt-row"><span class="tt-label">Entities</span><span class="tt-val">${t}</span></div>`;
+        h += `<div class="tt-row"><span class="tt-label">In Scope</span><span class="tt-val">${inS}</span></div>`;
+        h += `<div class="tt-row"><span class="tt-label">Overdue</span><span class="tt-val">${od}</span></div>`;
+        h += `<div class="tt-row"><span class="tt-label">Coverage</span><span class="tt-val">${cr}%</span></div>`;
+      } else {
+        h += `<div class="tt-row"><span class="tt-label">Entity ID</span><span class="tt-val">${r.node.id||''}</span></div>`;
+        h += `<div class="tt-row"><span class="tt-label">Risk</span><span class="tt-val"><span class="risk-dot" style="background:${RISK_COLORS[r.node.risk]||RISK_COLORS['N/A']}"></span>${r.node.risk||'N/A'}</span></div>`;
+        h += `<div class="tt-row"><span class="tt-label">In Scope</span><span class="tt-val">${r.node.inScope?'Yes':'No'}</span></div>`;
+        h += `<div class="tt-row"><span class="tt-label">Overdue</span><span class="tt-val">${r.node.overdue?'Yes':'No'}</span></div>`;
+        h += `<div class="tt-row"><span class="tt-label">Connectivity</span><span class="tt-val">${r.node.connectivity||0}</span></div>`;
+      }
+      tt.innerHTML = h; tt.style.display = 'block';
+      tt.style.left = (e.clientX + 16) + 'px'; tt.style.top = (e.clientY - 20) + 'px';
+    });
+    div.addEventListener('mousemove', (e) => {
+      const tt = document.getElementById('tooltip');
+      tt.style.left = (e.clientX + 16) + 'px'; tt.style.top = (e.clientY - 20) + 'px';
+    });
+    div.addEventListener('mouseleave', () => { document.getElementById('tooltip').style.display = 'none'; });
+
+    // Click to drill down
+    if (r.node.children && r.node.children.length > 0) {
+      div.addEventListener('click', () => {
+        navStack.push(currentNode);
+        currentNode = r.node;
+        render();
+        renderBreadcrumb();
+      });
+    }
+
+    container.appendChild(div);
+  }
+
+  renderLegend();
+}
+
+function squarifiedLayout(items, x, y, w, h, total, rects) {
+  if (items.length === 0) return;
+  if (items.length === 1) {
+    rects.push({node:items[0].node, x, y, w, h});
+    return;
+  }
+  items.sort((a,b) => b.val - a.val);
+  let best = [], bestRatio = Infinity, bestIdx = 0;
+
+  const shortSide = Math.min(w, h);
+  let sum = 0;
+
+  for (let i = 0; i < items.length; i++) {
+    sum += items[i].val;
+    const stripArea = (sum / total) * w * h;
+    const stripLen = stripArea / shortSide;
+    let worst = 0;
+    let partSum = 0;
+    for (let j = 0; j <= i; j++) {
+      partSum += items[j].val;
+      const dim = (items[j].val / sum) * shortSide;
+      const r = Math.max(stripLen / dim, dim / stripLen);
+      if (r > worst) worst = r;
+    }
+    if (worst <= bestRatio) {
+      bestRatio = worst;
+      bestIdx = i;
+    } else {
+      break;
+    }
+  }
+
+  // Lay out items 0..bestIdx along the short side
+  const strip = items.slice(0, bestIdx + 1);
+  const rest = items.slice(bestIdx + 1);
+  const stripTotal = strip.reduce((s,c) => s + c.val, 0);
+  const stripFrac = stripTotal / total;
+
+  let offset = 0;
+  if (w >= h) {
+    const sw = stripFrac * w;
+    for (const s of strip) {
+      const sh = (s.val / stripTotal) * h;
+      rects.push({node:s.node, x:x+0, y:y+offset, w:sw, h:sh});
+      offset += sh;
+    }
+    const restTotal = total - stripTotal;
+    if (rest.length > 0 && restTotal > 0) {
+      squarifiedLayout(rest, x+sw, y, w-sw, h, restTotal, rects);
+    }
+  } else {
+    const sh = stripFrac * h;
+    for (const s of strip) {
+      const sw = (s.val / stripTotal) * w;
+      rects.push({node:s.node, x:x+offset, y, w:sw, h:sh});
+      offset += sw;
+    }
+    const restTotal = total - stripTotal;
+    if (rest.length > 0 && restTotal > 0) {
+      squarifiedLayout(rest, x, y+sh, w, h-sh, restTotal, rects);
+    }
+  }
+}
+
+function renderBreadcrumb() {
+  const bc = document.getElementById('breadcrumb');
+  const trail = [...navStack, currentNode];
+  bc.innerHTML = trail.map((n, i) => {
+    const name = n.name || 'Root';
+    if (i === trail.length - 1) return `<span class="bc-current">${name}</span>`;
+    return `<span data-idx="${i}">${name}</span>`;
+  }).join(' &rsaquo; ');
+  bc.querySelectorAll('span[data-idx]').forEach(s => {
+    s.addEventListener('click', () => {
+      const idx = parseInt(s.dataset.idx);
+      currentNode = navStack[idx] || DATA;
+      navStack = navStack.slice(0, idx);
+      render();
+      renderBreadcrumb();
+    });
+  });
+}
+
+function renderLegend() {
+  const el = document.getElementById('legend');
+  if (colorMode === 'coverage') {
+    el.innerHTML = [['#166534','80-100%'],['#15803d','50-79%'],['#a16207','25-49%'],['#b45309','1-24%'],['#991b1b','0%']]
+      .map(([c,l]) => `<div class="legend-item"><div class="legend-swatch" style="background:${c}"></div>${l} coverage</div>`).join('');
+  } else {
+    el.innerHTML = Object.entries(RISK_COLORS)
+      .map(([k,c]) => `<div class="legend-item"><div class="legend-swatch" style="background:${c}"></div>${k}</div>`).join('');
+  }
+}
+
+document.querySelectorAll('.controls .btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.controls .btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    colorMode = this.dataset.color;
+    render();
+  });
+});
+
+window.addEventListener('resize', () => render());
+renderBreadcrumb();
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coverage Heatmap — PGA × Audit Leader</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+:root { --bg:#0c0e13; --surface:#14171f; --border:#2a2e3a; --text:#c9d1d9; --dim:#6b7280; --bright:#f0f2f7; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; padding:32px; }
+.header { text-align:center; margin-bottom:20px; }
+.header h1 { font-size:22px; font-weight:700; color:var(--bright); }
+.header p { font-size:13px; color:var(--dim); margin-top:6px; }
+.summary { display:flex; justify-content:center; gap:24px; margin-bottom:20px; flex-wrap:wrap; }
+.summary-item { text-align:center; }
+.summary-num { font-family:'JetBrains Mono',monospace; font-size:24px; font-weight:700; color:var(--bright); }
+.summary-label { font-size:11px; color:var(--dim); margin-top:2px; text-transform:uppercase; letter-spacing:0.3px; }
+.controls { display:flex; justify-content:center; gap:6px; margin-bottom:20px; }
+.controls .btn { background:#21262d; border:1px solid var(--border); color:var(--text); padding:6px 14px; border-radius:6px; font-size:11.5px; cursor:pointer; font-family:inherit; transition:all 0.15s; }
+.controls .btn:hover { background:#30363d; color:var(--bright); }
+.controls .btn.active { background:#1f6feb; border-color:#1f6feb; color:#fff; }
+.heatmap-wrap { overflow-x:auto; display:flex; justify-content:center; }
+table { border-collapse:separate; border-spacing:3px; }
+th { font-size:11px; font-weight:600; color:var(--dim); padding:8px 10px; text-transform:uppercase; letter-spacing:0.3px; white-space:nowrap; }
+th.pga-th {
+  text-align:right; min-width:180px; max-width:220px;
+  color:var(--bright); font-size:13px; font-weight:700;
+  position:sticky; left:0; background:var(--bg); z-index:3;
+  padding-right:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+th.leader-th { text-align:center; padding:8px 6px; min-width:70px; }
+th.total-th { font-style:italic; }
+th.corner {
+  position:sticky; left:0; background:var(--bg); z-index:4;
+}
+td { position:relative; min-width:64px; height:54px; border-radius:6px; text-align:center; vertical-align:middle; cursor:pointer; transition:transform 0.1s, box-shadow 0.15s; }
+td:hover { transform:scale(1.08); box-shadow:0 0 12px rgba(255,255,255,0.1); z-index:2; }
+td .cell-main { font-family:'JetBrains Mono',monospace; font-size:15px; font-weight:700; color:var(--bright); }
+td .cell-sub { font-size:9px; color:rgba(255,255,255,0.6); margin-top:1px; }
+td.empty { background:transparent; cursor:default; }
+td.empty:hover { transform:none; box-shadow:none; }
+td.total-cell { background:var(--surface) !important; border:1px solid var(--border); }
+.legend { display:flex; justify-content:center; gap:14px; margin-top:16px; flex-wrap:wrap; }
+.legend-item { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--dim); }
+.legend-swatch { width:14px; height:14px; border-radius:3px; }
+#tooltip { position:fixed; display:none; background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px 18px; font-size:12px; line-height:1.6; pointer-events:none; z-index:100; box-shadow:0 8px 24px rgba(0,0,0,0.5); max-width:340px; }
+#tooltip .tt-title { font-size:14px; font-weight:700; color:var(--bright); margin-bottom:6px; }
+#tooltip .tt-row { display:flex; justify-content:space-between; gap:16px; }
+#tooltip .tt-label { color:var(--dim); }
+#tooltip .tt-val { color:var(--bright); font-weight:600; font-family:'JetBrains Mono',monospace; }
+#tooltip .tt-entities { margin-top:8px; border-top:1px solid var(--border); padding-top:6px; max-height:200px; overflow-y:auto; }
+#tooltip .tt-entity { font-size:11px; display:flex; justify-content:space-between; align-items:center; padding:2px 0; }
+.risk-dot { display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:4px; vertical-align:middle; }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Audit Coverage Heatmap</h1>
+  <p>PGA/ASL vs Audit Leader — cell color shows coverage health. PGAs and Leaders with ≤3 entities grouped into "Other."</p>
+</div>
+<div class="summary" id="summary"></div>
+<div class="controls">
+  <button class="btn active" data-mode="coverage">Coverage Rate</button>
+  <button class="btn" data-mode="risk">Overdue Count</button>
+  <button class="btn" data-mode="gap">Not In Scope</button>
+</div>
+<div class="heatmap-wrap">
+  <table id="heatmap"></table>
+</div>
+<div class="legend" id="legend"></div>
+<div id="tooltip"></div>
+<script>
+%%DATA_INJECTION%%
+const RISK_COLORS = {'Critical':'#ef4444','High':'#f59e0b','Medium':'#eab308','Low':'#22c55e','N/A':'#6b7280'};
+let mode = 'coverage';
+const cellMap = {};
+DATA.cells.forEach(c => { cellMap[c.pga+'|'+c.leader] = c; });
+
+function cellColor(cell, mode) {
+  if (!cell || cell.total === 0) return 'transparent';
+  if (mode === 'coverage') {
+    const rate = cell.inScope / cell.total;
+    if (rate >= 0.8) return '#166534';
+    if (rate >= 0.5) return '#15803d';
+    if (rate >= 0.25) return '#a16207';
+    if (rate > 0) return '#b45309';
+    return '#991b1b';
+  } else if (mode === 'risk') {
+    if (cell.overdue === 0) return '#166534';
+    if (cell.overdue === 1) return '#a16207';
+    if (cell.overdue === 2) return '#b45309';
+    return '#991b1b';
+  } else {
+    if (cell.notInScope === 0) return '#166534';
+    if (cell.notInScope === 1) return '#15803d';
+    if (cell.notInScope === 2) return '#a16207';
+    return '#991b1b';
+  }
+}
+
+function cellLabel(cell, mode) {
+  if (!cell) return '';
+  if (mode === 'coverage') {
+    const rate = cell.total > 0 ? Math.round(cell.inScope / cell.total * 100) : 0;
+    return `<div class="cell-main">${rate}%</div><div class="cell-sub">${cell.inScope}/${cell.total}</div>`;
+  } else if (mode === 'risk') {
+    return `<div class="cell-main">${cell.overdue}</div><div class="cell-sub">of ${cell.total}</div>`;
+  } else {
+    return `<div class="cell-main">${cell.notInScope}</div><div class="cell-sub">of ${cell.total}</div>`;
+  }
+}
+
+function render() {
+  const table = document.getElementById('heatmap');
+  let html = '<tr><th class="corner"></th>';
+  DATA.leaders.forEach(l => { html += `<th class="leader-th">${l}</th>`; });
+  html += '<th class="leader-th total-th">Total</th></tr>';
+
+  DATA.pgas.forEach(p => {
+    html += `<tr><th class="pga-th" title="${p}">${p}</th>`;
+    DATA.leaders.forEach(l => {
+      const cell = cellMap[p+'|'+l];
+      if (!cell) {
+        html += '<td class="empty"></td>';
+      } else {
+        const bg = cellColor(cell, mode);
+        html += `<td style="background:${bg}" data-pga="${p}" data-leader="${l}">${cellLabel(cell, mode)}</td>`;
+      }
+    });
+    const pt = DATA.pgaTotals[p];
+    const rate = pt.total > 0 ? Math.round(pt.inScope / pt.total * 100) : 0;
+    html += `<td class="total-cell"><div class="cell-main">${mode==='coverage'?rate+'%':mode==='risk'?pt.overdue:pt.notInScope}</div><div class="cell-sub">${pt.total} entities</div></td>`;
+    html += '</tr>';
+  });
+
+  html += '<tr><th class="pga-th" style="font-style:italic;">Total</th>';
+  DATA.leaders.forEach(l => {
+    const lt = DATA.leaderTotals[l];
+    const rate = lt.total > 0 ? Math.round(lt.inScope / lt.total * 100) : 0;
+    html += `<td class="total-cell"><div class="cell-main">${mode==='coverage'?rate+'%':mode==='risk'?lt.overdue:lt.notInScope}</div><div class="cell-sub">${lt.total}</div></td>`;
+  });
+  const gt = DATA.grandTotal;
+  const grate = gt.total > 0 ? Math.round(gt.inScope / gt.total * 100) : 0;
+  html += `<td class="total-cell" style="border:2px solid #58a6ff;"><div class="cell-main">${mode==='coverage'?grate+'%':mode==='risk'?gt.overdue:gt.notInScope}</div><div class="cell-sub">${gt.total}</div></td>`;
+  html += '</tr>';
+  table.innerHTML = html;
+
+  document.getElementById('summary').innerHTML = `
+    <div class="summary-item"><div class="summary-num">${gt.total}</div><div class="summary-label">Total Entities</div></div>
+    <div class="summary-item"><div class="summary-num">${gt.inScope}</div><div class="summary-label">In Scope</div></div>
+    <div class="summary-item"><div class="summary-num">${gt.notInScope}</div><div class="summary-label">Not In Scope</div></div>
+    <div class="summary-item"><div class="summary-num">${gt.overdue}</div><div class="summary-label">Overdue</div></div>
+    <div class="summary-item"><div class="summary-num">${grate}%</div><div class="summary-label">Coverage Rate</div></div>
+  `;
+
+  const legends = {
+    coverage: [['#166534','80-100%'],['#15803d','50-79%'],['#a16207','25-49%'],['#b45309','1-24%'],['#991b1b','0%']],
+    risk: [['#166534','0 overdue'],['#a16207','1 overdue'],['#b45309','2 overdue'],['#991b1b','3+ overdue']],
+    gap: [['#166534','0 gaps'],['#15803d','1 gap'],['#a16207','2 gaps'],['#991b1b','3+ gaps']]
+  };
+  document.getElementById('legend').innerHTML = legends[mode].map(([c,l]) =>
+    `<div class="legend-item"><div class="legend-swatch" style="background:${c}"></div>${l}</div>`
+  ).join('');
+
+  document.querySelectorAll('td[data-pga]').forEach(td => {
+    td.addEventListener('mouseenter', (e) => {
+      const p = td.dataset.pga, l = td.dataset.leader;
+      const cell = cellMap[p+'|'+l];
+      if (!cell) return;
+      const rate = cell.total > 0 ? Math.round(cell.inScope / cell.total * 100) : 0;
+      let h = `<div class="tt-title">${p} &times; ${l}</div>`;
+      h += `<div class="tt-row"><span class="tt-label">Total Entities</span><span class="tt-val">${cell.total}</span></div>`;
+      h += `<div class="tt-row"><span class="tt-label">In Scope</span><span class="tt-val">${cell.inScope}</span></div>`;
+      h += `<div class="tt-row"><span class="tt-label">Not In Scope</span><span class="tt-val">${cell.notInScope}</span></div>`;
+      h += `<div class="tt-row"><span class="tt-label">Overdue</span><span class="tt-val">${cell.overdue}</span></div>`;
+      h += `<div class="tt-row"><span class="tt-label">Coverage Rate</span><span class="tt-val">${rate}%</span></div>`;
+      h += '<div class="tt-entities">';
+      cell.entities.forEach(ent => {
+        const scope = ent.inScope ? '\u2713' : '\u2717';
+        const od = ent.overdue ? ' \u26A0' : '';
+        h += `<div class="tt-entity"><span><span class="risk-dot" style="background:${RISK_COLORS[ent.risk]||RISK_COLORS['N/A']}"></span>${ent.name}</span><span style="font-family:monospace;font-size:10px;">${scope}${od}</span></div>`;
+      });
+      h += '</div>';
+      const tt = document.getElementById('tooltip');
+      tt.innerHTML = h; tt.style.display = 'block';
+      tt.style.left = (e.clientX + 16) + 'px'; tt.style.top = (e.clientY - 20) + 'px';
+    });
+    td.addEventListener('mousemove', (e) => {
+      const tt = document.getElementById('tooltip');
+      tt.style.left = (e.clientX + 16) + 'px'; tt.style.top = (e.clientY - 20) + 'px';
+    });
+    td.addEventListener('mouseleave', () => { document.getElementById('tooltip').style.display = 'none'; });
+  });
+}
+
+document.querySelectorAll('.controls .btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.controls .btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    mode = this.dataset.mode;
+    render();
+  });
+});
+render();
+</script>
+</body>
+</html>
