@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
@@ -148,8 +149,11 @@ def run(input_path: Path, plan_path: Path, output_dir: Path) -> dict:
     )
     val_log = pd.DataFrame(standardization_log) if standardization_log else pd.DataFrame(columns=["table", "original", "standardized", "reason"])
 
+    # --- Date stamp for output filenames
+    date_stamp = datetime.now().strftime("%Y%m%d")
+
     # --- Layer 1 workbook
-    layer1_path = output_dir / "layer1_output.xlsx"
+    layer1_path = output_dir / f"layer1_output_{date_stamp}.xlsx"
     write_workbook(
         layer1_path,
         {
@@ -182,7 +186,7 @@ def run(input_path: Path, plan_path: Path, output_dir: Path) -> dict:
     print(f"[pipeline] wrote {layer1_path}")
 
     # --- Edge derivation workbook
-    edge_path = output_dir / "edge_derivation_output.xlsx"
+    edge_path = output_dir / f"edge_derivation_output_{date_stamp}.xlsx"
     write_workbook(
         edge_path,
         {
@@ -194,7 +198,7 @@ def run(input_path: Path, plan_path: Path, output_dir: Path) -> dict:
     print(f"[pipeline] wrote {edge_path}")
 
     # --- Coverage workbook
-    coverage_path = output_dir / "layer2_coverage_matrix.xlsx"
+    coverage_path = output_dir / f"layer2_coverage_matrix_{date_stamp}.xlsx"
     write_workbook(
         coverage_path,
         {

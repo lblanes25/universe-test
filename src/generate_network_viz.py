@@ -20,7 +20,8 @@ Optional:
 Dependencies:
     pip install pandas openpyxl
 """
-import argparse, json, os, sys, base64
+import argparse, glob, json, os, sys, base64
+from datetime import datetime
 import pandas as pd
 
 # ── Embedded HTML templates (base64) ──
@@ -34,15 +35,27 @@ _CHD_A = "CmNvbnN0IFJJU0tfQ09MT1JTID0geydDcml0aWNhbCc6JyNlZjQ0NDQnLCdIaWdoJzonI2
 def _dec(b): return base64.b64decode(b).decode("utf-8")
 
 
+def _find_latest(input_dir, base_name, ext=".xlsx"):
+    """Find the latest timestamped file matching base_name_YYYYMMDD.ext, or fall back to base_name.ext."""
+    pattern = os.path.join(input_dir, f"{base_name}_*{ext}")
+    matches = sorted(glob.glob(pattern), reverse=True)
+    if matches:
+        return matches[0]
+    fallback = os.path.join(input_dir, f"{base_name}{ext}")
+    if os.path.isfile(fallback):
+        return fallback
+    return None
+
+
 def read_pipeline(input_dir):
     """Read all pipeline files and return raw DataFrames."""
-    l1 = os.path.join(input_dir, "layer1_output.xlsx")
-    ed = os.path.join(input_dir, "edge_derivation_output.xlsx")
-    l2 = os.path.join(input_dir, "layer2_coverage_matrix.xlsx")
+    l1 = _find_latest(input_dir, "layer1_output")
+    ed = _find_latest(input_dir, "edge_derivation_output")
+    l2 = _find_latest(input_dir, "layer2_coverage_matrix")
     hc = os.path.join(input_dir, "handoff_categories.csv")
-    for p in [l1, ed, l2]:
-        if not os.path.isfile(p):
-            sys.exit(f"ERROR: Missing file: {p}")
+    for name, p in [("layer1_output", l1), ("edge_derivation_output", ed), ("layer2_coverage_matrix", l2)]:
+        if p is None:
+            sys.exit(f"ERROR: Missing file: {name}*.xlsx in {input_dir}")
 
     dfs = dict(
         nodes = pd.read_excel(l1, sheet_name="Nodes"),
@@ -234,6 +247,7 @@ def build_heatmap_data(dfs):
 def generate(input_dir, output_dir):
     print(f"Reading pipeline files from: {input_dir}")
     dfs = read_pipeline(input_dir)
+    date_stamp = datetime.now().strftime("%Y%m%d")
 
     # === Network Visualization ===
     net_data = build_network_data(dfs)
@@ -241,7 +255,7 @@ def generate(input_dir, output_dir):
     print(f"  Network: {len(net_data['nodes'])} nodes, {len(net_data['edges'])} edges, {cats_tagged} categorized handoffs")
     net_json = json.dumps(net_data, separators=(",",":"))
     net_html = _dec(_NET_B) + "const DATA = " + net_json + ";\n" + _dec(_NET_A)
-    net_path = os.path.join(output_dir, "network_visualization.html")
+    net_path = os.path.join(output_dir, f"network_visualization_{date_stamp}.html")
     with open(net_path, "w", encoding="utf-8") as f: f.write(net_html)
     print(f"  -> {net_path} ({len(net_html):,} bytes)")
 
@@ -250,7 +264,7 @@ def generate(input_dir, output_dir):
     print(f"  Chord: {len(chord_data['pgas'])} PGAs, {len(chord_data['handoffs'])} handoffs")
     chord_json = json.dumps(chord_data, separators=(",",":"))
     chord_html = _dec(_CHD_B) + "const DATA = " + chord_json + ";\n" + _dec(_CHD_A)
-    chord_path = os.path.join(output_dir, "pga_chord_sankey.html")
+    chord_path = os.path.join(output_dir, f"pga_chord_sankey_{date_stamp}.html")
     with open(chord_path, "w", encoding="utf-8") as f: f.write(chord_html)
     print(f"  -> {chord_path} ({len(chord_html):,} bytes)")
 
@@ -260,7 +274,7 @@ def generate(input_dir, output_dir):
     print(f"  Heatmap: {len(hm_data['leaders'])} leaders x {len(hm_data['bus'])} BUs, {hm_data['grandTotal']['total']} entities")
     hm_json = json.dumps(hm_data, separators=(",",":"))
     hm_html = _dec(_HM_B) + "const DATA = " + hm_json + ";\n" + _dec(_HM_A)
-    hm_path = os.path.join(output_dir, "coverage_heatmap.html")
+    hm_path = os.path.join(output_dir, f"coverage_heatmap_{date_stamp}.html")
     with open(hm_path, "w", encoding="utf-8") as f: f.write(hm_html)
     print(f"  -> {hm_path} ({len(hm_html):,} bytes)")
 
