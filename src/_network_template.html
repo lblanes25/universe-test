@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audit Universe Network</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; background: #0d1117; color: #c9d1d9; overflow: hidden; height: 100vh; }
+#app { display: flex; height: 100vh; }
+#sidebar { width: 330px; min-width: 330px; background: #161b22; border-right: 1px solid #30363d; overflow-y: auto; padding: 14px; z-index: 10; display: flex; flex-direction: column; gap: 10px; }
+#canvas-container { flex: 1; position: relative; }
+canvas { display: block; width: 100%; height: 100%; cursor: grab; }
+canvas:active { cursor: grabbing; }
+.title-area { padding: 6px 0 4px; border-bottom: 1px solid #30363d; margin-bottom: 2px; }
+.title-area h1 { font-size: 15px; font-weight: 700; color: #f0f6fc; letter-spacing: -0.3px; }
+.title-area p { font-size: 10px; color: #8b949e; margin-top: 3px; line-height: 1.35; }
+.panel { background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 9px; }
+.panel h3 { font-size: 10px; font-weight: 600; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.panel label { display: flex; align-items: center; gap: 5px; font-size: 11.5px; color: #c9d1d9; cursor: pointer; padding: 2px 0; }
+.panel label:hover { color: #f0f6fc; }
+.panel input[type="checkbox"] { accent-color: #58a6ff; width: 13px; height: 13px; }
+.edge-color { display: inline-block; width: 18px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 3px; }
+select, input[type="text"] { width: 100%; background: #0d1117; border: 1px solid #30363d; border-radius: 6px; color: #c9d1d9; padding: 5px 7px; font-size: 11.5px; font-family: inherit; }
+select:focus, input:focus { outline: none; border-color: #58a6ff; }
+.btn { background: #21262d; border: 1px solid #30363d; color: #c9d1d9; padding: 5px 10px; border-radius: 6px; font-size: 11px; cursor: pointer; font-family: inherit; white-space: nowrap; }
+.btn:hover { background: #30363d; color: #f0f6fc; }
+.btn-primary { background: #1f6feb; border-color: #1f6feb; color: #fff; }
+.btn-primary:hover { background: #388bfd; }
+.filter-btns { display: flex; gap: 4px; flex-wrap: wrap; }
+.filter-btns .btn { font-size: 10.5px; padding: 3px 7px; }
+.filter-btns .btn.active { background: #1f6feb; border-color: #1f6feb; color: #fff; }
+#asset-info, #prsa-info, #ego-info, #impact-info { font-size: 11px; color: #8b949e; line-height: 1.5; margin-top: 5px; }
+#asset-info .val, #prsa-info .val, #ego-info .val { color: #f0f6fc; font-weight: 500; }
+.leader-checks { max-height: 120px; overflow-y: auto; }
+.stat-row { display: flex; justify-content: space-between; font-size: 11px; padding: 1.5px 0; }
+.stat-label { color: #8b949e; }
+.stat-val { color: #f0f6fc; font-weight: 600; }
+.legend { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; font-size: 10px; }
+.legend-item { display: flex; align-items: center; gap: 4px; }
+.legend-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.legend-diamond { width: 8px; height: 8px; transform: rotate(45deg); flex-shrink: 0; }
+#tooltip { position: absolute; display: none; background: #1c2128; border: 1px solid #30363d; border-radius: 8px; padding: 10px 12px; font-size: 11px; line-height: 1.5; pointer-events: none; z-index: 100; max-width: 340px; box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+#tooltip .tt-title { font-size: 13px; font-weight: 600; color: #f0f6fc; margin-bottom: 4px; }
+#tooltip .tt-id { font-family: monospace; font-size: 11px; color: #58a6ff; }
+#tooltip .tt-row { display: flex; justify-content: space-between; gap: 12px; }
+#tooltip .tt-label { color: #8b949e; }
+#tooltip .tt-val { color: #c9d1d9; font-weight: 500; }
+#tooltip .tt-risks { color: #f85149; font-size: 10px; margin-top: 4px; word-wrap: break-word; }
+.two-col { display: flex; gap: 5px; }
+.two-col > * { flex: 1; }
+.cat-tag { display:inline-block; background:#30363d; color:#c9d1d9; font-size:9px; padding:1px 5px; border-radius:3px; margin:1px; font-family:monospace; }
+#node-detail { font-size: 11px; line-height: 1.6; }
+#node-detail .nd-title { font-size: 13px; font-weight: 600; color: #f0f6fc; }
+#node-detail .nd-id { font-family: monospace; font-size: 11px; color: #58a6ff; }
+#node-detail .nd-row { display: flex; justify-content: space-between; gap: 8px; }
+#node-detail .nd-label { color: #8b949e; }
+#node-detail .nd-val { color: #c9d1d9; font-weight: 500; text-align: right; }
+#node-detail .nd-risks { color: #f85149; font-size: 10px; margin-top: 3px; word-wrap: break-word; }
+#node-detail .nd-close { float: right; cursor: pointer; color: #8b949e; font-size: 14px; }
+#node-detail .nd-close:hover { color: #f0f6fc; }
+body.light { background: #ffffff; color: #1f2328; }
+body.light #sidebar { background: #f6f8fa; border-right-color: #d0d7de; }
+body.light .panel { background: #ffffff; border-color: #d0d7de; }
+body.light .panel h3 { color: #656d76; }
+body.light .panel label { color: #1f2328; }
+body.light .panel label:hover { color: #000; }
+body.light select, body.light input[type="text"] { background: #fff; border-color: #d0d7de; color: #1f2328; }
+body.light .btn { background: #f6f8fa; border-color: #d0d7de; color: #1f2328; }
+body.light .btn:hover { background: #eaeef2; color: #000; }
+body.light .btn.active, body.light .btn-primary { background: #0969da; border-color: #0969da; color: #fff; }
+body.light .title-area { border-bottom-color: #d0d7de; }
+body.light .title-area h1 { color: #1f2328; }
+body.light .title-area p { color: #656d76; }
+body.light .stat-label { color: #656d76; }
+body.light .stat-val { color: #1f2328; }
+body.light #tooltip { background: #ffffff; border-color: #d0d7de; box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+body.light #tooltip .tt-title { color: #1f2328; }
+body.light #tooltip .tt-val { color: #1f2328; }
+body.light #tooltip .tt-label { color: #656d76; }
+body.light #node-detail .nd-title { color: #1f2328; }
+body.light #node-detail .nd-val { color: #1f2328; }
+body.light #node-detail .nd-label { color: #656d76; }
+body.light .cat-tag { background: #eaeef2; color: #1f2328; }
+</style>
+</head>
+<body>
+<div id="app">
+<div id="sidebar">
+<div class="title-area">
+  <h1>Audit Universe Network</h1>
+  <p>Color=risk. Shape=coverage. Size=connectivity. Click node for ego network. 2-hop traces by handoff category continuity.</p>
+</div>
+
+<div class="panel">
+  <h3>Network Stats</h3>
+  <div class="stat-row"><span class="stat-label">Total</span><span class="stat-val" id="stat-total">0</span></div>
+  <div class="stat-row"><span class="stat-label">Visible</span><span class="stat-val" id="stat-visible">0</span></div>
+  <div class="stat-row"><span class="stat-label">In Scope</span><span class="stat-val" id="stat-inscope">0</span></div>
+  <div class="stat-row"><span class="stat-label">Not In Scope</span><span class="stat-val" id="stat-notinscope">0</span></div>
+  <div class="stat-row"><span class="stat-label">Overdue</span><span class="stat-val" id="stat-overdue">0</span></div>
+  <div class="stat-row"><span class="stat-label">Visible Edges</span><span class="stat-val" id="stat-edges">0</span></div>
+</div>
+
+<div class="panel">
+  <h3>Layout Grouping</h3>
+  <div class="filter-btns">
+    <button class="btn active" data-group="leader">By Audit Leader</button>
+    <button class="btn" data-group="bu">By Business Unit</button>
+  </div>
+</div>
+
+<div class="panel">
+  <h3>Edge Types</h3>
+  <label><input type="checkbox" id="tog-handoff" checked><span class="edge-color" style="background:#888"></span> Handoffs</label>
+  <label><input type="checkbox" id="tog-app"><span class="edge-color" style="background:#3498db"></span> Shared Apps</label>
+  <label><input type="checkbox" id="tog-vendor"><span class="edge-color" style="background:#e67e22"></span> Shared Vendors</label>
+  <label><input type="checkbox" id="tog-prsa"><span class="edge-color" style="background:#9b59b6"></span> Shared PRSAs</label>
+  <label><input type="checkbox" id="tog-crossonly"><span style="color:#58a6ff;font-size:10px;">&#10697;</span> Cross-portfolio only</label>
+  <label><input type="checkbox" id="tog-edge-tip"><span style="color:#8b949e;font-size:10px;">&#9432;</span> Edge tooltips</label>
+</div>
+
+<div class="panel">
+  <h3>Risk Rating Filter</h3>
+  <div class="filter-btns" id="risk-filter-btns">
+    <button class="btn active" data-risk="all">All</button>
+    <button class="btn" data-risk="critical">Critical Only</button>
+    <button class="btn" data-risk="critical+high">Critical + High</button>
+  </div>
+</div>
+
+<div class="panel">
+  <h3>Coverage Filter</h3>
+  <div class="filter-btns" id="cov-filter-btns">
+    <button class="btn active" data-filter="all">All</button>
+    <button class="btn" data-filter="notinscope">Not In Scope</button>
+    <button class="btn" data-filter="overdue">Overdue</button>
+  </div>
+</div>
+
+<div class="panel">
+  <h3>Horizontal Entities</h3>
+  <div class="filter-btns" id="hz-btns">
+    <button class="btn active" data-hz="off">Off</button>
+    <button class="btn" data-hz="highlight">Highlight</button>
+    <button class="btn" data-hz="isolate">Isolate</button>
+  </div>
+</div>
+
+<div class="panel">
+  <h3>Audit Leader Filter</h3>
+  <div style="display:flex;gap:4px;margin-bottom:4px;"><button class="btn" id="leaders-all" style="font-size:10px;padding:2px 6px;">All</button><button class="btn" id="leaders-none" style="font-size:10px;padding:2px 6px;">None</button></div>
+  <div class="leader-checks" id="leader-checks"></div>
+  <div id="impact-info"></div>
+</div>
+
+<div class="panel">
+  <h3>App / Vendor Focus</h3>
+  <select id="asset-select"><option value="">— Select Asset —</option></select>
+  <div id="asset-info"></div>
+</div>
+
+<div class="panel">
+  <h3>PRSA Cluster</h3>
+  <select id="prsa-select"><option value="">— Select PRSA —</option></select>
+  <div id="prsa-info"></div>
+</div>
+
+<div class="panel">
+  <h3>Ego Network</h3>
+  <div style="font-size:10.5px;color:#8b949e;margin-bottom:4px;">Click any node on canvas</div>
+  <div class="filter-btns" id="ego-btns">
+    <button class="btn active" data-ego="off">Off</button>
+    <button class="btn" data-ego="1">Direct (1-hop)</button>
+    <button class="btn" data-ego="2">Impact Chain (2-hop)</button>
+  </div>
+  <div id="ego-info"></div>
+</div>
+
+<div class="panel">
+  <h3>Search</h3>
+  <input type="text" id="search-input" placeholder="Entity ID or name...">
+</div>
+
+<div class="panel" id="node-detail-panel" style="display:none;">
+  <h3>Selected Entity <span class="nd-close" id="nd-close">&times;</span></h3>
+  <div id="node-detail"></div>
+</div>
+
+<div class="two-col">
+  <button class="btn btn-primary" id="btn-reset">Reset View</button>
+  <button class="btn" id="btn-export-png">PNG</button>
+  <button class="btn" id="btn-export-csv">CSV</button>
+  <button class="btn" id="btn-theme" title="Toggle dark/light mode">&#9788;</button>
+</div>
+
+<div class="panel">
+  <h3>Legend</h3>
+  <div style="margin-bottom:4px;font-size:10px;color:#8b949e;">Risk (color)</div>
+  <div class="legend" style="margin-bottom:6px;">
+    <div class="legend-item"><div class="legend-dot" style="background:#c0392b"></div>Critical</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#e67e22"></div>High</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#f1c40f"></div>Medium</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#27ae60"></div>Low</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#95a5a6"></div>N/A</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#2980b9"></div>External (impact)</div>
+  </div>
+  <div style="margin-bottom:4px;font-size:10px;color:#8b949e;">Shape</div>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#666"></div>In Scope</div>
+    <div class="legend-item"><div class="legend-diamond" style="background:#666;border:2px solid #f85149"></div>Not In Scope+Overdue</div>
+    <div class="legend-item"><div class="legend-diamond" style="background:#666"></div>Not In Scope</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#666;border:2px dashed #da3633"></div>Horizontal</div>
+  </div>
+  <div style="font-size:10px;color:#8b949e;margin-top:4px;">Size = connectivity | 2-hop = category-traced impact chain</div>
+</div>
+</div>
+
+<div id="canvas-container">
+  <canvas id="canvas"></canvas>
+  <div id="tooltip"></div>
+</div>
+</div>
+
+<script>
+%%DATA_INJECTION%%
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const tooltip = document.getElementById('tooltip');
+let W, H, dpr, transform = {x:0,y:0,k:1};
+let nodes = DATA.nodes, visibleNodes = new Set(), visibleEdges = [];
+let hoveredNode = null, selectedSearch = null, selectedNode = null;
+let showHandoffs=true, showApps=false, showVendors=false, showPrsas=false, crossOnly=false, showEdgeTooltips=false;
+let activeFilter='all', activeRisk='all', activeAsset='', activePrsa='', hzMode='off';
+let groupBy='leader', egoMode='off', egoCenter=null;
+let impactMode=false, impactExternals=new Set(), darkMode=true;
+
+const RISK_COLORS = {'Critical':'#c0392b','High':'#e67e22','Medium':'#f1c40f','Low':'#27ae60','N/A':'#95a5a6'};
+const EDGE_STYLES = {
+  handoff_to:{color:'#888888',width:1.2,dash:[]}, handoff_from:{color:'#888888',width:1.2,dash:[]},
+  shared_app:{color:'#3498db',width:0.8,dash:[],alpha:0.5}, shared_vendor:{color:'#e67e22',width:0.8,dash:[],alpha:0.5},
+  shared_prsa:{color:'#9b59b6',width:0.6,dash:[4,4],alpha:0.3}
+};
+const CC = ['#1f6feb44','#da3633aa','#238636aa','#a371f7aa','#d29922aa','#f778baaa','#79c0ffaa','#56d364aa','#f0883eaa','#b392f0aa'];
+
+const nodeById = {}; DATA.nodes.forEach(n => { nodeById[n.id] = n; });
+const edgesByType = {handoff_to:[],handoff_from:[],shared_app:[],shared_vendor:[],shared_prsa:[]};
+const edgesByNode = {};
+DATA.edges.forEach(e => {
+  if(edgesByType[e.edgeType]) edgesByType[e.edgeType].push(e);
+  if(!edgesByNode[e.source]) edgesByNode[e.source]=[];
+  if(!edgesByNode[e.target]) edgesByNode[e.target]=[];
+  edgesByNode[e.source].push(e);
+  edgesByNode[e.target].push(e);
+});
+const handoffPairs=new Set();
+edgesByType.handoff_to.forEach(e=>handoffPairs.add(e.source+'->'+e.target));
+edgesByType.handoff_from.forEach(e=>handoffPairs.add(e.source+'->'+e.target));
+const bidirectional=new Set();
+handoffPairs.forEach(p=>{const[a,b]=p.split('->');if(handoffPairs.has(b+'->'+a)){bidirectional.add(a+'-'+b);bidirectional.add(b+'-'+a);}});
+
+const assetEntities = {}; DATA.assets.forEach(a=>{assetEntities[a.name]=a.depIds;});
+const assetPrimaryEntities = {};
+DATA.entityApps.forEach(ea=>{if(ea.relationship==='primary'){if(!assetPrimaryEntities[ea.appName])assetPrimaryEntities[ea.appName]=new Set();assetPrimaryEntities[ea.appName].add(ea.entityId);}});
+DATA.entityVendors.forEach(ev=>{if(ev.relationship==='primary'){if(!assetPrimaryEntities[ev.vendorName])assetPrimaryEntities[ev.vendorName]=new Set();assetPrimaryEntities[ev.vendorName].add(ev.entityId);}});
+const prsaEntities = {}; DATA.prsaClusters.forEach(p=>{prsaEntities[p.value]=p.entityIds;});
+
+// Build per-node inbound/outbound category maps for category-aware 2-hop
+// inboundCats[nodeId] = Set of categories coming INTO this node
+// outboundCats[nodeId] = Set of categories going OUT of this node
+const inboundCats = {}, outboundCats = {};
+DATA.edges.forEach(e => {
+  if (!e.category || e.category === '' || e.category === 'UNKNOWN') return;
+  if (e.edgeType === 'handoff_to') {
+    // source sends to target
+    if (!outboundCats[e.source]) outboundCats[e.source] = {};
+    if (!outboundCats[e.source][e.category]) outboundCats[e.source][e.category] = new Set();
+    outboundCats[e.source][e.category].add(e.target);
+    if (!inboundCats[e.target]) inboundCats[e.target] = {};
+    if (!inboundCats[e.target][e.category]) inboundCats[e.target][e.category] = new Set();
+    inboundCats[e.target][e.category].add(e.source);
+  } else if (e.edgeType === 'handoff_from') {
+    // target sends to source (handoff_from means source receives from target)
+    if (!outboundCats[e.target]) outboundCats[e.target] = {};
+    if (!outboundCats[e.target][e.category]) outboundCats[e.target][e.category] = new Set();
+    outboundCats[e.target][e.category].add(e.source);
+    if (!inboundCats[e.source]) inboundCats[e.source] = {};
+    if (!inboundCats[e.source][e.category]) inboundCats[e.source][e.category] = new Set();
+    inboundCats[e.source][e.category].add(e.target);
+  }
+});
+
+// === Ego network ===
+function getEgoNeighbors1(centerId) {
+  const result = new Set([centerId]);
+  (edgesByNode[centerId]||[]).forEach(e => {
+    if (e.edgeType==='handoff_to'||e.edgeType==='handoff_from') {
+      result.add(e.source); result.add(e.target);
+    }
+  });
+  return { nodes: result, categories: new Set() };
+}
+
+// Category-aware 2-hop: from center, find 1-hop neighbors.
+// For each 1-hop neighbor B, find categories that flow center->B (or B->center).
+// Then from B, only extend to C if the SAME category flows B->C (or C->B).
+function getEgoNeighbors2(centerId) {
+  const result = new Set([centerId]);
+  const tracedCategories = new Set();
+  const hop1 = new Set();
+
+  // 1-hop: all direct handoff neighbors
+  (edgesByNode[centerId]||[]).forEach(e => {
+    if (e.edgeType!=='handoff_to' && e.edgeType!=='handoff_from') return;
+    const neighbor = e.source === centerId ? e.target : e.source;
+    result.add(neighbor);
+    hop1.add(neighbor);
+    if (e.category && e.category !== 'UNKNOWN') tracedCategories.add(e.category);
+  });
+
+  // 2-hop with category continuity
+  hop1.forEach(mid => {
+    // What categories connect center <-> mid?
+    const catsFromCenter = new Set();
+    (edgesByNode[centerId]||[]).forEach(e => {
+      if (e.edgeType!=='handoff_to' && e.edgeType!=='handoff_from') return;
+      const other = e.source===centerId ? e.target : e.source;
+      if (other===mid && e.category && e.category!=='UNKNOWN') catsFromCenter.add(e.category);
+    });
+
+    // Now check mid's other edges — only extend if same category
+    (edgesByNode[mid]||[]).forEach(e => {
+      if (e.edgeType!=='handoff_to' && e.edgeType!=='handoff_from') return;
+      const hop2node = e.source===mid ? e.target : e.source;
+      if (hop2node===centerId) return;
+      if (e.category && e.category!=='UNKNOWN' && catsFromCenter.has(e.category)) {
+        result.add(hop2node);
+        tracedCategories.add(e.category);
+      }
+    });
+
+    // If no categories on center<->mid edges (UNKNOWN), allow structural 2-hop as fallback
+    if (catsFromCenter.size === 0) {
+      (edgesByNode[mid]||[]).forEach(e => {
+        if (e.edgeType!=='handoff_to' && e.edgeType!=='handoff_from') return;
+        const hop2node = e.source===mid ? e.target : e.source;
+        if (hop2node!==centerId) result.add(hop2node);
+      });
+    }
+  });
+
+  return { nodes: result, categories: tracedCategories };
+}
+
+// === Layout ===
+const leaders = [...new Set(DATA.nodes.map(n=>n.auditLeader))].sort();
+const bus = [...new Set(DATA.nodes.map(n=>n.businessUnit))].sort();
+
+function computeLayout(groupKey) {
+  const groups = groupKey==='leader' ? leaders : bus;
+  const cols = Math.ceil(Math.sqrt(groups.length)), clusterW=400, clusterH=350, gap=120;
+  groups.forEach((g,gi) => {
+    const cn = DATA.nodes.filter(n => (groupKey==='leader'?n.auditLeader:n.businessUnit)===g);
+    const cx = (gi%cols)*(clusterW+gap)+clusterW/2, cy = Math.floor(gi/cols)*(clusterH+gap)+clusterH/2;
+    cn.forEach((n,i) => {
+      const angle=(i/cn.length)*Math.PI*2, r=40+Math.random()*80;
+      n.x=cx+Math.cos(angle)*r; n.y=cy+Math.sin(angle)*r;
+      n.cx=cx; n.cy=cy; n.clusterW=clusterW; n.clusterH=clusterH; n.clusterGroup=g; n.clusterIdx=gi;
+    });
+    for(let iter=0;iter<150;iter++){
+      for(let i=0;i<cn.length;i++) for(let j=i+1;j<cn.length;j++){
+        let dx=cn[j].x-cn[i].x,dy=cn[j].y-cn[i].y,d=Math.sqrt(dx*dx+dy*dy)||1,f=800/(d*d);
+        cn[i].x-=dx/d*f;cn[i].y-=dy/d*f;cn[j].x+=dx/d*f;cn[j].y+=dy/d*f;
+      }
+      DATA.edges.forEach(e=>{
+        if(e.edgeType!=='handoff_to'&&e.edgeType!=='handoff_from') return;
+        const a=nodeById[e.source],b=nodeById[e.target];
+        if(!a||!b||(groupKey==='leader'?a.auditLeader:a.businessUnit)!==g||(groupKey==='leader'?b.auditLeader:b.businessUnit)!==g) return;
+        let dx=b.x-a.x,dy=b.y-a.y,d=Math.sqrt(dx*dx+dy*dy)||1,f=(d-60)*0.01;
+        a.x+=dx/d*f;a.y+=dy/d*f;b.x-=dx/d*f;b.y-=dy/d*f;
+      });
+      cn.forEach(n=>{n.x+=(cx-n.x)*0.02;n.y+=(cy-n.y)*0.02;});
+    }
+    cn.forEach(n=>{n.x=Math.max(cx-clusterW/2+30,Math.min(cx+clusterW/2-30,n.x));n.y=Math.max(cy-clusterH/2+30,Math.min(cy+clusterH/2-30,n.y));});
+  });
+}
+computeLayout('leader');
+
+// === Populate UI ===
+const leaderChecks = document.getElementById('leader-checks');
+leaders.forEach(l => { const lbl=document.createElement('label'); lbl.innerHTML='<input type="checkbox" class="leader-cb" value="'+l+'" checked> '+l; leaderChecks.appendChild(lbl); });
+const assetSelect = document.getElementById('asset-select');
+DATA.assets.sort((a,b)=>b.depCount-a.depCount).forEach(a=>{ const o=document.createElement('option');o.value=a.name;o.textContent=a.name+' ('+a.type+', '+a.depCount+')';assetSelect.appendChild(o); });
+const prsaSelect = document.getElementById('prsa-select');
+DATA.prsaClusters.forEach(p=>{ const o=document.createElement('option');o.value=p.value;o.textContent=p.value+' ('+p.entityIds.length+' entities)';prsaSelect.appendChild(o); });
+
+function getSelectedLeaders() { return [...document.querySelectorAll('.leader-cb')].filter(cb=>cb.checked).map(cb=>cb.value); }
+
+// === Filtering ===
+function updateVisibility() {
+  visibleNodes = new Set(); impactMode=false; impactExternals=new Set();
+  const selLeaders=getSelectedLeaders(), assetFocus=activeAsset&&assetEntities[activeAsset], prsaFocus=activePrsa&&prsaEntities[activePrsa];
+
+  DATA.nodes.forEach(n => {
+    let show=true;
+    if(activeFilter==='notinscope'&&n.inScope!=='No') show=false;
+    if(activeFilter==='overdue'&&n.overdue!=='Yes') show=false;
+    if(activeRisk==='critical'&&n.riskRating!=='Critical') show=false;
+    if(activeRisk==='critical+high'&&n.riskRating!=='Critical'&&n.riskRating!=='High') show=false;
+    if(!selLeaders.includes(n.auditLeader)) show=false;
+    if(assetFocus&&!assetFocus.includes(n.id)) show=false;
+    if(prsaFocus&&!prsaFocus.includes(n.id)) show=false;
+    if(hzMode==='isolate'&&n.horizontalFlag!=='horizontal') show=false;
+    if(show) visibleNodes.add(n.id);
+  });
+
+  // Impact mode
+  if(selLeaders.length===1&&!assetFocus&&!prsaFocus){
+    impactMode=true; const portfolioIds=new Set([...visibleNodes]);
+    edgesByType.handoff_to.forEach(e=>{
+      if(portfolioIds.has(e.target)&&!portfolioIds.has(e.source)&&nodeById[e.source]){
+        const en=nodeById[e.source];
+        if(activeFilter==='overdue'&&en.overdue!=='Yes') return;
+        if(activeFilter==='notinscope'&&en.inScope!=='No') return;
+        if(activeRisk==='critical'&&en.riskRating!=='Critical') return;
+        if(activeRisk==='critical+high'&&en.riskRating!=='Critical'&&en.riskRating!=='High') return;
+        impactExternals.add(e.source);visibleNodes.add(e.source);
+      }
+    });
+    edgesByType.handoff_from.forEach(e=>{
+      if(portfolioIds.has(e.source)&&!portfolioIds.has(e.target)&&nodeById[e.target]){
+        const en=nodeById[e.target];
+        if(activeFilter==='overdue'&&en.overdue!=='Yes') return;
+        if(activeFilter==='notinscope'&&en.inScope!=='No') return;
+        if(activeRisk==='critical'&&en.riskRating!=='Critical') return;
+        if(activeRisk==='critical+high'&&en.riskRating!=='Critical'&&en.riskRating!=='High') return;
+        impactExternals.add(e.target);visibleNodes.add(e.target);
+      }
+    });
+    document.getElementById('impact-info').innerHTML=impactExternals.size>0?'<span style="color:#58a6ff">'+impactExternals.size+' external entities</span> hand off into this portfolio':'';
+  } else { document.getElementById('impact-info').innerHTML=''; }
+
+  // Ego network
+  let egoTraced = null;
+  if(egoMode!=='off'&&egoCenter&&nodeById[egoCenter]){
+    if(egoMode==='1') egoTraced = getEgoNeighbors1(egoCenter);
+    else egoTraced = getEgoNeighbors2(egoCenter);
+    const egoSet = egoTraced.nodes;
+    const filtered=new Set(); visibleNodes.forEach(id=>{if(egoSet.has(id))filtered.add(id);}); visibleNodes=filtered;
+    let info='<div><span class="val">'+nodeById[egoCenter].name+'</span></div>';
+    info+='<div>'+visibleNodes.size+' entities in '+(egoMode==='1'?'direct':'impact chain')+' view</div>';
+    if(egoMode==='2'&&egoTraced.categories.size>0){
+      info+='<div style="margin-top:3px;">Traced categories:</div><div>';
+      egoTraced.categories.forEach(c=>{info+='<span class="cat-tag">'+c+'</span>';});
+      info+='</div>';
+    }
+    document.getElementById('ego-info').innerHTML=info;
+  } else { document.getElementById('ego-info').innerHTML=''; }
+
+  // Build visible edges
+  visibleEdges=[]; const vn=visibleNodes, gk=groupBy==='leader'?'auditLeader':'businessUnit';
+  function addEdges(list){list.forEach(e=>{
+    if(!vn.has(e.source)||!vn.has(e.target)) return;
+    if(crossOnly&&(e.edgeType==='handoff_to'||e.edgeType==='handoff_from')){const a=nodeById[e.source],b=nodeById[e.target];if(a&&b&&a[gk]===b[gk])return;}
+    visibleEdges.push(e);
+  });}
+  if(showHandoffs){addEdges(edgesByType.handoff_to);addEdges(edgesByType.handoff_from);}
+  if(showApps) addEdges(edgesByType.shared_app);
+  if(showVendors) addEdges(edgesByType.shared_vendor);
+  if(showPrsas) addEdges(edgesByType.shared_prsa);
+
+  // Info panels
+  if(assetFocus){
+    const asset=DATA.assets.find(a=>a.name===activeAsset),depNodes=assetFocus.map(id=>nodeById[id]).filter(Boolean);
+    const inSc=depNodes.filter(n=>n.inScope==='Yes').length,riskB={};depNodes.forEach(n=>{riskB[n.riskRating]=(riskB[n.riskRating]||0)+1;});
+    const ps=assetPrimaryEntities[activeAsset]||new Set();
+    let h='<div><span class="val">'+activeAsset+'</span> ('+asset.type+')</div>';
+    h+='<div>Deps: <span class="val">'+depNodes.length+'</span> | In scope: <span class="val">'+inSc+'</span></div>';
+    if(ps.size)h+='<div>Primary: <span class="val">'+[...ps].join(', ')+'</span></div>';
+    h+='<div>'+Object.entries(riskB).map(([k,v])=>'<span style="color:'+RISK_COLORS[k]+'">'+k+':'+v+'</span>').join(' ')+'</div>';
+    document.getElementById('asset-info').innerHTML=h;
+  } else document.getElementById('asset-info').innerHTML='';
+
+  if(prsaFocus){
+    const ids=prsaEntities[activePrsa],pn=ids.map(id=>nodeById[id]).filter(Boolean),inSc=pn.filter(n=>n.inScope==='Yes').length;
+    let h='<div><span class="val">'+activePrsa+'</span> — '+pn.length+' entities</div>';
+    h+='<div>In scope: <span class="val">'+inSc+'</span> / Not: <span class="val">'+(pn.length-inSc)+'</span></div>';
+    const pl={};pn.forEach(n=>{pl[n.auditLeader]=(pl[n.auditLeader]||0)+1;});
+    h+='<div>'+Object.entries(pl).map(([k,v])=>k+':'+v).join(', ')+'</div>';
+    document.getElementById('prsa-info').innerHTML=h;
+  } else document.getElementById('prsa-info').innerHTML='';
+
+  document.getElementById('stat-total').textContent=DATA.nodes.length;
+  document.getElementById('stat-visible').textContent=visibleNodes.size;
+  const va=[...visibleNodes].map(id=>nodeById[id]).filter(Boolean);
+  document.getElementById('stat-inscope').textContent=va.filter(n=>n.inScope==='Yes').length;
+  document.getElementById('stat-notinscope').textContent=va.filter(n=>n.inScope==='No').length;
+  document.getElementById('stat-overdue').textContent=va.filter(n=>n.overdue==='Yes').length;
+  document.getElementById('stat-edges').textContent=visibleEdges.length;
+}
+
+// === Canvas ===
+function resize(){dpr=window.devicePixelRatio||1;const r=canvas.parentElement.getBoundingClientRect();W=r.width;H=r.height;canvas.width=W*dpr;canvas.height=H*dpr;canvas.style.width=W+'px';canvas.style.height=H+'px';ctx.setTransform(dpr,0,0,dpr,0,0);}
+function nodeRadius(n){return Math.max(6,Math.min(22,4+Math.sqrt(n.connectivityTotal)*1.8));}
+function screenPos(n){return{x:n.x*transform.k+transform.x,y:n.y*transform.k+transform.y};}
+
+function drawNode(n,dimmed){
+  const{x,y}=screenPos(n),r=nodeRadius(n)*transform.k;
+  if(x<-50||x>W+50||y<-50||y>H+50)return;
+  let color=RISK_COLORS[n.riskRating]||RISK_COLORS['N/A'];
+  if(impactMode&&impactExternals.has(n.id))color='#2980b9';
+  ctx.globalAlpha=dimmed?0.12:1;
+  const isIS=n.inScope==='Yes',isOD=n.overdue==='Yes',isPr=activeAsset&&assetPrimaryEntities[activeAsset]&&assetPrimaryEntities[activeAsset].has(n.id),isHz=hzMode==='highlight'&&n.horizontalFlag==='horizontal';
+  if(isIS){ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();
+    if(isPr){ctx.lineWidth=3*transform.k;ctx.strokeStyle='#f0f6fc';ctx.stroke();ctx.lineWidth=1.5*transform.k;ctx.strokeStyle='#000';ctx.stroke();}
+    if(isHz){ctx.setLineDash([4,3]);ctx.lineWidth=2*transform.k;ctx.strokeStyle='#da3633';ctx.stroke();ctx.setLineDash([]);}
+  }else{ctx.save();ctx.translate(x,y);ctx.rotate(Math.PI/4);const s=r*0.8;ctx.beginPath();ctx.rect(-s,-s,s*2,s*2);ctx.fillStyle=color;ctx.fill();
+    if(isOD){ctx.lineWidth=2.5*transform.k;ctx.strokeStyle='#1c2128';ctx.stroke();}
+    if(isPr){ctx.lineWidth=3*transform.k;ctx.strokeStyle='#f0f6fc';ctx.stroke();}
+    if(isHz){ctx.setLineDash([4,3]);ctx.lineWidth=2*transform.k;ctx.strokeStyle='#da3633';ctx.stroke();ctx.setLineDash([]);}
+    ctx.restore();}
+  if(egoMode!=='off'&&egoCenter===n.id){ctx.beginPath();ctx.arc(x,y,r+5*transform.k,0,Math.PI*2);ctx.strokeStyle='#58a6ff';ctx.lineWidth=2.5;ctx.stroke();}
+  const fs=transform.k>0.6?(transform.k>1.2?11:10):0;
+  if(fs>0){ctx.font='500 '+fs+'px monospace';ctx.fillStyle=dimmed?(darkMode?'rgba(240,246,252,0.12)':'rgba(31,35,40,0.12)'):(darkMode?'#f0f6fc':'#1f2328');ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText(transform.k>1.5?n.name:n.id,x,y+r+3);}
+  ctx.globalAlpha=1;
+}
+
+function draw(){
+  const bg=darkMode?'#0d1117':'#ffffff';
+  ctx.clearRect(0,0,W,H);ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+  const sA=selectedSearch!==null,sN=new Set();
+  if(sA)(edgesByNode[selectedSearch]||[]).forEach(e=>{if(e.edgeType==='handoff_to'||e.edgeType==='handoff_from'){sN.add(e.source);sN.add(e.target);}});
+  // Also dim for selected node
+  const selActive=selectedNode!==null&&!sA;
+  const selNeighbors=new Set();
+  if(selActive)(edgesByNode[selectedNode]||[]).forEach(e=>{if(e.edgeType==='handoff_to'||e.edgeType==='handoff_from'){selNeighbors.add(e.source);selNeighbors.add(e.target);}});
+
+  if(!activeAsset&&!activePrsa){const gk=groupBy==='leader'?'auditLeader':'businessUnit',groups=groupBy==='leader'?leaders:bus;
+    groups.forEach((g,gi)=>{const cn=nodes.filter(n=>n[gk]===g&&visibleNodes.has(n.id));if(!cn.length)return;
+      const f=cn[0],sx=f.cx*transform.k+transform.x,sy=f.cy*transform.k+transform.y,sw=f.clusterW*transform.k,sh=f.clusterH*transform.k;
+      ctx.fillStyle=CC[gi%CC.length];ctx.globalAlpha=0.08;ctx.beginPath();ctx.roundRect(sx-sw/2,sy-sh/2,sw,sh,12*transform.k);ctx.fill();ctx.globalAlpha=1;
+      if(transform.k>0.35){const fs=Math.max(11,Math.min(18,15*transform.k));ctx.font='600 '+fs+'px sans-serif';ctx.fillStyle=darkMode?'#8b949e':'#656d76';ctx.textAlign='center';
+        const label=g.length>35?g.substring(0,33)+'…':g;ctx.fillText(label,sx,sy-sh/2+Math.max(14,16*transform.k));}
+    });}
+
+  visibleEdges.forEach(e=>{const a=nodeById[e.source],b=nodeById[e.target];if(!a||!b)return;
+    const pa=screenPos(a),pb=screenPos(b);
+    if(Math.max(pa.x,pb.x)<-50||Math.min(pa.x,pb.x)>W+50||Math.max(pa.y,pb.y)<-50||Math.min(pa.y,pb.y)>H+50)return;
+    const st=EDGE_STYLES[e.edgeType];let dim=false;
+    if(sA&&!((e.source===selectedSearch||e.target===selectedSearch)&&(e.edgeType==='handoff_to'||e.edgeType==='handoff_from')))dim=true;
+    ctx.globalAlpha=dim?0.04:(st.alpha||0.7);ctx.strokeStyle=st.color;
+    ctx.lineWidth=(bidirectional.has(e.source+'-'+e.target)?st.width*2:st.width)*Math.min(transform.k,1.5);
+    ctx.setLineDash(st.dash);ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);ctx.stroke();
+    if(impactMode&&(e.edgeType==='handoff_to'||e.edgeType==='handoff_from')&&!dim){
+      const dx=pb.x-pa.x,dy=pb.y-pa.y,len=Math.sqrt(dx*dx+dy*dy);
+      if(len>10){const nr=nodeRadius(b)*transform.k,ax=pb.x-dx/len*nr,ay=pb.y-dy/len*nr,ang=Math.atan2(dy,dx),aS=6*Math.min(transform.k,1.5);
+        ctx.fillStyle=st.color;ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(ax-aS*Math.cos(ang-0.4),ay-aS*Math.sin(ang-0.4));ctx.lineTo(ax-aS*Math.cos(ang+0.4),ay-aS*Math.sin(ang+0.4));ctx.closePath();ctx.fill();}}
+  });ctx.setLineDash([]);ctx.globalAlpha=1;
+
+  nodes.forEach(n=>{if(!visibleNodes.has(n.id))return;let dim=false;if(sA&&n.id!==selectedSearch&&!sN.has(n.id))dim=true;if(selActive&&n.id!==selectedNode&&!selNeighbors.has(n.id))dim=true;drawNode(n,dim);});
+  // Search highlight ring
+  if(sA&&nodeById[selectedSearch]&&visibleNodes.has(selectedSearch)){const sn=nodeById[selectedSearch],{x,y}=screenPos(sn),r=nodeRadius(sn)*transform.k+6;
+    ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.strokeStyle='#58a6ff';ctx.lineWidth=2;ctx.stroke();}
+  // Selected node ring
+  if(selectedNode&&nodeById[selectedNode]&&visibleNodes.has(selectedNode)&&!sA){const sn=nodeById[selectedNode],{x,y}=screenPos(sn),r=nodeRadius(sn)*transform.k+6;
+    ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.strokeStyle='#f78166';ctx.lineWidth=2.5;ctx.stroke();}
+}
+
+// === Interaction ===
+let isDragging=false,dragStart={x:0,y:0},dragTransStart={x:0,y:0},dragMoved=false;
+canvas.addEventListener('mousedown',e=>{isDragging=true;dragMoved=false;dragStart={x:e.clientX,y:e.clientY};dragTransStart={x:transform.x,y:transform.y};});
+canvas.addEventListener('mousemove',e=>{
+  if(isDragging){const dx=e.clientX-dragStart.x,dy=e.clientY-dragStart.y;if(Math.abs(dx)>3||Math.abs(dy)>3)dragMoved=true;
+    transform.x=dragTransStart.x+dx;transform.y=dragTransStart.y+dy;draw();return;}
+  const rect=canvas.getBoundingClientRect(),mx=e.clientX-rect.left,my=e.clientY-rect.top;hoveredNode=null;
+  for(const n of nodes){if(!visibleNodes.has(n.id))continue;const p=screenPos(n),r=nodeRadius(n)*transform.k+4;
+    if(Math.abs(mx-p.x)<r&&Math.abs(my-p.y)<r){hoveredNode=n;break;}}
+  if(hoveredNode){const n=hoveredNode;
+    let h='<div class="tt-id">'+n.id+'</div><div class="tt-title">'+n.name+'</div>';
+    h+='<div class="tt-row"><span class="tt-label">Audit Leader</span><span class="tt-val">'+n.auditLeader+'</span></div>';
+    h+='<div class="tt-row"><span class="tt-label">Business Unit</span><span class="tt-val">'+n.businessUnit+'</span></div>';
+    h+='<div class="tt-row"><span class="tt-label">Risk</span><span class="tt-val" style="color:'+(RISK_COLORS[n.riskRating]||'#95a5a6')+'">'+n.riskRating+'</span></div>';
+    h+='<div class="tt-row"><span class="tt-label">Connectivity</span><span class="tt-val">'+n.connectivityTotal+'</span></div>';
+    h+='<div class="tt-row"><span class="tt-label">In Scope / Overdue</span><span class="tt-val">'+n.inScope+' / '+n.overdue+'</span></div>';
+    h+='<div class="tt-row"><span class="tt-label">Handoff To / From</span><span class="tt-val">'+n.handoffTo+' / '+n.handoffFrom+'</span></div>';
+    h+='<div class="tt-row"><span class="tt-label">Type</span><span class="tt-val">'+n.horizontalFlag+'</span></div>';
+    if(n.hcRisks)h+='<div class="tt-risks">'+n.hcRisks+'</div>';
+    tooltip.innerHTML=h;tooltip.style.display='block';
+    let tx=e.clientX-330+12,ty=e.clientY+12;if(tx+340>W)tx=e.clientX-330-350;if(ty+220>H)ty=e.clientY-220;
+    tooltip.style.left=tx+'px';tooltip.style.top=ty+'px';
+  } else {
+    // Check if hovering over a cluster background
+    let hoveredCluster=null;
+    if(!activeAsset&&!activePrsa){
+      const gk=groupBy==='leader'?'auditLeader':'businessUnit',groups=groupBy==='leader'?leaders:bus;
+      groups.forEach((g,gi)=>{
+        const cn=nodes.filter(n=>n[gk]===g&&visibleNodes.has(n.id));if(!cn.length||hoveredCluster)return;
+        const f=cn[0],sx=f.cx*transform.k+transform.x,sy=f.cy*transform.k+transform.y,sw=f.clusterW*transform.k/2,sh=f.clusterH*transform.k/2;
+        if(mx>=sx-sw&&mx<=sx+sw&&my>=sy-sh&&my<=sy+sh){
+          const nodeCount=cn.length,inSc=cn.filter(n=>n.inScope==='Yes').length,crit=cn.filter(n=>n.riskRating==='Critical').length,hi=cn.filter(n=>n.riskRating==='High').length;
+          let h='<div class="tt-title">'+g+'</div>';
+          h+='<div class="tt-row"><span class="tt-label">Entities</span><span class="tt-val">'+nodeCount+'</span></div>';
+          h+='<div class="tt-row"><span class="tt-label">In Scope</span><span class="tt-val">'+inSc+' / '+nodeCount+'</span></div>';
+          h+='<div class="tt-row"><span class="tt-label">Critical</span><span class="tt-val" style="color:#c0392b">'+crit+'</span></div>';
+          h+='<div class="tt-row"><span class="tt-label">High</span><span class="tt-val" style="color:#e67e22">'+hi+'</span></div>';
+          hoveredCluster=g;tooltip.innerHTML=h;tooltip.style.display='block';
+          let tx=e.clientX-330+12,ty=e.clientY+12;if(tx+340>W)tx=e.clientX-330-350;if(ty+200>H)ty=e.clientY-200;
+          tooltip.style.left=tx+'px';tooltip.style.top=ty+'px';
+        }
+      });
+    }
+    if(!hoveredCluster) {
+      // Check edge hover if edge tooltips enabled
+      let hoveredEdge=null;
+      if(showEdgeTooltips){
+        let minDist=12;
+        visibleEdges.forEach(e=>{
+          const a=nodeById[e.source],b=nodeById[e.target];if(!a||!b)return;
+          const pa=screenPos(a),pb=screenPos(b);
+          // Point-to-line-segment distance
+          const dx=pb.x-pa.x,dy=pb.y-pa.y,len2=dx*dx+dy*dy;
+          if(len2===0)return;
+          let t=((mx-pa.x)*dx+(my-pa.y)*dy)/len2;
+          t=Math.max(0,Math.min(1,t));
+          const px=pa.x+t*dx,py=pa.y+t*dy;
+          const dist=Math.sqrt((mx-px)*(mx-px)+(my-py)*(my-py));
+          if(dist<minDist){minDist=dist;hoveredEdge=e;}
+        });
+      }
+      if(hoveredEdge){
+        const eName={handoff_to:'Handoff →',handoff_from:'Handoff ←',shared_app:'Shared App',shared_vendor:'Shared Vendor',shared_prsa:'Shared PRSA'};
+        const sn=nodeById[hoveredEdge.source],tn=nodeById[hoveredEdge.target];
+        let h='<div class="tt-title">'+(eName[hoveredEdge.edgeType]||hoveredEdge.edgeType)+'</div>';
+        h+='<div class="tt-row"><span class="tt-label">From</span><span class="tt-val">'+hoveredEdge.source+(sn?' — '+sn.name:'')+'</span></div>';
+        h+='<div class="tt-row"><span class="tt-label">To</span><span class="tt-val">'+hoveredEdge.target+(tn?' — '+tn.name:'')+'</span></div>';
+        if(hoveredEdge.detail)h+='<div class="tt-row"><span class="tt-label">Detail</span><span class="tt-val">'+hoveredEdge.detail+'</span></div>';
+        if(hoveredEdge.category&&hoveredEdge.category!=='UNKNOWN'&&hoveredEdge.category!=='')h+='<div class="tt-row"><span class="tt-label">Category</span><span class="tt-val"><span class="cat-tag">'+hoveredEdge.category+'</span></span></div>';
+        tooltip.innerHTML=h;tooltip.style.display='block';
+        let tx=e.clientX-330+12,ty=e.clientY+12;if(tx+340>W)tx=e.clientX-330-350;if(ty+180>H)ty=e.clientY-180;
+        tooltip.style.left=tx+'px';tooltip.style.top=ty+'px';
+      } else { tooltip.style.display='none'; }
+    }
+  }
+});
+canvas.addEventListener('mouseup',e=>{
+  if(!dragMoved){const rect=canvas.getBoundingClientRect(),mx=e.clientX-rect.left,my=e.clientY-rect.top;let clicked=null;
+    for(const n of nodes){if(!visibleNodes.has(n.id))continue;const p=screenPos(n),r=nodeRadius(n)*transform.k+4;
+      if(Math.abs(mx-p.x)<r&&Math.abs(my-p.y)<r){clicked=n;break;}}
+    if(clicked){
+      selectedNode=clicked.id;
+      showNodeDetail(clicked);
+      if(egoMode!=='off'){egoCenter=clicked.id;updateVisibility();}
+      draw();
+    } else {
+      // Clicked empty space — deselect
+      selectedNode=null;document.getElementById('node-detail-panel').style.display='none';draw();
+    }
+  }isDragging=false;});
+canvas.addEventListener('mouseleave',()=>{isDragging=false;tooltip.style.display='none';});
+canvas.addEventListener('wheel',e=>{e.preventDefault();const rect=canvas.getBoundingClientRect(),mx=e.clientX-rect.left,my=e.clientY-rect.top;
+  const f=e.deltaY<0?1.12:1/1.12,nk=Math.max(0.15,Math.min(5,transform.k*f)),r=nk/transform.k;
+  transform.x=mx-(mx-transform.x)*r;transform.y=my-(my-transform.y)*r;transform.k=nk;draw();},{passive:false});
+
+// === Node detail panel ===
+function showNodeDetail(n){
+  const panel=document.getElementById('node-detail-panel');
+  const det=document.getElementById('node-detail');
+  const rc=RISK_COLORS[n.riskRating]||'#95a5a6';
+  // Count handoff connections
+  const ho=(edgesByNode[n.id]||[]).filter(e=>e.edgeType==='handoff_to'||e.edgeType==='handoff_from');
+  const targets=new Set(); ho.forEach(e=>{targets.add(e.source===n.id?e.target:e.source);});
+  let h='<div class="nd-id">'+n.id+'</div><div class="nd-title">'+n.name+'</div>';
+  h+='<div class="nd-row"><span class="nd-label">Audit Leader</span><span class="nd-val">'+n.auditLeader+'</span></div>';
+  h+='<div class="nd-row"><span class="nd-label">Business Unit</span><span class="nd-val">'+n.businessUnit+'</span></div>';
+  h+='<div class="nd-row"><span class="nd-label">Risk Rating</span><span class="nd-val" style="color:'+rc+'">'+n.riskRating+'</span></div>';
+  h+='<div class="nd-row"><span class="nd-label">Connectivity</span><span class="nd-val">'+n.connectivityTotal+'</span></div>';
+  h+='<div class="nd-row"><span class="nd-label">In Scope</span><span class="nd-val">'+n.inScope+'</span></div>';
+  h+='<div class="nd-row"><span class="nd-label">Overdue</span><span class="nd-val">'+n.overdue+'</span></div>';
+  h+='<div class="nd-row"><span class="nd-label">Handoff To / From</span><span class="nd-val">'+n.handoffTo+' / '+n.handoffFrom+'</span></div>';
+  h+='<div class="nd-row"><span class="nd-label">Type</span><span class="nd-val">'+n.horizontalFlag+'</span></div>';
+  if(n.pga) h+='<div class="nd-row"><span class="nd-label">PGA/ASL</span><span class="nd-val">'+n.pga+'</span></div>';
+  if(targets.size>0){
+    h+='<div style="margin-top:5px;font-size:10px;color:#8b949e;">Connected to (handoffs):</div><div style="font-size:10px;margin-top:2px;">';
+    [...targets].sort().forEach(tid=>{const tn=nodeById[tid];if(tn)h+='<span style="color:'+(RISK_COLORS[tn.riskRating]||'#95a5a6')+'">'+tid+'</span> ';});
+    h+='</div>';
+  }
+  if(n.hcRisks) h+='<div class="nd-risks" style="margin-top:5px;">'+n.hcRisks+'</div>';
+  det.innerHTML=h;panel.style.display='block';
+}
+document.getElementById('nd-close').addEventListener('click',()=>{selectedNode=null;document.getElementById('node-detail-panel').style.display='none';draw();});
+
+// === Double-click to zoom into cluster ===
+let lastZoomedCluster=null;
+canvas.addEventListener('dblclick',e=>{
+  const rect=canvas.getBoundingClientRect(),mx=e.clientX-rect.left,my=e.clientY-rect.top;
+  // Check if clicking a node first — don't zoom cluster
+  for(const n of nodes){if(!visibleNodes.has(n.id))continue;const p=screenPos(n),r=nodeRadius(n)*transform.k+4;
+    if(Math.abs(mx-p.x)<r&&Math.abs(my-p.y)<r) return;}
+  // Check clusters
+  if(!activeAsset&&!activePrsa){
+    const gk=groupBy==='leader'?'auditLeader':'businessUnit',groups=groupBy==='leader'?leaders:bus;
+    for(let gi=0;gi<groups.length;gi++){
+      const g=groups[gi];
+      const cn=nodes.filter(n=>n[gk]===g&&visibleNodes.has(n.id));if(!cn.length)continue;
+      const f=cn[0],sx=f.cx*transform.k+transform.x,sy=f.cy*transform.k+transform.y,sw=f.clusterW*transform.k/2,sh=f.clusterH*transform.k/2;
+      if(mx>=sx-sw&&mx<=sx+sw&&my>=sy-sh&&my<=sy+sh){
+        // Zoom into this cluster
+        lastZoomedCluster=g;
+        const xs=cn.map(n=>n.x),ys=cn.map(n=>n.y);
+        const cMinX=Math.min(...xs)-60,cMaxX=Math.max(...xs)+60,cMinY=Math.min(...ys)-60,cMaxY=Math.max(...ys)+60;
+        const span=Math.max(cMaxX-cMinX,cMaxY-cMinY);
+        transform.k=Math.min(W,H)/span;transform.x=W/2-(cMinX+cMaxX)/2*transform.k;transform.y=H/2-(cMinY+cMaxY)/2*transform.k;
+        draw();return;
+      }
+    }
+  }
+  // Double-click on empty space — zoom back out
+  if(lastZoomedCluster){lastZoomedCluster=null;fitAll();draw();}
+});
+
+// === Controls ===
+document.getElementById('tog-handoff').addEventListener('change',function(){showHandoffs=this.checked;updateVisibility();draw();});
+document.getElementById('tog-app').addEventListener('change',function(){showApps=this.checked;updateVisibility();draw();});
+document.getElementById('tog-vendor').addEventListener('change',function(){showVendors=this.checked;updateVisibility();draw();});
+document.getElementById('tog-prsa').addEventListener('change',function(){showPrsas=this.checked;updateVisibility();draw();});
+document.getElementById('tog-crossonly').addEventListener('change',function(){crossOnly=this.checked;updateVisibility();draw();});
+document.getElementById('tog-edge-tip').addEventListener('change',function(){showEdgeTooltips=this.checked;});
+document.getElementById('btn-theme').addEventListener('click',()=>{
+  darkMode=!darkMode;document.body.classList.toggle('light',!darkMode);
+  document.getElementById('btn-theme').innerHTML=darkMode?'&#9788;':'&#9790;';draw();
+});
+document.querySelectorAll('.leader-cb').forEach(cb=>{cb.addEventListener('change',()=>{updateVisibility();draw();});});
+document.getElementById('leaders-all').addEventListener('click',()=>{document.querySelectorAll('.leader-cb').forEach(cb=>{cb.checked=true;});updateVisibility();draw();});
+document.getElementById('leaders-none').addEventListener('click',()=>{document.querySelectorAll('.leader-cb').forEach(cb=>{cb.checked=false;});updateVisibility();draw();});
+document.querySelectorAll('[data-group]').forEach(btn=>{btn.addEventListener('click',function(){document.querySelectorAll('[data-group]').forEach(b=>b.classList.remove('active'));this.classList.add('active');groupBy=this.dataset.group;computeLayout(groupBy);updateVisibility();fitAll();draw();});});
+document.querySelectorAll('#risk-filter-btns .btn').forEach(btn=>{btn.addEventListener('click',function(){document.querySelectorAll('#risk-filter-btns .btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');activeRisk=this.dataset.risk;updateVisibility();draw();});});
+document.querySelectorAll('#cov-filter-btns .btn').forEach(btn=>{btn.addEventListener('click',function(){document.querySelectorAll('#cov-filter-btns .btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');activeFilter=this.dataset.filter;updateVisibility();draw();});});
+document.querySelectorAll('#hz-btns .btn').forEach(btn=>{btn.addEventListener('click',function(){document.querySelectorAll('#hz-btns .btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');hzMode=this.dataset.hz;updateVisibility();draw();});});
+document.querySelectorAll('#ego-btns .btn').forEach(btn=>{btn.addEventListener('click',function(){document.querySelectorAll('#ego-btns .btn').forEach(b=>b.classList.remove('active'));this.classList.add('active');egoMode=this.dataset.ego;if(egoMode==='off')egoCenter=null;updateVisibility();draw();});});
+assetSelect.addEventListener('change',function(){activeAsset=this.value;activePrsa='';prsaSelect.value='';selectedSearch=null;updateVisibility();
+  if(activeAsset){const v=[...visibleNodes].map(id=>nodeById[id]).filter(Boolean);if(v.length){const xs=v.map(n=>n.x),ys=v.map(n=>n.y);
+    transform.k=Math.min(W,H)/Math.max(Math.max(...xs)-Math.min(...xs)+200,Math.max(...ys)-Math.min(...ys)+200);
+    transform.x=W/2-(Math.min(...xs)+Math.max(...xs))/2*transform.k;transform.y=H/2-(Math.min(...ys)+Math.max(...ys))/2*transform.k;}}else fitAll();draw();});
+prsaSelect.addEventListener('change',function(){activePrsa=this.value;activeAsset='';assetSelect.value='';selectedSearch=null;updateVisibility();
+  if(activePrsa){const v=[...visibleNodes].map(id=>nodeById[id]).filter(Boolean);if(v.length){const xs=v.map(n=>n.x),ys=v.map(n=>n.y);
+    transform.k=Math.min(W,H)/Math.max(Math.max(...xs)-Math.min(...xs)+200,Math.max(...ys)-Math.min(...ys)+200);
+    transform.x=W/2-(Math.min(...xs)+Math.max(...xs))/2*transform.k;transform.y=H/2-(Math.min(...ys)+Math.max(...ys))/2*transform.k;}}else fitAll();draw();});
+document.getElementById('search-input').addEventListener('input',function(){const q=this.value.toLowerCase().trim();if(!q){selectedSearch=null;draw();return;}
+  const f=nodes.find(n=>n.id.toLowerCase()===q||n.name.toLowerCase().includes(q));selectedSearch=f?f.id:null;
+  if(f){const{x,y}=screenPos(f);if(x<0||x>W||y<0||y>H){transform.x=W/2-f.x*transform.k;transform.y=H/2-f.y*transform.k;}}draw();});
+
+document.getElementById('btn-reset').addEventListener('click',()=>{
+  activeFilter='all';activeRisk='all';activeAsset='';activePrsa='';selectedSearch=null;selectedNode=null;egoMode='off';egoCenter=null;hzMode='off';crossOnly=false;
+  showHandoffs=true;showApps=false;showVendors=false;showPrsas=false;showEdgeTooltips=false;groupBy='leader';lastZoomedCluster=null;
+  document.getElementById('tog-handoff').checked=true;document.getElementById('tog-app').checked=false;
+  document.getElementById('tog-vendor').checked=false;document.getElementById('tog-prsa').checked=false;document.getElementById('tog-crossonly').checked=false;document.getElementById('tog-edge-tip').checked=false;
+  document.getElementById('node-detail-panel').style.display='none';
+  document.querySelectorAll('.leader-cb').forEach(cb=>{cb.checked=true;});
+  assetSelect.value='';prsaSelect.value='';document.getElementById('search-input').value='';
+  ['cov-filter-btns','risk-filter-btns','hz-btns','ego-btns'].forEach(id=>{document.querySelectorAll('#'+id+' .btn').forEach(b=>b.classList.remove('active'));});
+  document.querySelector('[data-filter="all"]').classList.add('active');document.querySelector('[data-risk="all"]').classList.add('active');
+  document.querySelector('[data-hz="off"]').classList.add('active');document.querySelector('[data-ego="off"]').classList.add('active');
+  document.querySelectorAll('[data-group]').forEach(b=>b.classList.remove('active'));document.querySelector('[data-group="leader"]').classList.add('active');
+  computeLayout('leader');updateVisibility();fitAll();draw();
+});
+
+document.getElementById('btn-export-png').addEventListener('click',()=>{const l=document.createElement('a');l.download='audit_network_'+new Date().toISOString().slice(0,10)+'.png';l.href=canvas.toDataURL('image/png');l.click();});
+document.getElementById('btn-export-csv').addEventListener('click',()=>{
+  let csv='Entity ID,Entity Name,Audit Leader,Business Unit,Risk Rating,In Scope,Overdue,Connectivity,Horizontal,Handoff To,Handoff From,High/Critical Risks\n';
+  [...visibleNodes].map(id=>nodeById[id]).filter(Boolean).sort((a,b)=>a.id.localeCompare(b.id)).forEach(n=>{
+    csv+='"'+n.id+'","'+n.name+'","'+n.auditLeader+'","'+n.businessUnit+'","'+n.riskRating+'","'+n.inScope+'","'+n.overdue+'",'+n.connectivityTotal+',"'+n.horizontalFlag+'",'+n.handoffTo+','+n.handoffFrom+',"'+n.hcRisks+'"\n';
+  });
+  const b=new Blob([csv],{type:'text/csv'}),l=document.createElement('a');l.download='audit_network_'+new Date().toISOString().slice(0,10)+'.csv';l.href=URL.createObjectURL(b);l.click();
+});
+
+function fitAll(){const v=[...visibleNodes].map(id=>nodeById[id]).filter(Boolean);if(!v.length)v.push(...nodes);
+  const xs=v.map(n=>n.x),ys=v.map(n=>n.y),minX=Math.min(...xs)-250,maxX=Math.max(...xs)+250,minY=Math.min(...ys)-220,maxY=Math.max(...ys)+220;
+  transform.k=Math.min(W,H)/Math.max(maxX-minX,maxY-minY);transform.x=W/2-(minX+maxX)/2*transform.k;transform.y=H/2-(minY+maxY)/2*transform.k;}
+
+window.addEventListener('resize',()=>{resize();draw();});
+resize();updateVisibility();fitAll();draw();
+</script>
+</body>
+</html>

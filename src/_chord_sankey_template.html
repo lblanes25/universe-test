@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PGA Relationship Explorer</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+:root {
+  --bg: #ffffff; --surface: #f7f8fa; --surface2: #eef0f4; --border: #dde1e8;
+  --text: #2d3748; --text-dim: #8492a6; --text-bright: #1a202c;
+  --blue-900: #1e3a5f; --blue-700: #2b6cb0; --blue-500: #4299e1;
+  --blue-300: #90cdf4; --blue-100: #ebf8ff;
+  --ring: #2b6cb0; --ribbon: #4299e1;
+  --dark-bg: #0f1218; --dark-surface: #181d27; --dark-border: #2a3042; --dark-text: #c9d1d9; --dark-bright: #f0f2f7;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); height:100vh; overflow:hidden; }
+#app { display:flex; height:100vh; }
+#chord-view, #sankey-view { flex:1; display:flex; flex-direction:column; }
+#sankey-view { display:none; background:var(--dark-bg); color:var(--dark-text); }
+
+/* Chord view - light theme */
+.chord-header { padding:24px 32px 16px; text-align:center; }
+.chord-header h1 { font-family:'Source Serif 4',Georgia,serif; font-size:24px; font-weight:700; color:var(--text-bright); letter-spacing:-0.5px; }
+.chord-header p { font-size:13px; color:var(--text-dim); margin-top:6px; }
+.chord-area { flex:1; display:flex; align-items:center; justify-content:center; position:relative; }
+.chord-footer { padding:10px 32px 18px; text-align:center; font-size:12px; color:var(--text-dim); font-style:italic; }
+#chord-tooltip { position:absolute; background:#fff; border:1px solid var(--border); border-radius:10px; padding:12px 16px; font-size:12px; pointer-events:none; z-index:100; box-shadow:0 4px 20px rgba(0,0,0,0.1); display:none; line-height:1.6; }
+#chord-tooltip .ct-title { font-weight:700; color:var(--text-bright); font-size:13px; margin-bottom:2px; }
+#chord-tooltip .ct-val { font-family:'JetBrains Mono',monospace; color:var(--blue-700); font-weight:500; }
+
+/* Sankey view - dark theme */
+.sankey-header { padding:16px 28px; border-bottom:1px solid var(--dark-border); display:flex; align-items:center; gap:16px; background:var(--dark-surface); }
+.back-btn { background:transparent; border:1px solid var(--dark-border); color:var(--dark-text); padding:6px 14px; border-radius:6px; font-size:12px; cursor:pointer; font-family:inherit; }
+.back-btn:hover { background:var(--dark-border); color:var(--dark-bright); }
+.sankey-title-area { }
+.sankey-title-area h2 { font-size:17px; font-weight:700; color:var(--dark-bright); }
+.sankey-title-area p { font-size:11px; color:var(--dark-text); margin-top:2px; }
+.sankey-body { flex:1; display:flex; overflow:hidden; }
+.sankey-canvas { flex:1; overflow:hidden; padding:20px; position:relative; }
+.sankey-panel { width:280px; background:var(--dark-surface); border-left:1px solid var(--dark-border); padding:16px; overflow-y:auto; }
+.sankey-panel h3 { font-size:10px; font-weight:600; color:var(--dark-text); text-transform:uppercase; letter-spacing:0.5px; margin:12px 0 6px; }
+.sankey-panel h3:first-child { margin-top:0; }
+.info-card { background:var(--dark-bg); border:1px solid var(--dark-border); border-radius:8px; padding:10px; margin-bottom:8px; }
+.info-row { display:flex; justify-content:space-between; font-size:11.5px; padding:2px 0; }
+.info-label { color:var(--dark-text); }
+.info-val { color:var(--dark-bright); font-weight:600; font-family:'JetBrains Mono',monospace; font-size:11px; }
+.entity-list { max-height:260px; overflow-y:auto; }
+.entity-item { font-size:11px; padding:4px 6px; border-radius:4px; display:flex; justify-content:space-between; align-items:center; }
+.entity-item:hover { background:rgba(255,255,255,0.04); }
+.entity-id { font-family:'JetBrains Mono',monospace; color:#6d8af8; font-size:10px; }
+.risk-dot { display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:4px; vertical-align:middle; }
+#sankey-tooltip { position:absolute; background:var(--dark-surface); border:1px solid var(--dark-border); border-radius:8px; padding:10px 14px; font-size:12px; pointer-events:none; z-index:100; box-shadow:0 8px 24px rgba(0,0,0,0.5); display:none; }
+.export-row { display:flex; gap:6px; margin-top:10px; }
+.export-row button { flex:1; }
+svg text { font-family:'DM Sans',sans-serif; }
+</style>
+</head>
+<body>
+<div id="app">
+
+<div id="chord-view">
+  <div class="chord-header">
+    <h1>PGA Relationship Map</h1>
+    <p>Click any segment to explore handoff flows by Audit Leader</p>
+  </div>
+  <div class="chord-area" id="chord-area"></div>
+  <div id="chord-tooltip"></div>
+  <div class="chord-footer">Ribbon thickness represents relationship strength</div>
+</div>
+
+<div id="sankey-view">
+  <div class="sankey-header">
+    <button class="back-btn" id="back-btn">&larr; Back</button>
+    <div class="sankey-title-area">
+      <h2 id="sankey-title"></h2>
+      <p id="sankey-subtitle"></p>
+    </div>
+  </div>
+  <div class="sankey-body">
+    <div class="sankey-canvas" id="sankey-container"></div>
+    <div id="sankey-tooltip"></div>
+    <div class="sankey-panel" id="sankey-panel">
+      <h3>Portfolio Summary</h3>
+      <div id="sankey-info"></div>
+      <h3>Entities</h3>
+      <div class="entity-list" id="sankey-entities"></div>
+      <div class="export-row">
+        <button class="back-btn" id="export-sankey-png">Export PNG</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+%%DATA_INJECTION%%
+
+const RISK_COLORS = {'Critical':'#ef4444','High':'#f59e0b','Medium':'#eab308','Low':'#22c55e','N/A':'#94a3b8'};
+
+// Filter out PGAs with too few entities — merge into "Other"
+const MIN_PGA_ENTITIES = 3;
+(function filterSmallPGAs() {
+  const small = DATA.pgas.filter(p => DATA.pgaSummaries[p].count < MIN_PGA_ENTITIES);
+  if (!small.length) return;
+  const keep = DATA.pgas.filter(p => DATA.pgaSummaries[p].count >= MIN_PGA_ENTITIES);
+  // Merge small PGAs into "Other"
+  const otherEntities = [], otherLeaders = new Set();
+  let otherInScope = 0;
+  small.forEach(p => {
+    const s = DATA.pgaSummaries[p];
+    s.entities.forEach(eid => { otherEntities.push(eid); DATA.entities[eid].pga = 'Other'; });
+    otherInScope += s.inScope;
+    s.leaders.forEach(l => otherLeaders.add(l));
+  });
+  if (otherEntities.length) {
+    keep.push('Other');
+    DATA.pgaSummaries['Other'] = { count: otherEntities.length, inScope: otherInScope, leaders: [...otherLeaders], entities: otherEntities };
+  }
+  // Rebuild matrix
+  const oldIdx = {}; DATA.pgas.forEach((p,i) => oldIdx[p]=i);
+  const newPgas = keep;
+  const n = newPgas.length;
+  const newMatrix = Array.from({length:n}, ()=>Array(n).fill(0));
+  const pgaMap = {}; // old pga name -> new index
+  DATA.pgas.forEach(p => { pgaMap[p] = newPgas.indexOf(small.includes(p) ? 'Other' : p); });
+  for (let i=0; i<DATA.pgas.length; i++) for (let j=0; j<DATA.pgas.length; j++) {
+    newMatrix[pgaMap[DATA.pgas[i]]][pgaMap[DATA.pgas[j]]] += DATA.matrix[i][j];
+  }
+  DATA.pgas = newPgas;
+  DATA.matrix = newMatrix;
+  console.log('Merged '+small.length+' small PGAs into Other ('+otherEntities.length+' entities)');
+})();
+
+// Blue monochrome palette for chord - each PGA gets a shade
+const BLUES = ['#1e3a5f','#2b6cb0','#3182ce','#4299e1','#63b3ed','#90cdf4'];
+const pgaColor = {}; DATA.pgas.forEach((p,i) => { pgaColor[p] = BLUES[i % BLUES.length]; });
+
+// ===================== CHORD DIAGRAM =====================
+function drawChord() {
+  const area = document.getElementById('chord-area');
+  const dim = Math.min(area.clientWidth, area.clientHeight) - 60;
+  const size = Math.min(dim, 640);
+  const outerR = size/2 - 30, innerR = outerR - 26, padAngle = 0.05;
+  const n = DATA.pgas.length, matrix = DATA.matrix;
+
+  // Group sums (total flow through each PGA)
+  const groupSums = [];
+  for (let i=0; i<n; i++) {
+    let s = 0;
+    for (let j=0; j<n; j++) s += matrix[i][j] + matrix[j][i];
+    groupSums.push(s);
+  }
+  const totalSum = groupSums.reduce((a,b)=>a+b,0) || 1;
+  const availAngle = Math.PI*2 - padAngle*n;
+
+  // Build group arcs
+  const groups = [];
+  let angle = 0;
+  for (let i=0; i<n; i++) {
+    const extent = (groupSums[i]/totalSum)*availAngle;
+    groups.push({ index:i, startAngle:angle, endAngle:angle+extent, value:groupSums[i], name:DATA.pgas[i] });
+    angle += extent + padAngle;
+  }
+
+  // Build chord ribbons
+  const chords = [];
+  for (let i=0; i<n; i++) for (let j=i; j<n; j++) {
+    const val = matrix[i][j] + matrix[j][i];
+    if (!val) continue;
+    chords.push({ source:i, target:j, value:val, iShare:val/(groupSums[i]||1), jShare:val/(groupSums[j]||1) });
+  }
+
+  // Assign angular sub-positions
+  const portAngles = groups.map(g => g.startAngle);
+  const chordArcs = chords.map(c => {
+    const gi=groups[c.source], gj=groups[c.target];
+    const iExt=(gi.endAngle-gi.startAngle)*c.iShare, jExt=(gj.endAngle-gj.startAngle)*c.jShare;
+    const iStart=portAngles[c.source]; portAngles[c.source]+=iExt;
+    const jStart=portAngles[c.target]; portAngles[c.target]+=jExt;
+    return {...c, ss:iStart, se:iStart+iExt, ts:jStart, te:jStart+jExt};
+  });
+
+  // Create SVG
+  const svgNS = 'http://www.w3.org/2000/svg';
+  const fullSize = size + 60;
+  const svg = document.createElementNS(svgNS,'svg');
+  svg.setAttribute('width', fullSize); svg.setAttribute('height', fullSize);
+  svg.setAttribute('viewBox', `${-fullSize/2} ${-fullSize/2} ${fullSize} ${fullSize}`);
+  area.innerHTML = '';
+  area.appendChild(svg);
+
+  // Helper: point on circle
+  const pt = (r, a) => [r*Math.cos(a - Math.PI/2), r*Math.sin(a - Math.PI/2)];
+
+  // Draw ribbons
+  const ribbonG = document.createElementNS(svgNS,'g');
+  svg.appendChild(ribbonG);
+
+  chordArcs.forEach((c, ci) => {
+    const r = innerR;
+    const [sx1,sy1]=pt(r,c.ss), [sx2,sy2]=pt(r,c.se), [tx1,ty1]=pt(r,c.ts), [tx2,ty2]=pt(r,c.te);
+    const sLarge = c.se-c.ss > Math.PI?1:0, tLarge = c.te-c.ts > Math.PI?1:0;
+    const d = `M${sx1},${sy1} A${r},${r} 0 ${sLarge} 1 ${sx2},${sy2} Q0,0 ${tx1},${ty1} A${r},${r} 0 ${tLarge} 1 ${tx2},${ty2} Q0,0 ${sx1},${sy1} Z`;
+
+    const path = document.createElementNS(svgNS,'path');
+    path.setAttribute('d', d);
+    path.setAttribute('fill', pgaColor[DATA.pgas[c.source]]);
+    path.setAttribute('opacity', '0.35');
+    path.setAttribute('stroke', 'rgba(255,255,255,0.3)');
+    path.setAttribute('stroke-width', '0.5');
+    path.style.cursor = 'pointer';
+    path.style.transition = 'opacity 0.2s';
+
+    path.addEventListener('mouseenter', (e) => {
+      path.setAttribute('opacity', '0.65');
+      const s=DATA.pgas[c.source], t=DATA.pgas[c.target];
+      const tt=document.getElementById('chord-tooltip');
+      tt.innerHTML=`<div class="ct-title">${s} &harr; ${t}</div><div><span class="ct-val">${c.value}</span> handoff relationships</div><div style="color:var(--text-dim);font-size:11px;">${matrix[c.source][c.target]} &rarr; / ${matrix[c.target][c.source]} &larr;</div>`;
+      tt.style.display='block';
+      const rect=area.getBoundingClientRect();
+      tt.style.left=(e.clientX-rect.left+14)+'px'; tt.style.top=(e.clientY-rect.top-50)+'px';
+    });
+    path.addEventListener('mousemove', (e) => {
+      const tt=document.getElementById('chord-tooltip'), rect=area.getBoundingClientRect();
+      tt.style.left=(e.clientX-rect.left+14)+'px'; tt.style.top=(e.clientY-rect.top-50)+'px';
+    });
+    path.addEventListener('mouseleave', () => {
+      path.setAttribute('opacity', '0.35');
+      document.getElementById('chord-tooltip').style.display='none';
+    });
+    ribbonG.appendChild(path);
+  });
+
+  // Draw outer arcs (ring segments)
+  groups.forEach((g,i) => {
+    const [ox1,oy1]=pt(outerR,g.startAngle), [ox2,oy2]=pt(outerR,g.endAngle);
+    const [ix1,iy1]=pt(innerR,g.endAngle), [ix2,iy2]=pt(innerR,g.startAngle);
+    const large = g.endAngle-g.startAngle > Math.PI ? 1 : 0;
+
+    const arcPath = document.createElementNS(svgNS,'path');
+    arcPath.setAttribute('d', `M${ox1},${oy1} A${outerR},${outerR} 0 ${large} 1 ${ox2},${oy2} L${ix1},${iy1} A${innerR},${innerR} 0 ${large} 0 ${ix2},${iy2} Z`);
+    arcPath.setAttribute('fill', pgaColor[g.name]);
+    arcPath.setAttribute('stroke', '#fff');
+    arcPath.setAttribute('stroke-width', '2');
+    arcPath.style.cursor = 'pointer';
+    arcPath.style.transition = 'opacity 0.2s';
+    arcPath.addEventListener('mouseenter', () => arcPath.setAttribute('opacity','0.8'));
+    arcPath.addEventListener('mouseleave', () => arcPath.setAttribute('opacity','1'));
+    arcPath.addEventListener('click', () => showSankey(g.name));
+    svg.appendChild(arcPath);
+
+    // Label along the outside
+    const midAngle = (g.startAngle + g.endAngle)/2;
+    const labelR = outerR + 18;
+    const [lx,ly] = pt(labelR, midAngle);
+    const rot = (midAngle * 180/Math.PI) - 90;
+    const flip = midAngle > Math.PI;
+
+    const text = document.createElementNS(svgNS,'text');
+    text.setAttribute('x', lx); text.setAttribute('y', ly);
+    text.setAttribute('fill', '#2d3748');
+    text.setAttribute('font-size', '13'); text.setAttribute('font-weight', '600');
+    text.setAttribute('font-style', 'italic');
+    text.style.cursor = 'pointer';
+    text.addEventListener('click', () => showSankey(g.name));
+
+    if (flip) {
+      text.setAttribute('text-anchor', 'end');
+      text.setAttribute('transform', `rotate(${rot+180},${lx},${ly})`);
+    } else {
+      text.setAttribute('text-anchor', 'start');
+      text.setAttribute('transform', `rotate(${rot},${lx},${ly})`);
+    }
+    text.setAttribute('dominant-baseline', 'middle');
+    text.textContent = g.name;
+    svg.appendChild(text);
+  });
+}
+
+// ===================== SANKEY =====================
+function showSankey(pgaName) {
+  document.getElementById('chord-view').style.display='none';
+  document.getElementById('sankey-view').style.display='flex';
+
+  const summary = DATA.pgaSummaries[pgaName];
+  document.getElementById('sankey-title').textContent = pgaName + ' — Handoff Flows';
+  document.getElementById('sankey-subtitle').textContent = summary.count+' entities · Flows grouped by Audit Leader';
+
+  const pgaEntIds = new Set(summary.entities);
+  const outbound=[], inbound=[], internal=[];
+  DATA.handoffs.forEach(h => {
+    const si=pgaEntIds.has(h.source), ti=pgaEntIds.has(h.target);
+    if(si&&ti) internal.push(h);
+    else if(si&&!ti) outbound.push(h);
+    else if(!si&&ti) inbound.push(h);
+  });
+
+  // Aggregate flows: leftLeader -> rightLeader
+  const leftLeaders = {};
+  pgaEntIds.forEach(eid => {
+    const e=DATA.entities[eid];
+    if(!leftLeaders[e.leader]) leftLeaders[e.leader]={entities:[],out:0,in_:0};
+    leftLeaders[e.leader].entities.push(eid);
+  });
+
+  const flows = {};
+  outbound.forEach(h => {
+    const sl=DATA.entities[h.source].leader, tl=DATA.entities[h.target].leader;
+    const key=sl+'->'+tl;
+    if(!flows[key]) flows[key]={srcLeader:sl,tgtLeader:tl,out:0,in_:0};
+    flows[key].out++;
+  });
+  inbound.forEach(h => {
+    const sl=DATA.entities[h.source].leader, tl=DATA.entities[h.target].leader;
+    const key=tl+'->'+sl;
+    if(!flows[key]) flows[key]={srcLeader:tl,tgtLeader:sl,out:0,in_:0};
+    flows[key].in_++;
+  });
+
+  const container = document.getElementById('sankey-container');
+  const W = Math.max(container.clientWidth-40, 600);
+  const availH = container.clientHeight - 40;
+  const sortedLeft = Object.keys(leftLeaders).sort();
+  const rightSet = new Set(); Object.values(flows).forEach(f=>rightSet.add(f.tgtLeader));
+  const sortedRight = [...rightSet].sort();
+
+  // Compute node heights — fit to viewport, proportional to flow volume
+  const nodeGap=8, minH=14, topPad=50;
+  const leftRaw={}, rightRaw={};
+  sortedLeft.forEach(l => {
+    leftRaw[l] = Object.values(flows).filter(f=>f.srcLeader===l).reduce((s,f)=>s+f.out+f.in_,0) || 1;
+  });
+  sortedRight.forEach(l => {
+    rightRaw[l] = Object.values(flows).filter(f=>f.tgtLeader===l).reduce((s,f)=>s+f.out+f.in_,0) || 1;
+  });
+  const totalLRaw = Object.values(leftRaw).reduce((a,b)=>a+b,0);
+  const totalRRaw = Object.values(rightRaw).reduce((a,b)=>a+b,0);
+  const usableH = availH - topPad - 20;
+  const leftGapTotal = (sortedLeft.length-1)*nodeGap;
+  const rightGapTotal = (sortedRight.length-1)*nodeGap;
+
+  // Use a single pixel-per-handoff scale so ribbons fill bars on both sides
+  const maxSideRaw = Math.max(totalLRaw, totalRRaw);
+  const maxSideGaps = Math.max(leftGapTotal, rightGapTotal);
+  const pxPerUnit = (usableH - maxSideGaps) / maxSideRaw;
+
+  const leftH={}, rightH={};
+  sortedLeft.forEach(l => { leftH[l] = Math.max(minH, leftRaw[l] * pxPerUnit); });
+  sortedRight.forEach(l => { rightH[l] = Math.max(minH, rightRaw[l] * pxPerUnit); });
+
+  const H = Math.max(availH, 300);
+  const leftX=160, rightX=W-180, nodeW=16;
+
+  const svgNS='http://www.w3.org/2000/svg';
+  const svg=document.createElementNS(svgNS,'svg');
+  svg.setAttribute('width',W); svg.setAttribute('height',H); svg.id='sankey-svg';
+  container.innerHTML=''; container.appendChild(svg);
+
+  // Position nodes
+  const leftPos={}, rightPos={};
+  let ly=topPad; sortedLeft.forEach(l=>{leftPos[l]={x:leftX,y:ly,h:leftH[l]};ly+=leftH[l]+nodeGap;});
+  let ry=topPad; sortedRight.forEach(l=>{rightPos[l]={x:rightX,y:ry,h:rightH[l]};ry+=rightH[l]+nodeGap;});
+
+  // Port trackers
+  const lPortY={}, rPortY={};
+  sortedLeft.forEach(l=>lPortY[l]=leftPos[l].y);
+  sortedRight.forEach(l=>rPortY[l]=rightPos[l].y);
+
+  const flowList = Object.values(flows).sort((a,b)=>(b.out+b.in_)-(a.out+a.in_));
+  const sankeyTT = document.getElementById('sankey-tooltip');
+
+  // Draw flows — ribbon thickness = flow value * pxPerUnit (fills bars exactly)
+  const linkG = document.createElementNS(svgNS,'g');
+  svg.appendChild(linkG);
+
+  flowList.forEach(f => {
+    const total=f.out+f.in_, thickness=Math.max(1, total * pxPerUnit);
+    const lp=leftPos[f.srcLeader], rp=rightPos[f.tgtLeader];
+    if(!lp||!rp) return;
+    const sy=lPortY[f.srcLeader]+thickness/2, ty=rPortY[f.tgtLeader]+thickness/2;
+    lPortY[f.srcLeader]+=thickness; rPortY[f.tgtLeader]+=thickness;
+    const sx=lp.x+nodeW, tx=rp.x, mx=(sx+tx)/2;
+
+    const path=document.createElementNS(svgNS,'path');
+    path.setAttribute('d',`M${sx},${sy} C${mx},${sy} ${mx},${ty} ${tx},${ty}`);
+    path.setAttribute('fill','none'); path.setAttribute('stroke','#4299e1');
+    path.setAttribute('stroke-width',thickness); path.setAttribute('opacity','0.25');
+    path.style.cursor='pointer'; path.style.transition='opacity 0.15s';
+
+    path.addEventListener('mouseenter',(e)=>{
+      path.setAttribute('opacity','0.6');
+      let h=`<div style="font-weight:600;color:var(--dark-bright);margin-bottom:3px;">${f.srcLeader} &rarr; ${f.tgtLeader}</div>`;
+      if(f.out) h+=`<div style="color:#4299e1;">${f.out} outbound</div>`;
+      if(f.in_) h+=`<div style="color:#f5a623;">${f.in_} inbound</div>`;
+      sankeyTT.innerHTML=h; sankeyTT.style.display='block';
+      sankeyTT.style.left=(e.clientX+14)+'px'; sankeyTT.style.top=(e.clientY-40)+'px';
+    });
+    path.addEventListener('mousemove',(e)=>{sankeyTT.style.left=(e.clientX+14)+'px';sankeyTT.style.top=(e.clientY-40)+'px';});
+    path.addEventListener('mouseleave',()=>{path.setAttribute('opacity','0.25');sankeyTT.style.display='none';});
+    linkG.appendChild(path);
+  });
+
+  // Adaptive font size based on leader count
+  const labelSize = Math.max(8, Math.min(11, 120 / Math.max(sortedLeft.length, sortedRight.length)));
+
+  // Draw left nodes
+  sortedLeft.forEach(l=>{
+    const p=leftPos[l];
+    const rect=document.createElementNS(svgNS,'rect');
+    rect.setAttribute('x',p.x);rect.setAttribute('y',p.y);rect.setAttribute('width',nodeW);rect.setAttribute('height',p.h);
+    rect.setAttribute('fill','#4299e1');rect.setAttribute('rx','3');
+    svg.appendChild(rect);
+    const text=document.createElementNS(svgNS,'text');
+    text.setAttribute('x',p.x-10);text.setAttribute('y',p.y+p.h/2);
+    text.setAttribute('text-anchor','end');text.setAttribute('dominant-baseline','middle');
+    text.setAttribute('fill','#c9d1d9');text.setAttribute('font-size',labelSize);text.setAttribute('font-weight','500');
+    text.textContent=l+' ('+leftLeaders[l].entities.length+')';
+    svg.appendChild(text);
+  });
+
+  // Draw right nodes
+  sortedRight.forEach(l=>{
+    const p=rightPos[l];
+    const rect=document.createElementNS(svgNS,'rect');
+    rect.setAttribute('x',p.x);rect.setAttribute('y',p.y);rect.setAttribute('width',nodeW);rect.setAttribute('height',p.h);
+    rect.setAttribute('fill','#4a5568');rect.setAttribute('rx','3');
+    svg.appendChild(rect);
+    const text=document.createElementNS(svgNS,'text');
+    text.setAttribute('x',p.x+nodeW+10);text.setAttribute('y',p.y+p.h/2);
+    text.setAttribute('text-anchor','start');text.setAttribute('dominant-baseline','middle');
+    text.setAttribute('fill','#c9d1d9');text.setAttribute('font-size',labelSize);text.setAttribute('font-weight','500');
+    text.textContent=l;
+    svg.appendChild(text);
+  });
+
+  // Column headers
+  const lh=document.createElementNS(svgNS,'text');
+  lh.setAttribute('x',leftX+nodeW/2);lh.setAttribute('y',32);lh.setAttribute('text-anchor','middle');
+  lh.setAttribute('fill','#6b7280');lh.setAttribute('font-size','10');lh.setAttribute('font-weight','600');lh.setAttribute('letter-spacing','1');
+  lh.textContent=pgaName.split(',')[0].toUpperCase()+' PORTFOLIO';svg.appendChild(lh);
+  const rh=document.createElementNS(svgNS,'text');
+  rh.setAttribute('x',rightX+nodeW/2);rh.setAttribute('y',32);rh.setAttribute('text-anchor','middle');
+  rh.setAttribute('fill','#6b7280');rh.setAttribute('font-size','10');rh.setAttribute('font-weight','600');rh.setAttribute('letter-spacing','1');
+  rh.textContent='EXTERNAL LEADERS';svg.appendChild(rh);
+
+  // Side panel
+  document.getElementById('sankey-info').innerHTML=`
+    <div class="info-card">
+      <div class="info-row"><span class="info-label">Entities</span><span class="info-val">${summary.count}</span></div>
+      <div class="info-row"><span class="info-label">In Scope</span><span class="info-val">${summary.inScope}</span></div>
+      <div class="info-row"><span class="info-label">Outbound</span><span class="info-val">${outbound.length}</span></div>
+      <div class="info-row"><span class="info-label">Inbound</span><span class="info-val">${inbound.length}</span></div>
+      <div class="info-row"><span class="info-label">Internal</span><span class="info-val">${internal.length}</span></div>
+      <div class="info-row"><span class="info-label">External Leaders</span><span class="info-val">${sortedRight.length}</span></div>
+    </div>`;
+  const entDiv=document.getElementById('sankey-entities');entDiv.innerHTML='';
+  summary.entities.forEach(eid=>{
+    const e=DATA.entities[eid];
+    const item=document.createElement('div');item.className='entity-item';
+    item.innerHTML=`<span><span class="risk-dot" style="background:${RISK_COLORS[e.risk]||RISK_COLORS['N/A']}"></span>${e.name}</span><span class="entity-id">${eid}</span>`;
+    entDiv.appendChild(item);
+  });
+}
+
+document.getElementById('back-btn').addEventListener('click',()=>{
+  document.getElementById('sankey-view').style.display='none';
+  document.getElementById('chord-view').style.display='flex';
+  drawChord();
+});
+
+document.getElementById('export-sankey-png').addEventListener('click',()=>{
+  const svgEl=document.getElementById('sankey-svg'); if(!svgEl) return;
+  const data=new XMLSerializer().serializeToString(svgEl);
+  const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');
+  canvas.width=svgEl.getAttribute('width')*2;canvas.height=svgEl.getAttribute('height')*2;ctx.scale(2,2);
+  const img=new Image();
+  img.onload=()=>{ctx.fillStyle='#0f1218';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,0,0);
+    const l=document.createElement('a');l.download='pga_sankey.png';l.href=canvas.toDataURL('image/png');l.click();};
+  img.src='data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(data)));
+});
+
+drawChord();
+window.addEventListener('resize',()=>{if(document.getElementById('chord-view').style.display!=='none')drawChord();});
+</script>
+</body>
+</html>
