@@ -116,12 +116,18 @@ def _control_records_for_entity(
     entity_id: str,
     controls_df: pd.DataFrame,
     include_description: bool,
+    description_max_chars: int | None = None,
 ) -> list[dict]:
     """Read controls for an entity. Archer column names differ from internal
     payload field names: "Key Risk ID/Description" in the CSV maps to the
     "specific_risk_id/description" payload field we've used throughout docs
     and prompt. The conceptual name stays "Specific Risk" everywhere the
     model sees.
+
+    If include_description is True and description_max_chars is set, the
+    Control Description is hard-truncated to that many characters. KPA
+    Description and Specific Risk Description are never truncated — they
+    are compact and carry the primary evidence layer.
     """
     if controls_df.empty:
         return []
@@ -137,7 +143,10 @@ def _control_records_for_entity(
             "specific_risk_description": str(r.get(_CONTROLS_KEY_RISK_DESC_COL, "")).strip(),
         }
         if include_description:
-            rec["control_description"] = str(r.get("Control Description", "")).strip()
+            desc = str(r.get("Control Description", "")).strip()
+            if description_max_chars is not None and len(desc) > description_max_chars:
+                desc = desc[:description_max_chars]
+            rec["control_description"] = desc
         out.append(rec)
     return out
 
@@ -172,9 +181,15 @@ def build_focal_payload(
     active_ids: set[str],
     horizontal_flag: bool,
     include_control_description: bool = True,
+    control_description_max_chars: int | None = None,
 ) -> dict:
     header = _entity_header(row)
-    controls = _control_records_for_entity(header["entity_id"], controls_df, include_description=include_control_description)
+    controls = _control_records_for_entity(
+        header["entity_id"],
+        controls_df,
+        include_description=include_control_description,
+        description_max_chars=control_description_max_chars,
+    )
     return {
         **header,
         "horizontal_flag": horizontal_flag,

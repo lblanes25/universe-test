@@ -94,6 +94,13 @@ def _build_payloads_for_batch(
 ) -> tuple[list[dict], list[dict], list[dict]]:
     target_ids, source_ids = partition_context(batch.focal_ids, entity_rows)
 
+    # Convert focal_control_description_max_tokens (config) to max_chars using
+    # the same tokens_per_char heuristic the token estimator uses. None = no
+    # truncation (keep existing behavior).
+    max_tokens = config.get("focal_control_description_max_tokens")
+    tpc = config.get("tokens_per_char", 0.25)
+    max_chars = int(max_tokens / tpc) if max_tokens else None
+
     focal_payloads = []
     for eid in batch.focal_ids:
         row = entity_rows.get(eid)
@@ -107,6 +114,7 @@ def _build_payloads_for_batch(
                 active_ids,
                 horizontal_flags.get(eid, False),
                 include_control_description=True,
+                control_description_max_chars=max_chars,
             )
         )
 

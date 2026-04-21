@@ -1,15 +1,15 @@
 {
   "_comment": "Tuning parameters for src/stage2_handoff_review. Edit without touching code. Calibrate after first real-data dry-run.",
 
-  "focal_per_batch": 10,
+  "focal_per_batch": 7,
   "target_token_budget": 85000,
   "hard_token_ceiling": 110000,
 
-  "louvain_resolution": 1.0,
+  "louvain_resolution": 1.5,
   "louvain_seed": 42,
 
   "target_context_include_control_description": false,
-  "focal_control_description_max_tokens": null,
+  "focal_control_description_max_tokens": 250,
 
   "tokens_per_char": 0.25,
   "fixed_prompt_overhead_tokens": 4000,

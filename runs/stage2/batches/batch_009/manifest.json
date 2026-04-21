@@ -1,0 +1,33 @@
+{
+  "batch_id": 9,
+  "focal_ids": [
+    "AE-17",
+    "AE-19",
+    "AE-42",
+    "AE-45"
+  ],
+  "target_ids": [
+    "AE-11",
+    "AE-12",
+    "AE-30",
+    "AE-32",
+    "AE-8"
+  ],
+  "source_ids": [
+    "AE-23",
+    "AE-25",
+    "AE-31",
+    "AE-40"
+  ],
+  "isolated": false,
+  "focal_tokens": 15494,
+  "target_tokens": 15489,
+  "source_tokens": 399,
+  "fixed_tokens": 4000,
+  "avg_total_tokens": 35382,
+  "worst_case_total_tokens": 50873,
+  "split_from": null,
+  "focal_count": 4,
+  "target_count": 5,
+  "source_count": 4
+}
