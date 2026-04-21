@@ -62,7 +62,13 @@ class BatchPlan:
 def _read_table(path: Path) -> pd.DataFrame:
     if path.suffix.lower() in (".xlsx", ".xlsm", ".xls"):
         return pd.read_excel(path, dtype=str)
-    return pd.read_csv(path, dtype=str)
+    # Try UTF-8-with-BOM first (handles UTF-8 and UTF-8-BOM both); fall back
+    # to CP1252, which is the common Windows/Excel export encoding for CSVs
+    # from Archer and similar tools.
+    try:
+        return pd.read_csv(path, dtype=str, encoding="utf-8-sig")
+    except UnicodeDecodeError:
+        return pd.read_csv(path, dtype=str, encoding="cp1252")
 
 
 def _estimate_tokens(obj, tokens_per_char: float) -> int:
