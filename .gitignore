@@ -21,8 +21,8 @@ Thumbs.db
 data/output/*.xlsx
 data/output/*.html
 
-# Stage 2 handoff review artifacts (prompts, pasted responses, aggregated findings)
-runs/
+# Stage 2 handoff review artifacts tracked so batches can be run from any clone.
+# This repo uses dummy data only; real data stays on local machines.
 
 # Local env
 .env

@@ -1,0 +1,39 @@
+{
+  "batch_id": 5,
+  "focal_ids": [
+    "AE-1",
+    "AE-12",
+    "AE-15",
+    "AE-19",
+    "AE-21",
+    "AE-24",
+    "AE-32",
+    "AE-36"
+  ],
+  "target_ids": [
+    "AE-11",
+    "AE-13",
+    "AE-17",
+    "AE-23",
+    "AE-28",
+    "AE-40",
+    "AE-42",
+    "AE-43",
+    "AE-44",
+    "AE-45",
+    "AE-5",
+    "AE-6"
+  ],
+  "source_ids": [],
+  "isolated": false,
+  "focal_tokens": 29634,
+  "target_tokens": 31633,
+  "source_tokens": 0,
+  "fixed_tokens": 4000,
+  "avg_total_tokens": 65267,
+  "worst_case_total_tokens": 95900,
+  "split_from": null,
+  "focal_count": 8,
+  "target_count": 12,
+  "source_count": 0
+}
