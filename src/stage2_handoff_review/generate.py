@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from src.stage1_filter import filter_entities  # noqa: E402
+from src.stage1_filter import classify_entities  # noqa: E402
 from src.stage2_nodes import build_nodes  # noqa: E402
 from src.stage4_relational import build_handoffs  # noqa: E402
 from src.stage2_handoff_review.graph import (  # noqa: E402
@@ -289,38 +289,72 @@ def run(
 
     print(f"[generate] reading {risk_assessment_path}")
     df_raw = _read_table(risk_assessment_path)
-    active, _filter_stats = filter_entities(df_raw)
-    nodes = build_nodes(active, HORIZONTAL_KEYWORDS)
+    focal_df, referenceable_df, class_stats = classify_entities(df_raw)
+    print(
+        f"[generate] classified: focal={class_stats['focal_count']} "
+        f"referenceable={class_stats['referenceable_count']} "
+        f"(referenceable-only={class_stats['referenceable_only_count']}) "
+        f"dropped={class_stats['dropped_count']}"
+    )
 
-    active_ids = set(nodes["Audit Entity ID"])
-    name_by_id = dict(zip(nodes["Audit Entity ID"], nodes["Audit Entity Name"]))
+    # Nodes / horizontal flags / name lookup span all referenceable entities so that
+    # inactive-referenceable partners resolve to real names and the graph-construction
+    # helpers can reason about them. Focal assignment uses only focal_ids.
+    all_nodes = build_nodes(referenceable_df, HORIZONTAL_KEYWORDS)
+    focal_nodes = all_nodes[all_nodes["Audit Entity ID"].isin(set(focal_df["Audit Entity ID"]))].reset_index(drop=True)
+
+    focal_ids = set(focal_df["Audit Entity ID"])
+    referenceable_ids = set(referenceable_df["Audit Entity ID"])
+    name_by_id = dict(zip(all_nodes["Audit Entity ID"], all_nodes["Audit Entity Name"]))
     horizontal_flags = {
         r["Audit Entity ID"]: (r.get("Horizontal Flag") == "horizontal")
-        for _, r in nodes.iterrows()
+        for _, r in all_nodes.iterrows()
     }
 
     print(f"[generate] reading {controls_path}")
     controls_df = _read_table(controls_path)
-    controls_per_entity = controls_df.groupby("Audit Entity ID").size().to_dict() if not controls_df.empty else {}
+    controls_per_entity = (
+        controls_df.groupby("Audit Entity (Audit Controls)").size().to_dict()
+        if not controls_df.empty
+        else {}
+    )
 
-    handoffs = build_handoffs(active, active_ids)
-    print(f"[generate] active entities={len(active_ids)} handoff rows={len(handoffs)}")
+    # Handoffs built from focal entities' rows; unmatched check against the full
+    # referenceable universe so inactive-referenceable partners don't get flagged
+    # as unmatched. Dropped-type partner IDs remain unmatched (correct behavior).
+    handoffs = build_handoffs(focal_df, referenceable_ids)
+
+    # Focal-to-focal subgraph drives Louvain community detection. Handoffs between
+    # focal and inactive-referenceable entities are preserved in the full handoffs
+    # table for payload context but don't influence focal clustering.
+    focal_to_focal_handoffs = handoffs[
+        handoffs["Source Entity ID"].isin(focal_ids)
+        & handoffs["Target Entity ID"].isin(focal_ids)
+    ].reset_index(drop=True)
+    print(
+        f"[generate] handoff rows: total={len(handoffs)} focal-to-focal={len(focal_to_focal_handoffs)}"
+    )
 
     batches = select_focal_batches(
-        nodes,
-        handoffs,
+        focal_nodes,
+        focal_to_focal_handoffs,
         focal_per_batch=config["focal_per_batch"],
         resolution=config["louvain_resolution"],
         seed=config["louvain_seed"],
     )
-    G = build_undirected_handoff_graph(nodes, handoffs)
+    G = build_undirected_handoff_graph(focal_nodes, focal_to_focal_handoffs)
     severed = severed_edge_count(G, batches)
     print(f"[generate] initial batches={len(batches)} severed_edges={severed}/{G.number_of_edges()}")
 
-    entity_rows = _entity_rows_by_id(active)
+    # Entity rows cover all referenceable entities so target/source context
+    # payloads can render for inactive-referenceable partners too.
+    entity_rows = _entity_rows_by_id(referenceable_df)
 
+    # Pass focal_ids as the "active_ids" arg to payload builders: inactive_flag on
+    # a handoff partner is True iff the partner is not focal-eligible (covers both
+    # inactive-referenceable and dropped partners).
     plans = [
-        _batch_plan(b, entity_rows, controls_df, name_by_id, active_ids, horizontal_flags, config)
+        _batch_plan(b, entity_rows, controls_df, name_by_id, focal_ids, horizontal_flags, config)
         for b in batches
     ]
 
@@ -330,7 +364,7 @@ def run(
     for p in plans:
         if p.worst_case_total_tokens > ceiling:
             pieces = _split_oversized_plan(
-                p, entity_rows, controls_df, name_by_id, active_ids, horizontal_flags, config, controls_per_entity
+                p, entity_rows, controls_df, name_by_id, focal_ids, horizontal_flags, config, controls_per_entity
             )
             final_plans.extend(pieces)
         else:
@@ -358,7 +392,7 @@ def run(
 
     for p in final_plans:
         _write_batch(
-            output_root, p, entity_rows, controls_df, name_by_id, active_ids,
+            output_root, p, entity_rows, controls_df, name_by_id, focal_ids,
             horizontal_flags, config, template, skip_if_response_exists=True,
         )
     print(f"[generate] wrote {len(final_plans)} batches -> {output_root}")

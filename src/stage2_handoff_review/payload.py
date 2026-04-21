@@ -31,18 +31,21 @@ def _col(key: str):
 
 
 def _risk_fields(risk_name: str) -> tuple[str, str, str, str, str]:
-    """Return column names for rating triples + (real-data) prose columns.
+    """Return column names for rating triples + rationale prose columns.
 
-    Dummy CSV only carries the three rating columns; the prose columns are
-    expected in real data and not present in dummy. If a prose column is
-    missing on the row, the payload builder emits an empty string so Task 2's
-    conditional-rationale handling kicks in.
+    Real data (confirmed 2026-04-20): 11 of 14 categories carry inherent-risk
+    rationale and control-assessment rationale prose; the 3 exceptions
+    (Information Security, Information Technology, Third Party) carry only
+    ratings. Missing prose columns are read as empty strings silently so
+    Task 2's conditional-rationale handling kicks in without crashes.
+
+    Dummy data carries only the three rating columns. Same degradation path.
     """
     residual = f"{risk_name}{_COLS['risk_residual_suffix']}"
     inherent_rating = f"{risk_name}{_COLS['risk_inherent_suffix']}"
     control_rating = f"{risk_name}{_COLS['risk_control_suffix']}"
     inherent_rationale = f"{risk_name} Inherent Risk Rationale"
-    control_prose = f"{risk_name} Control Assessment Description"
+    control_prose = f"{risk_name} Control Assessment Rationale"
     return residual, inherent_rating, control_rating, inherent_rationale, control_prose
 
 
@@ -56,10 +59,20 @@ def _split_ids(value) -> list[str]:
 
 
 def _resolve_partner_ids(ids: list[str], name_by_id: dict[str, str], active_ids: set[str]) -> list[dict]:
+    """Resolve a list of AE IDs to {id, name, inactive_flag} records.
+
+    name_by_id carries all referenceable entities (focal-eligible plus inactive
+    of focal types). If a pid isn't in the map, it's a dropped-type or a
+    genuinely unknown ID — surface as "(out of scope)" so the model can
+    distinguish from inactive-but-named referenceable entities.
+
+    active_ids carries focal-eligible IDs only. inactive_flag is True for any
+    partner that is not focal-eligible (inactive-referenceable OR dropped).
+    """
     return [
         {
             "id": pid,
-            "name": name_by_id.get(pid, "(inactive or filtered)"),
+            "name": name_by_id.get(pid, "(out of scope)"),
             "inactive_flag": pid not in active_ids,
         }
         for pid in ids
@@ -94,14 +107,25 @@ def _risk_rows_for_entity(
     return rows
 
 
+_CONTROLS_ENTITY_COL = "Audit Entity (Audit Controls)"  # Archer export header
+_CONTROLS_KEY_RISK_ID_COL = "Key Risk ID"               # Archer export header; maps to payload field specific_risk_id
+_CONTROLS_KEY_RISK_DESC_COL = "Key Risk Description"    # Archer export header; maps to payload field specific_risk_description
+
+
 def _control_records_for_entity(
     entity_id: str,
     controls_df: pd.DataFrame,
     include_description: bool,
 ) -> list[dict]:
+    """Read controls for an entity. Archer column names differ from internal
+    payload field names: "Key Risk ID/Description" in the CSV maps to the
+    "specific_risk_id/description" payload field we've used throughout docs
+    and prompt. The conceptual name stays "Specific Risk" everywhere the
+    model sees.
+    """
     if controls_df.empty:
         return []
-    sub = controls_df[controls_df["Audit Entity ID"] == entity_id]
+    sub = controls_df[controls_df[_CONTROLS_ENTITY_COL] == entity_id]
     out: list[dict] = []
     for _, r in sub.iterrows():
         rec = {
@@ -109,8 +133,8 @@ def _control_records_for_entity(
             "control_title": str(r.get("Control Title", "")).strip(),
             "kpa_id": str(r.get("KPA ID", "")).strip(),
             "kpa_description": str(r.get("KPA Description", "")).strip(),
-            "specific_risk_id": str(r.get("Specific Risk ID", "")).strip(),
-            "specific_risk_description": str(r.get("Specific Risk Description", "")).strip(),
+            "specific_risk_id": str(r.get(_CONTROLS_KEY_RISK_ID_COL, "")).strip(),
+            "specific_risk_description": str(r.get(_CONTROLS_KEY_RISK_DESC_COL, "")).strip(),
         }
         if include_description:
             rec["control_description"] = str(r.get("Control Description", "")).strip()

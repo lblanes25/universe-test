@@ -1,8 +1,12 @@
 """Generate a synthetic controls CSV for dummy data with seeded coarse-handoff patterns.
 
-Output: data/input/dummy_controls.csv with columns
-  Audit Entity ID, Control ID, Control Title, Control Description,
-  KPA ID, KPA Description, Specific Risk ID, Specific Risk Description
+Output: data/input/dummy_controls.csv with columns matching the real Archer export:
+  Audit Entity (Audit Controls), Control ID, Control Title, Control Description,
+  KPA ID, KPA Description, Key Risk ID, Key Risk Description
+
+Internally/in the prompt/in the payload field names, this tag layer is still
+called "Specific Risk" — the Archer column "Key Risk ID/Description" is just
+where it lives in the source file.
 
 Seeded scenarios:
 
@@ -144,14 +148,14 @@ def _control_for_sr(sr_id: str, serial: int) -> dict:
             "second-line governance on a defined cadence."
         )
     return {
-        "Audit Entity ID": None,
+        "Audit Entity (Audit Controls)": None,  # filled by caller; matches Archer export header
         "Control ID": f"CTRL-{serial:04d}",
         "Control Title": title,
         "Control Description": description,
         "KPA ID": kpa_id,
         "KPA Description": kpa_desc,
-        "Specific Risk ID": sr_id,
-        "Specific Risk Description": sr_desc,
+        "Key Risk ID": sr_id,               # Archer column; payload maps to specific_risk_id
+        "Key Risk Description": sr_desc,    # Archer column; payload maps to specific_risk_description
     }
 
 
@@ -263,12 +267,12 @@ def build(input_path: Path, output_path: Path, seed: int = 7) -> pd.DataFrame:
         srs_for_entity = _entity_srs(eid, ename, rng)
         for sr_id in srs_for_entity:
             rec = _control_for_sr(sr_id, serial)
-            rec["Audit Entity ID"] = eid
+            rec["Audit Entity (Audit Controls)"] = eid
             rows.append(rec)
             serial += 1
     out = pd.DataFrame(rows, columns=[
-        "Audit Entity ID", "Control ID", "Control Title", "Control Description",
-        "KPA ID", "KPA Description", "Specific Risk ID", "Specific Risk Description",
+        "Audit Entity (Audit Controls)", "Control ID", "Control Title", "Control Description",
+        "KPA ID", "KPA Description", "Key Risk ID", "Key Risk Description",
     ])
     out.to_csv(output_path, index=False)
     return out
@@ -278,9 +282,9 @@ def _sanity_check_seeded(df: pd.DataFrame, active_df: pd.DataFrame) -> str:
     """Print diagnostics showing whether each seeded scenario is distinguishable from noise."""
     name_by_id = dict(zip(active_df["Audit Entity ID"], active_df["Audit Entity Name"]))
     srs_by_entity: dict[str, set[str]] = {
-        eid: set(sub["Specific Risk ID"]) for eid, sub in df.groupby("Audit Entity ID")
+        eid: set(sub["Key Risk ID"]) for eid, sub in df.groupby("Audit Entity (Audit Controls)")
     }
-    entity_count = df["Audit Entity ID"].nunique()
+    entity_count = df["Audit Entity (Audit Controls)"].nunique()
     lines: list[str] = []
     lines.append("[sanity] Seeded scenario diagnostics")
     lines.append(f"[sanity] Total entities: {entity_count}")
@@ -339,8 +343,8 @@ def main() -> None:
     df = build(args.input, args.output, seed=args.seed)
     active_df = pd.read_csv(args.input, dtype=str)
     active_df = active_df[(active_df["Audit Entity Type"] == "Audit") & (active_df["Audit Entity Status"] == "Active")]
-    print(f"[stub_controls] {len(df)} rows across {df['Audit Entity ID'].nunique()} entities -> {args.output}")
-    counts = df.groupby("Audit Entity ID").size()
+    print(f"[stub_controls] {len(df)} rows across {df['Audit Entity (Audit Controls)'].nunique()} entities -> {args.output}")
+    counts = df.groupby("Audit Entity (Audit Controls)").size()
     print(f"[stub_controls] per-entity count: min={counts.min()} max={counts.max()} mean={counts.mean():.1f}")
     print(_sanity_check_seeded(df, active_df))
 

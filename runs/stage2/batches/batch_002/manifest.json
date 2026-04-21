@@ -1,46 +1,41 @@
 {
   "batch_id": 2,
   "focal_ids": [
-    "AE-16",
-    "AE-2",
-    "AE-20",
-    "AE-22",
-    "AE-25",
-    "AE-33",
-    "AE-41",
-    "AE-43",
-    "AE-9"
+    "AE-1",
+    "AE-36",
+    "AE-44",
+    "AE-45",
+    "AE-47"
   ],
   "target_ids": [
-    "AE-10",
-    "AE-18",
+    "AE-11",
     "AE-19",
-    "AE-24",
+    "AE-20",
     "AE-27",
-    "AE-28",
-    "AE-30",
-    "AE-32",
-    "AE-36",
-    "AE-37",
-    "AE-38",
+    "AE-31",
     "AE-40",
-    "AE-5"
+    "AE-42",
+    "AE-43",
+    "AE-6",
+    "AE-7",
+    "AE-8"
   ],
   "source_ids": [
+    "AE-10",
     "AE-14",
-    "AE-29",
-    "AE-31",
-    "AE-6"
+    "AE-15",
+    "AE-24",
+    "AE-25"
   ],
   "isolated": false,
-  "focal_tokens": 36350,
-  "target_tokens": 32878,
-  "source_tokens": 264,
+  "focal_tokens": 18532,
+  "target_tokens": 30561,
+  "source_tokens": 547,
   "fixed_tokens": 4000,
-  "avg_total_tokens": 73492,
-  "worst_case_total_tokens": 108106,
-  "split_from": 2,
-  "focal_count": 9,
-  "target_count": 13,
-  "source_count": 4
+  "avg_total_tokens": 53640,
+  "worst_case_total_tokens": 78186,
+  "split_from": null,
+  "focal_count": 5,
+  "target_count": 11,
+  "source_count": 5
 }

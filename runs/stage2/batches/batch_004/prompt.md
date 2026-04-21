@@ -113,318 +113,27 @@ Quote Specific Risk IDs and Descriptions as evidence in every Task 5 finding. Th
 ```json
 [
   {
-    "entity_id": "AE-13",
-    "entity_name": "Capital Markets",
-    "business_unit": "Operations",
-    "line_of_defense": "2nd Line of Defense",
-    "horizontal_flag": true,
-    "overview": "This entity covers the capital markets function.",
-    "handoff_description": "nan",
-    "handoffs_to": [
-      {
-        "id": "AE-32",
-        "name": "Cybersecurity",
-        "inactive_flag": false
-      }
-    ],
-    "handoffs_from": [
-      {
-        "id": "AE-7",
-        "name": "Card Operations",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-45",
-        "name": "Facilities Management",
-        "inactive_flag": false
-      }
-    ],
-    "risks": [
-      {
-        "risk_category": "Country",
-        "residual_rating": "Critical",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Credit",
-        "residual_rating": "Medium",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "External Fraud",
-        "residual_rating": "Critical",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Financial Reporting",
-        "residual_rating": "High",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Funding & Liquidity",
-        "residual_rating": "High",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Information Security",
-        "residual_rating": "Medium",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Model",
-        "residual_rating": "Low",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Operational",
-        "residual_rating": "Critical",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Reputational",
-        "residual_rating": "High",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Strategic & Business",
-        "residual_rating": "Medium",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Third Party",
-        "residual_rating": "Medium",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      }
-    ],
-    "controls": [
-      {
-        "control_id": "CTRL-0241",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-118",
-        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that production access is not provisioned per least-privilege policy. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0242",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-119",
-        "specific_risk_description": "Risk that user access is not recertified on the required cadence",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that user access is not recertified on the required cadence. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0243",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-119",
-        "specific_risk_description": "Risk that user access is not recertified on the required cadence",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that user access is not recertified on the required cadence. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0244",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-120",
-        "specific_risk_description": "Risk that production changes are not approved before release",
-        "control_description": "Control operated within Change Management. Mitigates the risk: Risk that production changes are not approved before release. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0245",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-121",
-        "specific_risk_description": "Risk that emergency changes are not documented post-implementation",
-        "control_description": "Control operated within Change Management. Mitigates the risk: Risk that emergency changes are not documented post-implementation. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0246",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-121",
-        "specific_risk_description": "Risk that emergency changes are not documented post-implementation",
-        "control_description": "Control operated within Change Management. Mitigates the risk: Risk that emergency changes are not documented post-implementation. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0247",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-108",
-        "specific_risk_description": "Risk that Suspicious Activity Reports are not filed within regulatory deadlines",
-        "control_description": "Governance control providing oversight of AML Transaction Monitoring Calibration. Mitigates the risk: Risk that Suspicious Activity Reports are not filed within regulatory deadlines. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0248",
-        "control_title": "Program-level oversight of Vendor Performance Monitoring",
-        "kpa_id": "KPA-009",
-        "kpa_description": "Vendor Performance Monitoring",
-        "specific_risk_id": "SR-117",
-        "specific_risk_description": "Risk that vendor SLAs and performance are not monitored periodically",
-        "control_description": "Governance control providing oversight of Vendor Performance Monitoring. Mitigates the risk: Risk that vendor SLAs and performance are not monitored periodically. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0249",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-119",
-        "specific_risk_description": "Risk that user access is not recertified on the required cadence",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that user access is not recertified on the required cadence. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0250",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-130",
-        "specific_risk_description": "Risk that customer data is not protected in transit and at rest",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that customer data is not protected in transit and at rest. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0251",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-119",
-        "specific_risk_description": "Risk that user access is not recertified on the required cadence",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that user access is not recertified on the required cadence. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0252",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-128",
-        "specific_risk_description": "Risk that periodic entity-level risk assessments are not completed",
-        "control_description": "Governance control providing oversight of Issue Management. Mitigates the risk: Risk that periodic entity-level risk assessments are not completed. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0253",
-        "control_title": "Program-level oversight of AML Program Framework",
-        "kpa_id": "KPA-016",
-        "kpa_description": "AML Program Framework",
-        "specific_risk_id": "SR-105",
-        "specific_risk_description": "Risk that the AML program framework and policies are not maintained",
-        "control_description": "Governance control providing oversight of AML Program Framework. Mitigates the risk: Risk that the AML program framework and policies are not maintained. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      }
-    ],
-    "specific_risk_coverage": [
-      {
-        "id": "SR-118",
-        "description": "Risk that production access is not provisioned per least-privilege policy"
-      },
-      {
-        "id": "SR-119",
-        "description": "Risk that user access is not recertified on the required cadence"
-      },
-      {
-        "id": "SR-120",
-        "description": "Risk that production changes are not approved before release"
-      },
-      {
-        "id": "SR-121",
-        "description": "Risk that emergency changes are not documented post-implementation"
-      },
-      {
-        "id": "SR-108",
-        "description": "Risk that Suspicious Activity Reports are not filed within regulatory deadlines"
-      },
-      {
-        "id": "SR-117",
-        "description": "Risk that vendor SLAs and performance are not monitored periodically"
-      },
-      {
-        "id": "SR-130",
-        "description": "Risk that customer data is not protected in transit and at rest"
-      },
-      {
-        "id": "SR-128",
-        "description": "Risk that periodic entity-level risk assessments are not completed"
-      },
-      {
-        "id": "SR-105",
-        "description": "Risk that the AML program framework and policies are not maintained"
-      }
-    ],
-    "kpa_coverage": [
-      {
-        "id": "KPA-010",
-        "description": "Access Management"
-      },
-      {
-        "id": "KPA-011",
-        "description": "Change Management"
-      },
-      {
-        "id": "KPA-017",
-        "description": "AML Transaction Monitoring Calibration"
-      },
-      {
-        "id": "KPA-009",
-        "description": "Vendor Performance Monitoring"
-      },
-      {
-        "id": "KPA-014",
-        "description": "Issue Management"
-      },
-      {
-        "id": "KPA-016",
-        "description": "AML Program Framework"
-      }
-    ]
-  },
-  {
-    "entity_id": "AE-18",
-    "entity_name": "ATM Operations",
+    "entity_id": "AE-48",
+    "entity_name": "Private Banking",
     "business_unit": "Global Consumer",
     "line_of_defense": "2nd Line of Defense",
     "horizontal_flag": false,
-    "overview": "This entity covers the atm operations function.",
-    "handoff_description": "nan",
+    "overview": "This entity covers the private banking function.",
+    "handoff_description": "Processes are handed off related to private banking operations.",
     "handoffs_to": [
       {
-        "id": "AE-30",
-        "name": "Regulatory Reporting",
+        "id": "AE-23",
+        "name": "Sanctions Screening",
+        "inactive_flag": false
+      },
+      {
+        "id": "AE-5",
+        "name": "Wire Transfers",
+        "inactive_flag": false
+      },
+      {
+        "id": "AE-21",
+        "name": "KYC/CDD",
         "inactive_flag": false
       },
       {
@@ -435,2898 +144,23 @@ Quote Specific Risk IDs and Descriptions as evidence in every Task 5 finding. Th
     ],
     "handoffs_from": [
       {
-        "id": "AE-6",
-        "name": "ACH Processing",
+        "id": "AE-43",
+        "name": "Business Continuity",
         "inactive_flag": false
       },
       {
-        "id": "AE-11",
-        "name": "Trade Finance",
-        "inactive_flag": false
-      }
-    ],
-    "risks": [
-      {
-        "risk_category": "Compliance",
-        "residual_rating": "Critical",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Country",
-        "residual_rating": "Critical",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Credit",
-        "residual_rating": "High",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "External Fraud",
-        "residual_rating": "High",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Financial Reporting",
-        "residual_rating": "Low",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Funding & Liquidity",
-        "residual_rating": "High",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Information Technology",
-        "residual_rating": "Critical",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Information Security",
-        "residual_rating": "High",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Model",
-        "residual_rating": "High",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Market",
-        "residual_rating": "High",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Operational",
-        "residual_rating": "Low",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Reputational",
-        "residual_rating": "Medium",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Strategic & Business",
-        "residual_rating": "High",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Third Party",
-        "residual_rating": "Low",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      }
-    ],
-    "controls": [
-      {
-        "control_id": "CTRL-0328",
-        "control_title": "Operating control over Payment Authorization",
-        "kpa_id": "KPA-004",
-        "kpa_description": "Payment Authorization",
-        "specific_risk_id": "SR-112",
-        "specific_risk_description": "Risk that payment instructions are not authorized before release",
-        "control_description": "Control operated within Payment Authorization. Mitigates the risk: Risk that payment instructions are not authorized before release. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0329",
-        "control_title": "Operating control over Payment Authorization",
-        "kpa_id": "KPA-004",
-        "kpa_description": "Payment Authorization",
-        "specific_risk_id": "SR-112",
-        "specific_risk_description": "Risk that payment instructions are not authorized before release",
-        "control_description": "Control operated within Payment Authorization. Mitigates the risk: Risk that payment instructions are not authorized before release. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0330",
-        "control_title": "Operating control over Payment Authorization",
-        "kpa_id": "KPA-004",
-        "kpa_description": "Payment Authorization",
-        "specific_risk_id": "SR-112",
-        "specific_risk_description": "Risk that payment instructions are not authorized before release",
-        "control_description": "Control operated within Payment Authorization. Mitigates the risk: Risk that payment instructions are not authorized before release. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0331",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-118",
-        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that production access is not provisioned per least-privilege policy. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0332",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-118",
-        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that production access is not provisioned per least-privilege policy. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0333",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-118",
-        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that production access is not provisioned per least-privilege policy. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0334",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-118",
-        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that production access is not provisioned per least-privilege policy. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0335",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-118",
-        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that production access is not provisioned per least-privilege policy. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0336",
-        "control_title": "Program-level oversight of Vendor Performance Monitoring",
-        "kpa_id": "KPA-009",
-        "kpa_description": "Vendor Performance Monitoring",
-        "specific_risk_id": "SR-117",
-        "specific_risk_description": "Risk that vendor SLAs and performance are not monitored periodically",
-        "control_description": "Governance control providing oversight of Vendor Performance Monitoring. Mitigates the risk: Risk that vendor SLAs and performance are not monitored periodically. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0337",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-124",
-        "specific_risk_description": "Risk that audit findings are not tracked to remediation",
-        "control_description": "Governance control providing oversight of Issue Management. Mitigates the risk: Risk that audit findings are not tracked to remediation. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0338",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-124",
-        "specific_risk_description": "Risk that audit findings are not tracked to remediation",
-        "control_description": "Governance control providing oversight of Issue Management. Mitigates the risk: Risk that audit findings are not tracked to remediation. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0339",
-        "control_title": "Program-level oversight of Training & Awareness",
-        "kpa_id": "KPA-020",
-        "kpa_description": "Training & Awareness",
-        "specific_risk_id": "SR-106",
-        "specific_risk_description": "Risk that annual AML training is not delivered to in-scope staff",
-        "control_description": "Governance control providing oversight of Training & Awareness. Mitigates the risk: Risk that annual AML training is not delivered to in-scope staff. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0340",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-130",
-        "specific_risk_description": "Risk that customer data is not protected in transit and at rest",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that customer data is not protected in transit and at rest. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0341",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-118",
-        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that production access is not provisioned per least-privilege policy. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0342",
-        "control_title": "Program-level oversight of AML Program Framework",
-        "kpa_id": "KPA-016",
-        "kpa_description": "AML Program Framework",
-        "specific_risk_id": "SR-105",
-        "specific_risk_description": "Risk that the AML program framework and policies are not maintained",
-        "control_description": "Governance control providing oversight of AML Program Framework. Mitigates the risk: Risk that the AML program framework and policies are not maintained. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0343",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-108",
-        "specific_risk_description": "Risk that Suspicious Activity Reports are not filed within regulatory deadlines",
-        "control_description": "Governance control providing oversight of AML Transaction Monitoring Calibration. Mitigates the risk: Risk that Suspicious Activity Reports are not filed within regulatory deadlines. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0344",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-108",
-        "specific_risk_description": "Risk that Suspicious Activity Reports are not filed within regulatory deadlines",
-        "control_description": "Governance control providing oversight of AML Transaction Monitoring Calibration. Mitigates the risk: Risk that Suspicious Activity Reports are not filed within regulatory deadlines. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0345",
-        "control_title": "Program-level oversight of Sanctions Program Oversight",
-        "kpa_id": "KPA-018",
-        "kpa_description": "Sanctions Program Oversight",
-        "specific_risk_id": "SR-109",
-        "specific_risk_description": "Risk that the sanctions screening program has inadequate list coverage",
-        "control_description": "Governance control providing oversight of Sanctions Program Oversight. Mitigates the risk: Risk that the sanctions screening program has inadequate list coverage. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0346",
-        "control_title": "Program-level oversight of AML Program Framework",
-        "kpa_id": "KPA-016",
-        "kpa_description": "AML Program Framework",
-        "specific_risk_id": "SR-105",
-        "specific_risk_description": "Risk that the AML program framework and policies are not maintained",
-        "control_description": "Governance control providing oversight of AML Program Framework. Mitigates the risk: Risk that the AML program framework and policies are not maintained. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0347",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-124",
-        "specific_risk_description": "Risk that audit findings are not tracked to remediation",
-        "control_description": "Governance control providing oversight of Issue Management. Mitigates the risk: Risk that audit findings are not tracked to remediation. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      }
-    ],
-    "specific_risk_coverage": [
-      {
-        "id": "SR-112",
-        "description": "Risk that payment instructions are not authorized before release"
-      },
-      {
-        "id": "SR-118",
-        "description": "Risk that production access is not provisioned per least-privilege policy"
-      },
-      {
-        "id": "SR-117",
-        "description": "Risk that vendor SLAs and performance are not monitored periodically"
-      },
-      {
-        "id": "SR-124",
-        "description": "Risk that audit findings are not tracked to remediation"
-      },
-      {
-        "id": "SR-106",
-        "description": "Risk that annual AML training is not delivered to in-scope staff"
-      },
-      {
-        "id": "SR-130",
-        "description": "Risk that customer data is not protected in transit and at rest"
-      },
-      {
-        "id": "SR-105",
-        "description": "Risk that the AML program framework and policies are not maintained"
-      },
-      {
-        "id": "SR-108",
-        "description": "Risk that Suspicious Activity Reports are not filed within regulatory deadlines"
-      },
-      {
-        "id": "SR-109",
-        "description": "Risk that the sanctions screening program has inadequate list coverage"
-      }
-    ],
-    "kpa_coverage": [
-      {
-        "id": "KPA-004",
-        "description": "Payment Authorization"
-      },
-      {
-        "id": "KPA-010",
-        "description": "Access Management"
-      },
-      {
-        "id": "KPA-009",
-        "description": "Vendor Performance Monitoring"
-      },
-      {
-        "id": "KPA-014",
-        "description": "Issue Management"
-      },
-      {
-        "id": "KPA-020",
-        "description": "Training & Awareness"
-      },
-      {
-        "id": "KPA-016",
-        "description": "AML Program Framework"
-      },
-      {
-        "id": "KPA-017",
-        "description": "AML Transaction Monitoring Calibration"
-      },
-      {
-        "id": "KPA-018",
-        "description": "Sanctions Program Oversight"
-      }
-    ]
-  },
-  {
-    "entity_id": "AE-29",
-    "entity_name": "Financial Reporting",
-    "business_unit": "Operations",
-    "line_of_defense": "2nd Line of Defense",
-    "horizontal_flag": false,
-    "overview": "This entity covers the financial reporting function.",
-    "handoff_description": "nan",
-    "handoffs_to": [],
-    "handoffs_from": [
-      {
-        "id": "AE-21",
-        "name": "KYC/CDD",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-24",
-        "name": "Fraud Detection",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-7",
-        "name": "Card Operations",
-        "inactive_flag": false
-      }
-    ],
-    "risks": [
-      {
-        "risk_category": "Compliance",
-        "residual_rating": "High",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Country",
-        "residual_rating": "Low",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Credit",
-        "residual_rating": "Medium",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "External Fraud",
-        "residual_rating": "High",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Financial Reporting",
-        "residual_rating": "Low",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Funding & Liquidity",
-        "residual_rating": "Medium",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Information Technology",
-        "residual_rating": "Critical",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Information Security",
-        "residual_rating": "Medium",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Model",
-        "residual_rating": "Critical",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Operational",
-        "residual_rating": "High",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Reputational",
-        "residual_rating": "Medium",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Strategic & Business",
-        "residual_rating": "Medium",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Third Party",
-        "residual_rating": "Medium",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      }
-    ],
-    "controls": [
-      {
-        "control_id": "CTRL-0505",
-        "control_title": "Operating control over Financial Reporting — Period Close",
-        "kpa_id": "KPA-006",
-        "kpa_description": "Financial Reporting — Period Close",
-        "specific_risk_id": "SR-114",
-        "specific_risk_description": "Risk that period-end financial statements contain material misstatement",
-        "control_description": "Control operated within Financial Reporting — Period Close. Mitigates the risk: Risk that period-end financial statements contain material misstatement. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0506",
-        "control_title": "Operating control over Financial Reporting — Period Close",
-        "kpa_id": "KPA-006",
-        "kpa_description": "Financial Reporting — Period Close",
-        "specific_risk_id": "SR-114",
-        "specific_risk_description": "Risk that period-end financial statements contain material misstatement",
-        "control_description": "Control operated within Financial Reporting — Period Close. Mitigates the risk: Risk that period-end financial statements contain material misstatement. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0507",
-        "control_title": "Operating control over Financial Reporting — Consolidation",
-        "kpa_id": "KPA-007",
-        "kpa_description": "Financial Reporting — Consolidation",
-        "specific_risk_id": "SR-115",
-        "specific_risk_description": "Risk that intercompany eliminations are not applied during consolidation",
-        "control_description": "Control operated within Financial Reporting — Consolidation. Mitigates the risk: Risk that intercompany eliminations are not applied during consolidation. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0508",
-        "control_title": "Operating control over Financial Reporting — Consolidation",
-        "kpa_id": "KPA-007",
-        "kpa_description": "Financial Reporting — Consolidation",
-        "specific_risk_id": "SR-115",
-        "specific_risk_description": "Risk that intercompany eliminations are not applied during consolidation",
-        "control_description": "Control operated within Financial Reporting — Consolidation. Mitigates the risk: Risk that intercompany eliminations are not applied during consolidation. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0509",
-        "control_title": "Operating control over Financial Reporting — Consolidation",
-        "kpa_id": "KPA-007",
-        "kpa_description": "Financial Reporting — Consolidation",
-        "specific_risk_id": "SR-115",
-        "specific_risk_description": "Risk that intercompany eliminations are not applied during consolidation",
-        "control_description": "Control operated within Financial Reporting — Consolidation. Mitigates the risk: Risk that intercompany eliminations are not applied during consolidation. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0510",
-        "control_title": "Operating control over Regulatory Reporting",
-        "kpa_id": "KPA-015",
-        "kpa_description": "Regulatory Reporting",
-        "specific_risk_id": "SR-125",
-        "specific_risk_description": "Risk that regulatory reports are not filed by required deadlines",
-        "control_description": "Control operated within Regulatory Reporting. Mitigates the risk: Risk that regulatory reports are not filed by required deadlines. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0511",
-        "control_title": "Operating control over Regulatory Reporting",
-        "kpa_id": "KPA-015",
-        "kpa_description": "Regulatory Reporting",
-        "specific_risk_id": "SR-125",
-        "specific_risk_description": "Risk that regulatory reports are not filed by required deadlines",
-        "control_description": "Control operated within Regulatory Reporting. Mitigates the risk: Risk that regulatory reports are not filed by required deadlines. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0512",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-121",
-        "specific_risk_description": "Risk that emergency changes are not documented post-implementation",
-        "control_description": "Control operated within Change Management. Mitigates the risk: Risk that emergency changes are not documented post-implementation. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0513",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-130",
-        "specific_risk_description": "Risk that customer data is not protected in transit and at rest",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that customer data is not protected in transit and at rest. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0514",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-118",
-        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that production access is not provisioned per least-privilege policy. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0515",
-        "control_title": "Operating control over Financial Reporting — Consolidation",
-        "kpa_id": "KPA-007",
-        "kpa_description": "Financial Reporting — Consolidation",
-        "specific_risk_id": "SR-115",
-        "specific_risk_description": "Risk that intercompany eliminations are not applied during consolidation",
-        "control_description": "Control operated within Financial Reporting — Consolidation. Mitigates the risk: Risk that intercompany eliminations are not applied during consolidation. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0516",
-        "control_title": "Program-level oversight of Vendor Due Diligence",
-        "kpa_id": "KPA-008",
-        "kpa_description": "Vendor Due Diligence",
-        "specific_risk_id": "SR-116",
-        "specific_risk_description": "Risk that vendors are not onboarded per Third Party Risk policy",
-        "control_description": "Governance control providing oversight of Vendor Due Diligence. Mitigates the risk: Risk that vendors are not onboarded per Third Party Risk policy. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0517",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-119",
-        "specific_risk_description": "Risk that user access is not recertified on the required cadence",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that user access is not recertified on the required cadence. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0518",
-        "control_title": "Operating control over Financial Reporting — Consolidation",
-        "kpa_id": "KPA-007",
-        "kpa_description": "Financial Reporting — Consolidation",
-        "specific_risk_id": "SR-115",
-        "specific_risk_description": "Risk that intercompany eliminations are not applied during consolidation",
-        "control_description": "Control operated within Financial Reporting — Consolidation. Mitigates the risk: Risk that intercompany eliminations are not applied during consolidation. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0519",
-        "control_title": "Program-level oversight of Sanctions Program Oversight",
-        "kpa_id": "KPA-018",
-        "kpa_description": "Sanctions Program Oversight",
-        "specific_risk_id": "SR-109",
-        "specific_risk_description": "Risk that the sanctions screening program has inadequate list coverage",
-        "control_description": "Governance control providing oversight of Sanctions Program Oversight. Mitigates the risk: Risk that the sanctions screening program has inadequate list coverage. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0520",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-121",
-        "specific_risk_description": "Risk that emergency changes are not documented post-implementation",
-        "control_description": "Control operated within Change Management. Mitigates the risk: Risk that emergency changes are not documented post-implementation. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0521",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-120",
-        "specific_risk_description": "Risk that production changes are not approved before release",
-        "control_description": "Control operated within Change Management. Mitigates the risk: Risk that production changes are not approved before release. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0522",
-        "control_title": "Program-level oversight of Training & Awareness",
-        "kpa_id": "KPA-020",
-        "kpa_description": "Training & Awareness",
-        "specific_risk_id": "SR-106",
-        "specific_risk_description": "Risk that annual AML training is not delivered to in-scope staff",
-        "control_description": "Governance control providing oversight of Training & Awareness. Mitigates the risk: Risk that annual AML training is not delivered to in-scope staff. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0523",
-        "control_title": "Program-level oversight of Sanctions Program Oversight",
-        "kpa_id": "KPA-018",
-        "kpa_description": "Sanctions Program Oversight",
-        "specific_risk_id": "SR-109",
-        "specific_risk_description": "Risk that the sanctions screening program has inadequate list coverage",
-        "control_description": "Governance control providing oversight of Sanctions Program Oversight. Mitigates the risk: Risk that the sanctions screening program has inadequate list coverage. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0524",
-        "control_title": "Program-level oversight of AML Program Framework",
-        "kpa_id": "KPA-016",
-        "kpa_description": "AML Program Framework",
-        "specific_risk_id": "SR-105",
-        "specific_risk_description": "Risk that the AML program framework and policies are not maintained",
-        "control_description": "Governance control providing oversight of AML Program Framework. Mitigates the risk: Risk that the AML program framework and policies are not maintained. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0525",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-107",
-        "specific_risk_description": "Risk that transaction monitoring rules are not calibrated against typologies",
-        "control_description": "Governance control providing oversight of AML Transaction Monitoring Calibration. Mitigates the risk: Risk that transaction monitoring rules are not calibrated against typologies. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0526",
-        "control_title": "Program-level oversight of Vendor Performance Monitoring",
-        "kpa_id": "KPA-009",
-        "kpa_description": "Vendor Performance Monitoring",
-        "specific_risk_id": "SR-117",
-        "specific_risk_description": "Risk that vendor SLAs and performance are not monitored periodically",
-        "control_description": "Governance control providing oversight of Vendor Performance Monitoring. Mitigates the risk: Risk that vendor SLAs and performance are not monitored periodically. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0527",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-124",
-        "specific_risk_description": "Risk that audit findings are not tracked to remediation",
-        "control_description": "Governance control providing oversight of Issue Management. Mitigates the risk: Risk that audit findings are not tracked to remediation. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0528",
-        "control_title": "Operating control over Financial Reporting — Period Close",
-        "kpa_id": "KPA-006",
-        "kpa_description": "Financial Reporting — Period Close",
-        "specific_risk_id": "SR-114",
-        "specific_risk_description": "Risk that period-end financial statements contain material misstatement",
-        "control_description": "Control operated within Financial Reporting — Period Close. Mitigates the risk: Risk that period-end financial statements contain material misstatement. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0529",
-        "control_title": "Program-level oversight of Training & Awareness",
-        "kpa_id": "KPA-020",
-        "kpa_description": "Training & Awareness",
-        "specific_risk_id": "SR-106",
-        "specific_risk_description": "Risk that annual AML training is not delivered to in-scope staff",
-        "control_description": "Governance control providing oversight of Training & Awareness. Mitigates the risk: Risk that annual AML training is not delivered to in-scope staff. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0530",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-107",
-        "specific_risk_description": "Risk that transaction monitoring rules are not calibrated against typologies",
-        "control_description": "Governance control providing oversight of AML Transaction Monitoring Calibration. Mitigates the risk: Risk that transaction monitoring rules are not calibrated against typologies. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0531",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-121",
-        "specific_risk_description": "Risk that emergency changes are not documented post-implementation",
-        "control_description": "Control operated within Change Management. Mitigates the risk: Risk that emergency changes are not documented post-implementation. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0532",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-130",
-        "specific_risk_description": "Risk that customer data is not protected in transit and at rest",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that customer data is not protected in transit and at rest. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0533",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-118",
-        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that production access is not provisioned per least-privilege policy. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0534",
-        "control_title": "Program-level oversight of Vendor Due Diligence",
-        "kpa_id": "KPA-008",
-        "kpa_description": "Vendor Due Diligence",
-        "specific_risk_id": "SR-116",
-        "specific_risk_description": "Risk that vendors are not onboarded per Third Party Risk policy",
-        "control_description": "Governance control providing oversight of Vendor Due Diligence. Mitigates the risk: Risk that vendors are not onboarded per Third Party Risk policy. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      }
-    ],
-    "specific_risk_coverage": [
-      {
-        "id": "SR-114",
-        "description": "Risk that period-end financial statements contain material misstatement"
-      },
-      {
-        "id": "SR-115",
-        "description": "Risk that intercompany eliminations are not applied during consolidation"
-      },
-      {
-        "id": "SR-125",
-        "description": "Risk that regulatory reports are not filed by required deadlines"
-      },
-      {
-        "id": "SR-121",
-        "description": "Risk that emergency changes are not documented post-implementation"
-      },
-      {
-        "id": "SR-130",
-        "description": "Risk that customer data is not protected in transit and at rest"
-      },
-      {
-        "id": "SR-118",
-        "description": "Risk that production access is not provisioned per least-privilege policy"
-      },
-      {
-        "id": "SR-116",
-        "description": "Risk that vendors are not onboarded per Third Party Risk policy"
-      },
-      {
-        "id": "SR-119",
-        "description": "Risk that user access is not recertified on the required cadence"
-      },
-      {
-        "id": "SR-109",
-        "description": "Risk that the sanctions screening program has inadequate list coverage"
-      },
-      {
-        "id": "SR-120",
-        "description": "Risk that production changes are not approved before release"
-      },
-      {
-        "id": "SR-106",
-        "description": "Risk that annual AML training is not delivered to in-scope staff"
-      },
-      {
-        "id": "SR-105",
-        "description": "Risk that the AML program framework and policies are not maintained"
-      },
-      {
-        "id": "SR-107",
-        "description": "Risk that transaction monitoring rules are not calibrated against typologies"
-      },
-      {
-        "id": "SR-117",
-        "description": "Risk that vendor SLAs and performance are not monitored periodically"
-      },
-      {
-        "id": "SR-124",
-        "description": "Risk that audit findings are not tracked to remediation"
-      }
-    ],
-    "kpa_coverage": [
-      {
-        "id": "KPA-006",
-        "description": "Financial Reporting — Period Close"
-      },
-      {
-        "id": "KPA-007",
-        "description": "Financial Reporting — Consolidation"
-      },
-      {
-        "id": "KPA-015",
-        "description": "Regulatory Reporting"
-      },
-      {
-        "id": "KPA-011",
-        "description": "Change Management"
-      },
-      {
-        "id": "KPA-010",
-        "description": "Access Management"
-      },
-      {
-        "id": "KPA-008",
-        "description": "Vendor Due Diligence"
-      },
-      {
-        "id": "KPA-018",
-        "description": "Sanctions Program Oversight"
-      },
-      {
-        "id": "KPA-020",
-        "description": "Training & Awareness"
-      },
-      {
-        "id": "KPA-016",
-        "description": "AML Program Framework"
-      },
-      {
-        "id": "KPA-017",
-        "description": "AML Transaction Monitoring Calibration"
-      },
-      {
-        "id": "KPA-009",
-        "description": "Vendor Performance Monitoring"
-      },
-      {
-        "id": "KPA-014",
-        "description": "Issue Management"
-      }
-    ]
-  },
-  {
-    "entity_id": "AE-3",
-    "entity_name": "Wealth Management",
-    "business_unit": "Technology",
-    "line_of_defense": "2nd Line of Defense",
-    "horizontal_flag": false,
-    "overview": "This entity covers the wealth management function.",
-    "handoff_description": "Processes are handed off related to wealth management operations.",
-    "handoffs_to": [
-      {
-        "id": "AE-6",
-        "name": "ACH Processing",
-        "inactive_flag": false
-      }
-    ],
-    "handoffs_from": [
-      {
-        "id": "AE-13",
-        "name": "Capital Markets",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-19",
-        "name": "Branch Operations",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-31",
-        "name": "IT Infrastructure",
-        "inactive_flag": false
-      }
-    ],
-    "risks": [
-      {
-        "risk_category": "Compliance",
-        "residual_rating": "High",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Credit",
-        "residual_rating": "High",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "External Fraud",
-        "residual_rating": "Critical",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Financial Reporting",
-        "residual_rating": "High",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Information Technology",
-        "residual_rating": "Low",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Information Security",
-        "residual_rating": "Low",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Model",
-        "residual_rating": "Medium",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Market",
-        "residual_rating": "Critical",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Operational",
-        "residual_rating": "Critical",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Reputational",
-        "residual_rating": "Medium",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Third Party",
-        "residual_rating": "High",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      }
-    ],
-    "controls": [
-      {
-        "control_id": "CTRL-0038",
-        "control_title": "Program-level oversight of Vendor Performance Monitoring",
-        "kpa_id": "KPA-009",
-        "kpa_description": "Vendor Performance Monitoring",
-        "specific_risk_id": "SR-117",
-        "specific_risk_description": "Risk that vendor SLAs and performance are not monitored periodically",
-        "control_description": "Governance control providing oversight of Vendor Performance Monitoring. Mitigates the risk: Risk that vendor SLAs and performance are not monitored periodically. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0039",
-        "control_title": "Program-level oversight of Vendor Performance Monitoring",
-        "kpa_id": "KPA-009",
-        "kpa_description": "Vendor Performance Monitoring",
-        "specific_risk_id": "SR-117",
-        "specific_risk_description": "Risk that vendor SLAs and performance are not monitored periodically",
-        "control_description": "Governance control providing oversight of Vendor Performance Monitoring. Mitigates the risk: Risk that vendor SLAs and performance are not monitored periodically. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0040",
-        "control_title": "Program-level oversight of Vendor Performance Monitoring",
-        "kpa_id": "KPA-009",
-        "kpa_description": "Vendor Performance Monitoring",
-        "specific_risk_id": "SR-117",
-        "specific_risk_description": "Risk that vendor SLAs and performance are not monitored periodically",
-        "control_description": "Governance control providing oversight of Vendor Performance Monitoring. Mitigates the risk: Risk that vendor SLAs and performance are not monitored periodically. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0041",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-107",
-        "specific_risk_description": "Risk that transaction monitoring rules are not calibrated against typologies",
-        "control_description": "Governance control providing oversight of AML Transaction Monitoring Calibration. Mitigates the risk: Risk that transaction monitoring rules are not calibrated against typologies. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0042",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-118",
-        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that production access is not provisioned per least-privilege policy. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0043",
-        "control_title": "Operating control over Customer Onboarding",
-        "kpa_id": "KPA-001",
-        "kpa_description": "Customer Onboarding",
-        "specific_risk_id": "SR-104",
-        "specific_risk_description": "Risk that enhanced due diligence is not completed for high-risk customers",
-        "control_description": "Control operated within Customer Onboarding. Mitigates the risk: Risk that enhanced due diligence is not completed for high-risk customers. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0044",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-130",
-        "specific_risk_description": "Risk that customer data is not protected in transit and at rest",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that customer data is not protected in transit and at rest. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0045",
-        "control_title": "Operating control over Customer Onboarding",
-        "kpa_id": "KPA-001",
-        "kpa_description": "Customer Onboarding",
-        "specific_risk_id": "SR-103",
-        "specific_risk_description": "Risk that sanctions screening is not performed at customer onboarding",
-        "control_description": "Control operated within Customer Onboarding. Mitigates the risk: Risk that sanctions screening is not performed at customer onboarding. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0046",
-        "control_title": "Operating control over Customer Onboarding",
-        "kpa_id": "KPA-001",
-        "kpa_description": "Customer Onboarding",
-        "specific_risk_id": "SR-102",
-        "specific_risk_description": "Risk that Customer Due Diligence is not refreshed per policy cadence",
-        "control_description": "Control operated within Customer Onboarding. Mitigates the risk: Risk that Customer Due Diligence is not refreshed per policy cadence. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0047",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-107",
-        "specific_risk_description": "Risk that transaction monitoring rules are not calibrated against typologies",
-        "control_description": "Governance control providing oversight of AML Transaction Monitoring Calibration. Mitigates the risk: Risk that transaction monitoring rules are not calibrated against typologies. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0048",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-124",
-        "specific_risk_description": "Risk that audit findings are not tracked to remediation",
-        "control_description": "Governance control providing oversight of Issue Management. Mitigates the risk: Risk that audit findings are not tracked to remediation. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0049",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-130",
-        "specific_risk_description": "Risk that customer data is not protected in transit and at rest",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that customer data is not protected in transit and at rest. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0050",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-120",
-        "specific_risk_description": "Risk that production changes are not approved before release",
-        "control_description": "Control operated within Change Management. Mitigates the risk: Risk that production changes are not approved before release. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      }
-    ],
-    "specific_risk_coverage": [
-      {
-        "id": "SR-117",
-        "description": "Risk that vendor SLAs and performance are not monitored periodically"
-      },
-      {
-        "id": "SR-107",
-        "description": "Risk that transaction monitoring rules are not calibrated against typologies"
-      },
-      {
-        "id": "SR-118",
-        "description": "Risk that production access is not provisioned per least-privilege policy"
-      },
-      {
-        "id": "SR-104",
-        "description": "Risk that enhanced due diligence is not completed for high-risk customers"
-      },
-      {
-        "id": "SR-130",
-        "description": "Risk that customer data is not protected in transit and at rest"
-      },
-      {
-        "id": "SR-103",
-        "description": "Risk that sanctions screening is not performed at customer onboarding"
-      },
-      {
-        "id": "SR-102",
-        "description": "Risk that Customer Due Diligence is not refreshed per policy cadence"
-      },
-      {
-        "id": "SR-124",
-        "description": "Risk that audit findings are not tracked to remediation"
-      },
-      {
-        "id": "SR-120",
-        "description": "Risk that production changes are not approved before release"
-      }
-    ],
-    "kpa_coverage": [
-      {
-        "id": "KPA-009",
-        "description": "Vendor Performance Monitoring"
-      },
-      {
-        "id": "KPA-017",
-        "description": "AML Transaction Monitoring Calibration"
-      },
-      {
-        "id": "KPA-010",
-        "description": "Access Management"
-      },
-      {
-        "id": "KPA-001",
-        "description": "Customer Onboarding"
-      },
-      {
-        "id": "KPA-014",
-        "description": "Issue Management"
-      },
-      {
-        "id": "KPA-011",
-        "description": "Change Management"
-      }
-    ]
-  },
-  {
-    "entity_id": "AE-34",
-    "entity_name": "Cloud Services",
-    "business_unit": "Corporate Functions",
-    "line_of_defense": "1st Line of Defense",
-    "horizontal_flag": false,
-    "overview": "This entity covers the cloud services function.",
-    "handoff_description": "nan",
-    "handoffs_to": [],
-    "handoffs_from": [
-      {
-        "id": "AE-45",
-        "name": "Facilities Management",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-29",
-        "name": "Financial Reporting",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-14",
-        "name": "Investment Banking",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-6",
-        "name": "ACH Processing",
-        "inactive_flag": false
-      }
-    ],
-    "risks": [
-      {
-        "risk_category": "Country",
-        "residual_rating": "High",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Credit",
-        "residual_rating": "Medium",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Financial Reporting",
-        "residual_rating": "Medium",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Information Technology",
-        "residual_rating": "Medium",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Information Security",
-        "residual_rating": "Medium",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Market",
-        "residual_rating": "Low",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Operational",
-        "residual_rating": "Medium",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Reputational",
-        "residual_rating": "Medium",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Strategic & Business",
-        "residual_rating": "Medium",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Third Party",
-        "residual_rating": "Medium",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      }
-    ],
-    "controls": [
-      {
-        "control_id": "CTRL-0631",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-118",
-        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that production access is not provisioned per least-privilege policy. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0632",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-120",
-        "specific_risk_description": "Risk that production changes are not approved before release",
-        "control_description": "Control operated within Change Management. Mitigates the risk: Risk that production changes are not approved before release. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0633",
-        "control_title": "Program-level oversight of AML Program Framework",
-        "kpa_id": "KPA-016",
-        "kpa_description": "AML Program Framework",
-        "specific_risk_id": "SR-105",
-        "specific_risk_description": "Risk that the AML program framework and policies are not maintained",
-        "control_description": "Governance control providing oversight of AML Program Framework. Mitigates the risk: Risk that the AML program framework and policies are not maintained. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0634",
-        "control_title": "Program-level oversight of AML Program Framework",
-        "kpa_id": "KPA-016",
-        "kpa_description": "AML Program Framework",
-        "specific_risk_id": "SR-105",
-        "specific_risk_description": "Risk that the AML program framework and policies are not maintained",
-        "control_description": "Governance control providing oversight of AML Program Framework. Mitigates the risk: Risk that the AML program framework and policies are not maintained. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0635",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-107",
-        "specific_risk_description": "Risk that transaction monitoring rules are not calibrated against typologies",
-        "control_description": "Governance control providing oversight of AML Transaction Monitoring Calibration. Mitigates the risk: Risk that transaction monitoring rules are not calibrated against typologies. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0636",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-121",
-        "specific_risk_description": "Risk that emergency changes are not documented post-implementation",
-        "control_description": "Control operated within Change Management. Mitigates the risk: Risk that emergency changes are not documented post-implementation. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0637",
-        "control_title": "Program-level oversight of Vendor Due Diligence",
-        "kpa_id": "KPA-008",
-        "kpa_description": "Vendor Due Diligence",
-        "specific_risk_id": "SR-116",
-        "specific_risk_description": "Risk that vendors are not onboarded per Third Party Risk policy",
-        "control_description": "Governance control providing oversight of Vendor Due Diligence. Mitigates the risk: Risk that vendors are not onboarded per Third Party Risk policy. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0638",
-        "control_title": "Program-level oversight of Training & Awareness",
-        "kpa_id": "KPA-020",
-        "kpa_description": "Training & Awareness",
-        "specific_risk_id": "SR-106",
-        "specific_risk_description": "Risk that annual AML training is not delivered to in-scope staff",
-        "control_description": "Governance control providing oversight of Training & Awareness. Mitigates the risk: Risk that annual AML training is not delivered to in-scope staff. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0639",
-        "control_title": "Program-level oversight of Vendor Performance Monitoring",
-        "kpa_id": "KPA-009",
-        "kpa_description": "Vendor Performance Monitoring",
-        "specific_risk_id": "SR-117",
-        "specific_risk_description": "Risk that vendor SLAs and performance are not monitored periodically",
-        "control_description": "Governance control providing oversight of Vendor Performance Monitoring. Mitigates the risk: Risk that vendor SLAs and performance are not monitored periodically. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0640",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-130",
-        "specific_risk_description": "Risk that customer data is not protected in transit and at rest",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that customer data is not protected in transit and at rest. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0641",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-118",
-        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that production access is not provisioned per least-privilege policy. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0642",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-119",
-        "specific_risk_description": "Risk that user access is not recertified on the required cadence",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that user access is not recertified on the required cadence. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0643",
-        "control_title": "Program-level oversight of AML Program Framework",
-        "kpa_id": "KPA-016",
-        "kpa_description": "AML Program Framework",
-        "specific_risk_id": "SR-105",
-        "specific_risk_description": "Risk that the AML program framework and policies are not maintained",
-        "control_description": "Governance control providing oversight of AML Program Framework. Mitigates the risk: Risk that the AML program framework and policies are not maintained. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0644",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-121",
-        "specific_risk_description": "Risk that emergency changes are not documented post-implementation",
-        "control_description": "Control operated within Change Management. Mitigates the risk: Risk that emergency changes are not documented post-implementation. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0645",
-        "control_title": "Program-level oversight of AML Program Framework",
-        "kpa_id": "KPA-016",
-        "kpa_description": "AML Program Framework",
-        "specific_risk_id": "SR-105",
-        "specific_risk_description": "Risk that the AML program framework and policies are not maintained",
-        "control_description": "Governance control providing oversight of AML Program Framework. Mitigates the risk: Risk that the AML program framework and policies are not maintained. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0646",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-121",
-        "specific_risk_description": "Risk that emergency changes are not documented post-implementation",
-        "control_description": "Control operated within Change Management. Mitigates the risk: Risk that emergency changes are not documented post-implementation. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0647",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-119",
-        "specific_risk_description": "Risk that user access is not recertified on the required cadence",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that user access is not recertified on the required cadence. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0648",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-121",
-        "specific_risk_description": "Risk that emergency changes are not documented post-implementation",
-        "control_description": "Control operated within Change Management. Mitigates the risk: Risk that emergency changes are not documented post-implementation. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0649",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-108",
-        "specific_risk_description": "Risk that Suspicious Activity Reports are not filed within regulatory deadlines",
-        "control_description": "Governance control providing oversight of AML Transaction Monitoring Calibration. Mitigates the risk: Risk that Suspicious Activity Reports are not filed within regulatory deadlines. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0650",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-118",
-        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that production access is not provisioned per least-privilege policy. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0651",
-        "control_title": "Program-level oversight of Sanctions Program Oversight",
-        "kpa_id": "KPA-018",
-        "kpa_description": "Sanctions Program Oversight",
-        "specific_risk_id": "SR-109",
-        "specific_risk_description": "Risk that the sanctions screening program has inadequate list coverage",
-        "control_description": "Governance control providing oversight of Sanctions Program Oversight. Mitigates the risk: Risk that the sanctions screening program has inadequate list coverage. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0652",
-        "control_title": "Program-level oversight of AML Program Framework",
-        "kpa_id": "KPA-016",
-        "kpa_description": "AML Program Framework",
-        "specific_risk_id": "SR-105",
-        "specific_risk_description": "Risk that the AML program framework and policies are not maintained",
-        "control_description": "Governance control providing oversight of AML Program Framework. Mitigates the risk: Risk that the AML program framework and policies are not maintained. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0653",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-118",
-        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that production access is not provisioned per least-privilege policy. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0654",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-128",
-        "specific_risk_description": "Risk that periodic entity-level risk assessments are not completed",
-        "control_description": "Governance control providing oversight of Issue Management. Mitigates the risk: Risk that periodic entity-level risk assessments are not completed. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0655",
-        "control_title": "Program-level oversight of Training & Awareness",
-        "kpa_id": "KPA-020",
-        "kpa_description": "Training & Awareness",
-        "specific_risk_id": "SR-106",
-        "specific_risk_description": "Risk that annual AML training is not delivered to in-scope staff",
-        "control_description": "Governance control providing oversight of Training & Awareness. Mitigates the risk: Risk that annual AML training is not delivered to in-scope staff. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0656",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-124",
-        "specific_risk_description": "Risk that audit findings are not tracked to remediation",
-        "control_description": "Governance control providing oversight of Issue Management. Mitigates the risk: Risk that audit findings are not tracked to remediation. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0657",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-119",
-        "specific_risk_description": "Risk that user access is not recertified on the required cadence",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that user access is not recertified on the required cadence. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0658",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-119",
-        "specific_risk_description": "Risk that user access is not recertified on the required cadence",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that user access is not recertified on the required cadence. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0659",
-        "control_title": "Program-level oversight of Training & Awareness",
-        "kpa_id": "KPA-020",
-        "kpa_description": "Training & Awareness",
-        "specific_risk_id": "SR-106",
-        "specific_risk_description": "Risk that annual AML training is not delivered to in-scope staff",
-        "control_description": "Governance control providing oversight of Training & Awareness. Mitigates the risk: Risk that annual AML training is not delivered to in-scope staff. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0660",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-121",
-        "specific_risk_description": "Risk that emergency changes are not documented post-implementation",
-        "control_description": "Control operated within Change Management. Mitigates the risk: Risk that emergency changes are not documented post-implementation. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      }
-    ],
-    "specific_risk_coverage": [
-      {
-        "id": "SR-118",
-        "description": "Risk that production access is not provisioned per least-privilege policy"
-      },
-      {
-        "id": "SR-120",
-        "description": "Risk that production changes are not approved before release"
-      },
-      {
-        "id": "SR-105",
-        "description": "Risk that the AML program framework and policies are not maintained"
-      },
-      {
-        "id": "SR-107",
-        "description": "Risk that transaction monitoring rules are not calibrated against typologies"
-      },
-      {
-        "id": "SR-121",
-        "description": "Risk that emergency changes are not documented post-implementation"
-      },
-      {
-        "id": "SR-116",
-        "description": "Risk that vendors are not onboarded per Third Party Risk policy"
-      },
-      {
-        "id": "SR-106",
-        "description": "Risk that annual AML training is not delivered to in-scope staff"
-      },
-      {
-        "id": "SR-117",
-        "description": "Risk that vendor SLAs and performance are not monitored periodically"
-      },
-      {
-        "id": "SR-130",
-        "description": "Risk that customer data is not protected in transit and at rest"
-      },
-      {
-        "id": "SR-119",
-        "description": "Risk that user access is not recertified on the required cadence"
-      },
-      {
-        "id": "SR-108",
-        "description": "Risk that Suspicious Activity Reports are not filed within regulatory deadlines"
-      },
-      {
-        "id": "SR-109",
-        "description": "Risk that the sanctions screening program has inadequate list coverage"
-      },
-      {
-        "id": "SR-128",
-        "description": "Risk that periodic entity-level risk assessments are not completed"
-      },
-      {
-        "id": "SR-124",
-        "description": "Risk that audit findings are not tracked to remediation"
-      }
-    ],
-    "kpa_coverage": [
-      {
-        "id": "KPA-010",
-        "description": "Access Management"
-      },
-      {
-        "id": "KPA-011",
-        "description": "Change Management"
-      },
-      {
-        "id": "KPA-016",
-        "description": "AML Program Framework"
-      },
-      {
-        "id": "KPA-017",
-        "description": "AML Transaction Monitoring Calibration"
-      },
-      {
-        "id": "KPA-008",
-        "description": "Vendor Due Diligence"
-      },
-      {
-        "id": "KPA-020",
-        "description": "Training & Awareness"
-      },
-      {
-        "id": "KPA-009",
-        "description": "Vendor Performance Monitoring"
-      },
-      {
-        "id": "KPA-018",
-        "description": "Sanctions Program Oversight"
-      },
-      {
-        "id": "KPA-014",
-        "description": "Issue Management"
-      }
-    ]
-  },
-  {
-    "entity_id": "AE-39",
-    "entity_name": "Market Risk Management",
-    "business_unit": "Risk & Compliance",
-    "line_of_defense": "1st Line of Defense",
-    "horizontal_flag": true,
-    "overview": "This entity covers the market risk management function.",
-    "handoff_description": "Processes are handed off related to market risk management operations.",
-    "handoffs_to": [
-      {
-        "id": "AE-1",
-        "name": "Consumer Lending",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-4",
-        "name": "Treasury Operations",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-25",
-        "name": "Dispute Resolution",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-29",
-        "name": "Financial Reporting",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-27",
-        "name": "Accounts Payable",
-        "inactive_flag": false
-      }
-    ],
-    "handoffs_from": [
-      {
-        "id": "AE-17",
-        "name": "Digital Banking",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-7",
-        "name": "Card Operations",
-        "inactive_flag": false
-      }
-    ],
-    "risks": [
-      {
-        "risk_category": "Compliance",
-        "residual_rating": "Medium",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Country",
-        "residual_rating": "Low",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "External Fraud",
-        "residual_rating": "Medium",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Financial Reporting",
-        "residual_rating": "Critical",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Funding & Liquidity",
-        "residual_rating": "High",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Information Security",
-        "residual_rating": "Critical",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Model",
-        "residual_rating": "Critical",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Market",
-        "residual_rating": "High",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Operational",
-        "residual_rating": "Low",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Reputational",
-        "residual_rating": "High",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Strategic & Business",
-        "residual_rating": "High",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Third Party",
-        "residual_rating": "Medium",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      }
-    ],
-    "controls": [
-      {
-        "control_id": "CTRL-0731",
-        "control_title": "Program-level oversight of Vendor Performance Monitoring",
-        "kpa_id": "KPA-009",
-        "kpa_description": "Vendor Performance Monitoring",
-        "specific_risk_id": "SR-117",
-        "specific_risk_description": "Risk that vendor SLAs and performance are not monitored periodically",
-        "control_description": "Governance control providing oversight of Vendor Performance Monitoring. Mitigates the risk: Risk that vendor SLAs and performance are not monitored periodically. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0732",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-108",
-        "specific_risk_description": "Risk that Suspicious Activity Reports are not filed within regulatory deadlines",
-        "control_description": "Governance control providing oversight of AML Transaction Monitoring Calibration. Mitigates the risk: Risk that Suspicious Activity Reports are not filed within regulatory deadlines. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0733",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-108",
-        "specific_risk_description": "Risk that Suspicious Activity Reports are not filed within regulatory deadlines",
-        "control_description": "Governance control providing oversight of AML Transaction Monitoring Calibration. Mitigates the risk: Risk that Suspicious Activity Reports are not filed within regulatory deadlines. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0734",
-        "control_title": "Program-level oversight of Training & Awareness",
-        "kpa_id": "KPA-020",
-        "kpa_description": "Training & Awareness",
-        "specific_risk_id": "SR-106",
-        "specific_risk_description": "Risk that annual AML training is not delivered to in-scope staff",
-        "control_description": "Governance control providing oversight of Training & Awareness. Mitigates the risk: Risk that annual AML training is not delivered to in-scope staff. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0735",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-120",
-        "specific_risk_description": "Risk that production changes are not approved before release",
-        "control_description": "Control operated within Change Management. Mitigates the risk: Risk that production changes are not approved before release. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0736",
-        "control_title": "Program-level oversight of Training & Awareness",
-        "kpa_id": "KPA-020",
-        "kpa_description": "Training & Awareness",
-        "specific_risk_id": "SR-106",
-        "specific_risk_description": "Risk that annual AML training is not delivered to in-scope staff",
-        "control_description": "Governance control providing oversight of Training & Awareness. Mitigates the risk: Risk that annual AML training is not delivered to in-scope staff. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0737",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-107",
-        "specific_risk_description": "Risk that transaction monitoring rules are not calibrated against typologies",
-        "control_description": "Governance control providing oversight of AML Transaction Monitoring Calibration. Mitigates the risk: Risk that transaction monitoring rules are not calibrated against typologies. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0738",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-124",
-        "specific_risk_description": "Risk that audit findings are not tracked to remediation",
-        "control_description": "Governance control providing oversight of Issue Management. Mitigates the risk: Risk that audit findings are not tracked to remediation. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0739",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-119",
-        "specific_risk_description": "Risk that user access is not recertified on the required cadence",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that user access is not recertified on the required cadence. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0740",
-        "control_title": "Program-level oversight of Sanctions Program Oversight",
-        "kpa_id": "KPA-018",
-        "kpa_description": "Sanctions Program Oversight",
-        "specific_risk_id": "SR-109",
-        "specific_risk_description": "Risk that the sanctions screening program has inadequate list coverage",
-        "control_description": "Governance control providing oversight of Sanctions Program Oversight. Mitigates the risk: Risk that the sanctions screening program has inadequate list coverage. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0741",
-        "control_title": "Program-level oversight of Vendor Due Diligence",
-        "kpa_id": "KPA-008",
-        "kpa_description": "Vendor Due Diligence",
-        "specific_risk_id": "SR-116",
-        "specific_risk_description": "Risk that vendors are not onboarded per Third Party Risk policy",
-        "control_description": "Governance control providing oversight of Vendor Due Diligence. Mitigates the risk: Risk that vendors are not onboarded per Third Party Risk policy. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0742",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-107",
-        "specific_risk_description": "Risk that transaction monitoring rules are not calibrated against typologies",
-        "control_description": "Governance control providing oversight of AML Transaction Monitoring Calibration. Mitigates the risk: Risk that transaction monitoring rules are not calibrated against typologies. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0743",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-120",
-        "specific_risk_description": "Risk that production changes are not approved before release",
-        "control_description": "Control operated within Change Management. Mitigates the risk: Risk that production changes are not approved before release. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0744",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-130",
-        "specific_risk_description": "Risk that customer data is not protected in transit and at rest",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that customer data is not protected in transit and at rest. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0745",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-121",
-        "specific_risk_description": "Risk that emergency changes are not documented post-implementation",
-        "control_description": "Control operated within Change Management. Mitigates the risk: Risk that emergency changes are not documented post-implementation. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0746",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-119",
-        "specific_risk_description": "Risk that user access is not recertified on the required cadence",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that user access is not recertified on the required cadence. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0747",
-        "control_title": "Program-level oversight of Sanctions Program Oversight",
-        "kpa_id": "KPA-018",
-        "kpa_description": "Sanctions Program Oversight",
-        "specific_risk_id": "SR-109",
-        "specific_risk_description": "Risk that the sanctions screening program has inadequate list coverage",
-        "control_description": "Governance control providing oversight of Sanctions Program Oversight. Mitigates the risk: Risk that the sanctions screening program has inadequate list coverage. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0748",
-        "control_title": "Program-level oversight of Training & Awareness",
-        "kpa_id": "KPA-020",
-        "kpa_description": "Training & Awareness",
-        "specific_risk_id": "SR-106",
-        "specific_risk_description": "Risk that annual AML training is not delivered to in-scope staff",
-        "control_description": "Governance control providing oversight of Training & Awareness. Mitigates the risk: Risk that annual AML training is not delivered to in-scope staff. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      }
-    ],
-    "specific_risk_coverage": [
-      {
-        "id": "SR-117",
-        "description": "Risk that vendor SLAs and performance are not monitored periodically"
-      },
-      {
-        "id": "SR-108",
-        "description": "Risk that Suspicious Activity Reports are not filed within regulatory deadlines"
-      },
-      {
-        "id": "SR-106",
-        "description": "Risk that annual AML training is not delivered to in-scope staff"
-      },
-      {
-        "id": "SR-120",
-        "description": "Risk that production changes are not approved before release"
-      },
-      {
-        "id": "SR-107",
-        "description": "Risk that transaction monitoring rules are not calibrated against typologies"
-      },
-      {
-        "id": "SR-124",
-        "description": "Risk that audit findings are not tracked to remediation"
-      },
-      {
-        "id": "SR-119",
-        "description": "Risk that user access is not recertified on the required cadence"
-      },
-      {
-        "id": "SR-109",
-        "description": "Risk that the sanctions screening program has inadequate list coverage"
-      },
-      {
-        "id": "SR-116",
-        "description": "Risk that vendors are not onboarded per Third Party Risk policy"
-      },
-      {
-        "id": "SR-130",
-        "description": "Risk that customer data is not protected in transit and at rest"
-      },
-      {
-        "id": "SR-121",
-        "description": "Risk that emergency changes are not documented post-implementation"
-      }
-    ],
-    "kpa_coverage": [
-      {
-        "id": "KPA-009",
-        "description": "Vendor Performance Monitoring"
-      },
-      {
-        "id": "KPA-017",
-        "description": "AML Transaction Monitoring Calibration"
-      },
-      {
-        "id": "KPA-020",
-        "description": "Training & Awareness"
-      },
-      {
-        "id": "KPA-011",
-        "description": "Change Management"
-      },
-      {
-        "id": "KPA-014",
-        "description": "Issue Management"
-      },
-      {
-        "id": "KPA-010",
-        "description": "Access Management"
-      },
-      {
-        "id": "KPA-018",
-        "description": "Sanctions Program Oversight"
-      },
-      {
-        "id": "KPA-008",
-        "description": "Vendor Due Diligence"
-      }
-    ]
-  },
-  {
-    "entity_id": "AE-4",
-    "entity_name": "Treasury Operations",
-    "business_unit": "Global Commercial",
-    "line_of_defense": "2nd Line of Defense",
-    "horizontal_flag": false,
-    "overview": "This entity covers the treasury operations function.",
-    "handoff_description": "nan",
-    "handoffs_to": [
-      {
-        "id": "AE-18",
-        "name": "ATM Operations",
-        "inactive_flag": false
-      }
-    ],
-    "handoffs_from": [],
-    "risks": [
-      {
-        "risk_category": "Compliance",
-        "residual_rating": "High",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Country",
-        "residual_rating": "Low",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Credit",
-        "residual_rating": "High",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "External Fraud",
-        "residual_rating": "Medium",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Financial Reporting",
-        "residual_rating": "Low",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Funding & Liquidity",
-        "residual_rating": "High",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Information Technology",
-        "residual_rating": "Medium",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Information Security",
-        "residual_rating": "High",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Model",
-        "residual_rating": "Critical",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Market",
-        "residual_rating": "Critical",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Operational",
-        "residual_rating": "Medium",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Reputational",
-        "residual_rating": "Medium",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Strategic & Business",
-        "residual_rating": "Low",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Third Party",
-        "residual_rating": "Medium",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      }
-    ],
-    "controls": [
-      {
-        "control_id": "CTRL-0051",
-        "control_title": "Operating control over Payment Authorization",
-        "kpa_id": "KPA-004",
-        "kpa_description": "Payment Authorization",
-        "specific_risk_id": "SR-112",
-        "specific_risk_description": "Risk that payment instructions are not authorized before release",
-        "control_description": "Control operated within Payment Authorization. Mitigates the risk: Risk that payment instructions are not authorized before release. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0052",
-        "control_title": "Operating control over Payment Authorization",
-        "kpa_id": "KPA-004",
-        "kpa_description": "Payment Authorization",
-        "specific_risk_id": "SR-112",
-        "specific_risk_description": "Risk that payment instructions are not authorized before release",
-        "control_description": "Control operated within Payment Authorization. Mitigates the risk: Risk that payment instructions are not authorized before release. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0053",
-        "control_title": "Operating control over Payment Authorization",
-        "kpa_id": "KPA-004",
-        "kpa_description": "Payment Authorization",
-        "specific_risk_id": "SR-113",
-        "specific_risk_description": "Risk that daily payment reconciliations are not completed and reviewed",
-        "control_description": "Control operated within Payment Authorization. Mitigates the risk: Risk that daily payment reconciliations are not completed and reviewed. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0054",
-        "control_title": "Operating control over Payment Authorization",
-        "kpa_id": "KPA-004",
-        "kpa_description": "Payment Authorization",
-        "specific_risk_id": "SR-113",
-        "specific_risk_description": "Risk that daily payment reconciliations are not completed and reviewed",
-        "control_description": "Control operated within Payment Authorization. Mitigates the risk: Risk that daily payment reconciliations are not completed and reviewed. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0055",
-        "control_title": "Operating control over Payment Authorization",
-        "kpa_id": "KPA-004",
-        "kpa_description": "Payment Authorization",
-        "specific_risk_id": "SR-113",
-        "specific_risk_description": "Risk that daily payment reconciliations are not completed and reviewed",
-        "control_description": "Control operated within Payment Authorization. Mitigates the risk: Risk that daily payment reconciliations are not completed and reviewed. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0056",
-        "control_title": "Operating control over Financial Reporting — Consolidation",
-        "kpa_id": "KPA-007",
-        "kpa_description": "Financial Reporting — Consolidation",
-        "specific_risk_id": "SR-115",
-        "specific_risk_description": "Risk that intercompany eliminations are not applied during consolidation",
-        "control_description": "Control operated within Financial Reporting — Consolidation. Mitigates the risk: Risk that intercompany eliminations are not applied during consolidation. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0057",
-        "control_title": "Operating control over Financial Reporting — Consolidation",
-        "kpa_id": "KPA-007",
-        "kpa_description": "Financial Reporting — Consolidation",
-        "specific_risk_id": "SR-115",
-        "specific_risk_description": "Risk that intercompany eliminations are not applied during consolidation",
-        "control_description": "Control operated within Financial Reporting — Consolidation. Mitigates the risk: Risk that intercompany eliminations are not applied during consolidation. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0058",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-119",
-        "specific_risk_description": "Risk that user access is not recertified on the required cadence",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that user access is not recertified on the required cadence. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0059",
-        "control_title": "Program-level oversight of Vendor Performance Monitoring",
-        "kpa_id": "KPA-009",
-        "kpa_description": "Vendor Performance Monitoring",
-        "specific_risk_id": "SR-117",
-        "specific_risk_description": "Risk that vendor SLAs and performance are not monitored periodically",
-        "control_description": "Governance control providing oversight of Vendor Performance Monitoring. Mitigates the risk: Risk that vendor SLAs and performance are not monitored periodically. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0060",
-        "control_title": "Operating control over Financial Reporting — Consolidation",
-        "kpa_id": "KPA-007",
-        "kpa_description": "Financial Reporting — Consolidation",
-        "specific_risk_id": "SR-115",
-        "specific_risk_description": "Risk that intercompany eliminations are not applied during consolidation",
-        "control_description": "Control operated within Financial Reporting — Consolidation. Mitigates the risk: Risk that intercompany eliminations are not applied during consolidation. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0061",
-        "control_title": "Operating control over Payment Authorization",
-        "kpa_id": "KPA-004",
-        "kpa_description": "Payment Authorization",
-        "specific_risk_id": "SR-112",
-        "specific_risk_description": "Risk that payment instructions are not authorized before release",
-        "control_description": "Control operated within Payment Authorization. Mitigates the risk: Risk that payment instructions are not authorized before release. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0062",
-        "control_title": "Operating control over Financial Reporting — Consolidation",
-        "kpa_id": "KPA-007",
-        "kpa_description": "Financial Reporting — Consolidation",
-        "specific_risk_id": "SR-115",
-        "specific_risk_description": "Risk that intercompany eliminations are not applied during consolidation",
-        "control_description": "Control operated within Financial Reporting — Consolidation. Mitigates the risk: Risk that intercompany eliminations are not applied during consolidation. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0063",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-107",
-        "specific_risk_description": "Risk that transaction monitoring rules are not calibrated against typologies",
-        "control_description": "Governance control providing oversight of AML Transaction Monitoring Calibration. Mitigates the risk: Risk that transaction monitoring rules are not calibrated against typologies. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0064",
-        "control_title": "Program-level oversight of Vendor Performance Monitoring",
-        "kpa_id": "KPA-009",
-        "kpa_description": "Vendor Performance Monitoring",
-        "specific_risk_id": "SR-117",
-        "specific_risk_description": "Risk that vendor SLAs and performance are not monitored periodically",
-        "control_description": "Governance control providing oversight of Vendor Performance Monitoring. Mitigates the risk: Risk that vendor SLAs and performance are not monitored periodically. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0065",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-130",
-        "specific_risk_description": "Risk that customer data is not protected in transit and at rest",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that customer data is not protected in transit and at rest. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0066",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-128",
-        "specific_risk_description": "Risk that periodic entity-level risk assessments are not completed",
-        "control_description": "Governance control providing oversight of Issue Management. Mitigates the risk: Risk that periodic entity-level risk assessments are not completed. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0067",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-118",
-        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that production access is not provisioned per least-privilege policy. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0068",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-124",
-        "specific_risk_description": "Risk that audit findings are not tracked to remediation",
-        "control_description": "Governance control providing oversight of Issue Management. Mitigates the risk: Risk that audit findings are not tracked to remediation. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0069",
-        "control_title": "Program-level oversight of Vendor Performance Monitoring",
-        "kpa_id": "KPA-009",
-        "kpa_description": "Vendor Performance Monitoring",
-        "specific_risk_id": "SR-117",
-        "specific_risk_description": "Risk that vendor SLAs and performance are not monitored periodically",
-        "control_description": "Governance control providing oversight of Vendor Performance Monitoring. Mitigates the risk: Risk that vendor SLAs and performance are not monitored periodically. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0070",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-107",
-        "specific_risk_description": "Risk that transaction monitoring rules are not calibrated against typologies",
-        "control_description": "Governance control providing oversight of AML Transaction Monitoring Calibration. Mitigates the risk: Risk that transaction monitoring rules are not calibrated against typologies. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      }
-    ],
-    "specific_risk_coverage": [
-      {
-        "id": "SR-112",
-        "description": "Risk that payment instructions are not authorized before release"
-      },
-      {
-        "id": "SR-113",
-        "description": "Risk that daily payment reconciliations are not completed and reviewed"
-      },
-      {
-        "id": "SR-115",
-        "description": "Risk that intercompany eliminations are not applied during consolidation"
-      },
-      {
-        "id": "SR-119",
-        "description": "Risk that user access is not recertified on the required cadence"
-      },
-      {
-        "id": "SR-117",
-        "description": "Risk that vendor SLAs and performance are not monitored periodically"
-      },
-      {
-        "id": "SR-107",
-        "description": "Risk that transaction monitoring rules are not calibrated against typologies"
-      },
-      {
-        "id": "SR-130",
-        "description": "Risk that customer data is not protected in transit and at rest"
-      },
-      {
-        "id": "SR-128",
-        "description": "Risk that periodic entity-level risk assessments are not completed"
-      },
-      {
-        "id": "SR-118",
-        "description": "Risk that production access is not provisioned per least-privilege policy"
-      },
-      {
-        "id": "SR-124",
-        "description": "Risk that audit findings are not tracked to remediation"
-      }
-    ],
-    "kpa_coverage": [
-      {
-        "id": "KPA-004",
-        "description": "Payment Authorization"
-      },
-      {
-        "id": "KPA-007",
-        "description": "Financial Reporting — Consolidation"
-      },
-      {
-        "id": "KPA-010",
-        "description": "Access Management"
-      },
-      {
-        "id": "KPA-009",
-        "description": "Vendor Performance Monitoring"
-      },
-      {
-        "id": "KPA-017",
-        "description": "AML Transaction Monitoring Calibration"
-      },
-      {
-        "id": "KPA-014",
-        "description": "Issue Management"
-      }
-    ]
-  },
-  {
-    "entity_id": "AE-6",
-    "entity_name": "ACH Processing",
-    "business_unit": "Technology",
-    "line_of_defense": "2nd Line of Defense",
-    "horizontal_flag": false,
-    "overview": "This entity covers the ach processing function.",
-    "handoff_description": "Processes are handed off related to ach processing operations.",
-    "handoffs_to": [
-      {
-        "id": "AE-4",
-        "name": "Treasury Operations",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-37",
-        "name": "Model Validation",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-17",
-        "name": "Digital Banking",
-        "inactive_flag": false
-      }
-    ],
-    "handoffs_from": [
-      {
-        "id": "AE-16",
-        "name": "Retail Banking",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-13",
-        "name": "Capital Markets",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-35",
-        "name": "Application Development",
-        "inactive_flag": false
-      }
-    ],
-    "risks": [
-      {
-        "risk_category": "Compliance",
-        "residual_rating": "High",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Credit",
-        "residual_rating": "Critical",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "External Fraud",
-        "residual_rating": "Critical",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Financial Reporting",
-        "residual_rating": "High",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Funding & Liquidity",
-        "residual_rating": "Medium",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Information Technology",
-        "residual_rating": "High",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Information Security",
-        "residual_rating": "Medium",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Model",
-        "residual_rating": "High",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Market",
-        "residual_rating": "High",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Operational",
-        "residual_rating": "High",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Reputational",
-        "residual_rating": "Low",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Strategic & Business",
-        "residual_rating": "Low",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      }
-    ],
-    "controls": [
-      {
-        "control_id": "CTRL-0084",
-        "control_title": "Operating control over Payment Authorization",
-        "kpa_id": "KPA-004",
-        "kpa_description": "Payment Authorization",
-        "specific_risk_id": "SR-112",
-        "specific_risk_description": "Risk that payment instructions are not authorized before release",
-        "control_description": "Control operated within Payment Authorization. Mitigates the risk: Risk that payment instructions are not authorized before release. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0085",
-        "control_title": "Operating control over Payment Authorization",
-        "kpa_id": "KPA-004",
-        "kpa_description": "Payment Authorization",
-        "specific_risk_id": "SR-112",
-        "specific_risk_description": "Risk that payment instructions are not authorized before release",
-        "control_description": "Control operated within Payment Authorization. Mitigates the risk: Risk that payment instructions are not authorized before release. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0086",
-        "control_title": "Operating control over Payment Authorization",
-        "kpa_id": "KPA-004",
-        "kpa_description": "Payment Authorization",
-        "specific_risk_id": "SR-112",
-        "specific_risk_description": "Risk that payment instructions are not authorized before release",
-        "control_description": "Control operated within Payment Authorization. Mitigates the risk: Risk that payment instructions are not authorized before release. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0087",
-        "control_title": "Operating control over Payment Authorization",
-        "kpa_id": "KPA-004",
-        "kpa_description": "Payment Authorization",
-        "specific_risk_id": "SR-113",
-        "specific_risk_description": "Risk that daily payment reconciliations are not completed and reviewed",
-        "control_description": "Control operated within Payment Authorization. Mitigates the risk: Risk that daily payment reconciliations are not completed and reviewed. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0088",
-        "control_title": "Operating control over Payment Authorization",
-        "kpa_id": "KPA-004",
-        "kpa_description": "Payment Authorization",
-        "specific_risk_id": "SR-113",
-        "specific_risk_description": "Risk that daily payment reconciliations are not completed and reviewed",
-        "control_description": "Control operated within Payment Authorization. Mitigates the risk: Risk that daily payment reconciliations are not completed and reviewed. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0089",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-130",
-        "specific_risk_description": "Risk that customer data is not protected in transit and at rest",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that customer data is not protected in transit and at rest. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0090",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-128",
-        "specific_risk_description": "Risk that periodic entity-level risk assessments are not completed",
-        "control_description": "Governance control providing oversight of Issue Management. Mitigates the risk: Risk that periodic entity-level risk assessments are not completed. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0091",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-107",
-        "specific_risk_description": "Risk that transaction monitoring rules are not calibrated against typologies",
-        "control_description": "Governance control providing oversight of AML Transaction Monitoring Calibration. Mitigates the risk: Risk that transaction monitoring rules are not calibrated against typologies. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0092",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-107",
-        "specific_risk_description": "Risk that transaction monitoring rules are not calibrated against typologies",
-        "control_description": "Governance control providing oversight of AML Transaction Monitoring Calibration. Mitigates the risk: Risk that transaction monitoring rules are not calibrated against typologies. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0093",
-        "control_title": "Program-level oversight of Vendor Performance Monitoring",
-        "kpa_id": "KPA-009",
-        "kpa_description": "Vendor Performance Monitoring",
-        "specific_risk_id": "SR-117",
-        "specific_risk_description": "Risk that vendor SLAs and performance are not monitored periodically",
-        "control_description": "Governance control providing oversight of Vendor Performance Monitoring. Mitigates the risk: Risk that vendor SLAs and performance are not monitored periodically. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0094",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-130",
-        "specific_risk_description": "Risk that customer data is not protected in transit and at rest",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that customer data is not protected in transit and at rest. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0095",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-107",
-        "specific_risk_description": "Risk that transaction monitoring rules are not calibrated against typologies",
-        "control_description": "Governance control providing oversight of AML Transaction Monitoring Calibration. Mitigates the risk: Risk that transaction monitoring rules are not calibrated against typologies. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0096",
-        "control_title": "Program-level oversight of Training & Awareness",
-        "kpa_id": "KPA-020",
-        "kpa_description": "Training & Awareness",
-        "specific_risk_id": "SR-106",
-        "specific_risk_description": "Risk that annual AML training is not delivered to in-scope staff",
-        "control_description": "Governance control providing oversight of Training & Awareness. Mitigates the risk: Risk that annual AML training is not delivered to in-scope staff. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0097",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-118",
-        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that production access is not provisioned per least-privilege policy. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0098",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-128",
-        "specific_risk_description": "Risk that periodic entity-level risk assessments are not completed",
-        "control_description": "Governance control providing oversight of Issue Management. Mitigates the risk: Risk that periodic entity-level risk assessments are not completed. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0099",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-118",
-        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that production access is not provisioned per least-privilege policy. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0100",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-121",
-        "specific_risk_description": "Risk that emergency changes are not documented post-implementation",
-        "control_description": "Control operated within Change Management. Mitigates the risk: Risk that emergency changes are not documented post-implementation. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0101",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-120",
-        "specific_risk_description": "Risk that production changes are not approved before release",
-        "control_description": "Control operated within Change Management. Mitigates the risk: Risk that production changes are not approved before release. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0102",
-        "control_title": "Program-level oversight of AML Program Framework",
-        "kpa_id": "KPA-016",
-        "kpa_description": "AML Program Framework",
-        "specific_risk_id": "SR-105",
-        "specific_risk_description": "Risk that the AML program framework and policies are not maintained",
-        "control_description": "Governance control providing oversight of AML Program Framework. Mitigates the risk: Risk that the AML program framework and policies are not maintained. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0103",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-128",
-        "specific_risk_description": "Risk that periodic entity-level risk assessments are not completed",
-        "control_description": "Governance control providing oversight of Issue Management. Mitigates the risk: Risk that periodic entity-level risk assessments are not completed. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      }
-    ],
-    "specific_risk_coverage": [
-      {
-        "id": "SR-112",
-        "description": "Risk that payment instructions are not authorized before release"
-      },
-      {
-        "id": "SR-113",
-        "description": "Risk that daily payment reconciliations are not completed and reviewed"
-      },
-      {
-        "id": "SR-130",
-        "description": "Risk that customer data is not protected in transit and at rest"
-      },
-      {
-        "id": "SR-128",
-        "description": "Risk that periodic entity-level risk assessments are not completed"
-      },
-      {
-        "id": "SR-107",
-        "description": "Risk that transaction monitoring rules are not calibrated against typologies"
-      },
-      {
-        "id": "SR-117",
-        "description": "Risk that vendor SLAs and performance are not monitored periodically"
-      },
-      {
-        "id": "SR-106",
-        "description": "Risk that annual AML training is not delivered to in-scope staff"
-      },
-      {
-        "id": "SR-118",
-        "description": "Risk that production access is not provisioned per least-privilege policy"
-      },
-      {
-        "id": "SR-121",
-        "description": "Risk that emergency changes are not documented post-implementation"
-      },
-      {
-        "id": "SR-120",
-        "description": "Risk that production changes are not approved before release"
-      },
-      {
-        "id": "SR-105",
-        "description": "Risk that the AML program framework and policies are not maintained"
-      }
-    ],
-    "kpa_coverage": [
-      {
-        "id": "KPA-004",
-        "description": "Payment Authorization"
-      },
-      {
-        "id": "KPA-010",
-        "description": "Access Management"
-      },
-      {
-        "id": "KPA-014",
-        "description": "Issue Management"
-      },
-      {
-        "id": "KPA-017",
-        "description": "AML Transaction Monitoring Calibration"
-      },
-      {
-        "id": "KPA-009",
-        "description": "Vendor Performance Monitoring"
-      },
-      {
-        "id": "KPA-020",
-        "description": "Training & Awareness"
-      },
-      {
-        "id": "KPA-011",
-        "description": "Change Management"
-      },
-      {
-        "id": "KPA-016",
-        "description": "AML Program Framework"
-      }
-    ]
-  },
-  {
-    "entity_id": "AE-7",
-    "entity_name": "Card Operations",
-    "business_unit": "Global Commercial",
-    "line_of_defense": "2nd Line of Defense",
-    "horizontal_flag": false,
-    "overview": "This entity covers the card operations function.",
-    "handoff_description": "nan",
-    "handoffs_to": [
-      {
-        "id": "AE-18",
-        "name": "ATM Operations",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-6",
-        "name": "ACH Processing",
+        "id": "AE-20",
+        "name": "Customer Onboarding",
         "inactive_flag": false
       },
       {
         "id": "AE-32",
         "name": "Cybersecurity",
         "inactive_flag": false
-      }
-    ],
-    "handoffs_from": [
-      {
-        "id": "AE-26",
-        "name": "Payroll Processing",
-        "inactive_flag": false
       },
       {
-        "id": "AE-19",
-        "name": "Branch Operations",
+        "id": "AE-37",
+        "name": "Model Validation",
         "inactive_flag": false
       }
     ],
@@ -3340,23 +174,7 @@ Quote Specific Risk IDs and Descriptions as evidence in every Task 5 finding. Th
         "control_assessment_prose": ""
       },
       {
-        "risk_category": "Credit",
-        "residual_rating": "High",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
         "risk_category": "External Fraud",
-        "residual_rating": "Low",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Financial Reporting",
         "residual_rating": "High",
         "inherent_rating": "Medium",
         "inherent_rationale": "",
@@ -3364,47 +182,15 @@ Quote Specific Risk IDs and Descriptions as evidence in every Task 5 finding. Th
         "control_assessment_prose": ""
       },
       {
-        "risk_category": "Information Technology",
-        "residual_rating": "Medium",
+        "risk_category": "Financial Reporting",
+        "residual_rating": "Low",
         "inherent_rating": "Critical",
         "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
+        "control_assessment_rating": "Well Controlled",
         "control_assessment_prose": ""
       },
       {
-        "risk_category": "Information Security",
-        "residual_rating": "Medium",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Model",
-        "residual_rating": "Medium",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Market",
-        "residual_rating": "High",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Operational",
-        "residual_rating": "Medium",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Reputational",
+        "risk_category": "Funding & Liquidity",
         "residual_rating": "Medium",
         "inherent_rating": "Critical",
         "inherent_rationale": "",
@@ -3412,9 +198,49 @@ Quote Specific Risk IDs and Descriptions as evidence in every Task 5 finding. Th
         "control_assessment_prose": ""
       },
       {
+        "risk_category": "Information Technology",
+        "residual_rating": "High",
+        "inherent_rating": "Low",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Partially Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Information Security",
+        "residual_rating": "High",
+        "inherent_rating": "High",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Insufficiently Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Market",
+        "residual_rating": "Medium",
+        "inherent_rating": "Critical",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Well Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Operational",
+        "residual_rating": "High",
+        "inherent_rating": "Medium",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Insufficiently Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Reputational",
+        "residual_rating": "High",
+        "inherent_rating": "Medium",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Insufficiently Controlled",
+        "control_assessment_prose": ""
+      },
+      {
         "risk_category": "Strategic & Business",
         "residual_rating": "High",
-        "inherent_rating": "Critical",
+        "inherent_rating": "Medium",
         "inherent_rationale": "",
         "control_assessment_rating": "Insufficiently Controlled",
         "control_assessment_prose": ""
@@ -3422,295 +248,15 @@ Quote Specific Risk IDs and Descriptions as evidence in every Task 5 finding. Th
       {
         "risk_category": "Third Party",
         "residual_rating": "High",
-        "inherent_rating": "Medium",
+        "inherent_rating": "Critical",
         "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
+        "control_assessment_rating": "Partially Controlled",
         "control_assessment_prose": ""
       }
     ],
-    "controls": [
-      {
-        "control_id": "CTRL-0104",
-        "control_title": "Operating control over Payment Authorization",
-        "kpa_id": "KPA-004",
-        "kpa_description": "Payment Authorization",
-        "specific_risk_id": "SR-112",
-        "specific_risk_description": "Risk that payment instructions are not authorized before release",
-        "control_description": "Control operated within Payment Authorization. Mitigates the risk: Risk that payment instructions are not authorized before release. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0105",
-        "control_title": "Operating control over Payment Authorization",
-        "kpa_id": "KPA-004",
-        "kpa_description": "Payment Authorization",
-        "specific_risk_id": "SR-113",
-        "specific_risk_description": "Risk that daily payment reconciliations are not completed and reviewed",
-        "control_description": "Control operated within Payment Authorization. Mitigates the risk: Risk that daily payment reconciliations are not completed and reviewed. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0106",
-        "control_title": "Operating control over Payment Authorization",
-        "kpa_id": "KPA-004",
-        "kpa_description": "Payment Authorization",
-        "specific_risk_id": "SR-113",
-        "specific_risk_description": "Risk that daily payment reconciliations are not completed and reviewed",
-        "control_description": "Control operated within Payment Authorization. Mitigates the risk: Risk that daily payment reconciliations are not completed and reviewed. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0107",
-        "control_title": "Operating control over Payment Authorization",
-        "kpa_id": "KPA-004",
-        "kpa_description": "Payment Authorization",
-        "specific_risk_id": "SR-113",
-        "specific_risk_description": "Risk that daily payment reconciliations are not completed and reviewed",
-        "control_description": "Control operated within Payment Authorization. Mitigates the risk: Risk that daily payment reconciliations are not completed and reviewed. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0108",
-        "control_title": "Operating control over Fraud Case Management",
-        "kpa_id": "KPA-019",
-        "kpa_description": "Fraud Case Management",
-        "specific_risk_id": "SR-126",
-        "specific_risk_description": "Risk that fraud cases are not investigated and closed",
-        "control_description": "Control operated within Fraud Case Management. Mitigates the risk: Risk that fraud cases are not investigated and closed. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0109",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-128",
-        "specific_risk_description": "Risk that periodic entity-level risk assessments are not completed",
-        "control_description": "Governance control providing oversight of Issue Management. Mitigates the risk: Risk that periodic entity-level risk assessments are not completed. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0110",
-        "control_title": "Program-level oversight of Training & Awareness",
-        "kpa_id": "KPA-020",
-        "kpa_description": "Training & Awareness",
-        "specific_risk_id": "SR-106",
-        "specific_risk_description": "Risk that annual AML training is not delivered to in-scope staff",
-        "control_description": "Governance control providing oversight of Training & Awareness. Mitigates the risk: Risk that annual AML training is not delivered to in-scope staff. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0111",
-        "control_title": "Operating control over Payment Authorization",
-        "kpa_id": "KPA-004",
-        "kpa_description": "Payment Authorization",
-        "specific_risk_id": "SR-113",
-        "specific_risk_description": "Risk that daily payment reconciliations are not completed and reviewed",
-        "control_description": "Control operated within Payment Authorization. Mitigates the risk: Risk that daily payment reconciliations are not completed and reviewed. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0112",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-118",
-        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy",
-        "control_description": "Control operated within Access Management. Mitigates the risk: Risk that production access is not provisioned per least-privilege policy. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0113",
-        "control_title": "Program-level oversight of Sanctions Program Oversight",
-        "kpa_id": "KPA-018",
-        "kpa_description": "Sanctions Program Oversight",
-        "specific_risk_id": "SR-109",
-        "specific_risk_description": "Risk that the sanctions screening program has inadequate list coverage",
-        "control_description": "Governance control providing oversight of Sanctions Program Oversight. Mitigates the risk: Risk that the sanctions screening program has inadequate list coverage. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0114",
-        "control_title": "Program-level oversight of Vendor Due Diligence",
-        "kpa_id": "KPA-008",
-        "kpa_description": "Vendor Due Diligence",
-        "specific_risk_id": "SR-116",
-        "specific_risk_description": "Risk that vendors are not onboarded per Third Party Risk policy",
-        "control_description": "Governance control providing oversight of Vendor Due Diligence. Mitigates the risk: Risk that vendors are not onboarded per Third Party Risk policy. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0115",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-121",
-        "specific_risk_description": "Risk that emergency changes are not documented post-implementation",
-        "control_description": "Control operated within Change Management. Mitigates the risk: Risk that emergency changes are not documented post-implementation. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0116",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-121",
-        "specific_risk_description": "Risk that emergency changes are not documented post-implementation",
-        "control_description": "Control operated within Change Management. Mitigates the risk: Risk that emergency changes are not documented post-implementation. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0117",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-128",
-        "specific_risk_description": "Risk that periodic entity-level risk assessments are not completed",
-        "control_description": "Governance control providing oversight of Issue Management. Mitigates the risk: Risk that periodic entity-level risk assessments are not completed. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0118",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-107",
-        "specific_risk_description": "Risk that transaction monitoring rules are not calibrated against typologies",
-        "control_description": "Governance control providing oversight of AML Transaction Monitoring Calibration. Mitigates the risk: Risk that transaction monitoring rules are not calibrated against typologies. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0119",
-        "control_title": "Operating control over Payment Authorization",
-        "kpa_id": "KPA-004",
-        "kpa_description": "Payment Authorization",
-        "specific_risk_id": "SR-112",
-        "specific_risk_description": "Risk that payment instructions are not authorized before release",
-        "control_description": "Control operated within Payment Authorization. Mitigates the risk: Risk that payment instructions are not authorized before release. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0120",
-        "control_title": "Operating control over Fraud Case Management",
-        "kpa_id": "KPA-019",
-        "kpa_description": "Fraud Case Management",
-        "specific_risk_id": "SR-126",
-        "specific_risk_description": "Risk that fraud cases are not investigated and closed",
-        "control_description": "Control operated within Fraud Case Management. Mitigates the risk: Risk that fraud cases are not investigated and closed. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0121",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-121",
-        "specific_risk_description": "Risk that emergency changes are not documented post-implementation",
-        "control_description": "Control operated within Change Management. Mitigates the risk: Risk that emergency changes are not documented post-implementation. Evidence is retained per the control operator's workpapers and is executed at the transaction or event level."
-      },
-      {
-        "control_id": "CTRL-0122",
-        "control_title": "Program-level oversight of Vendor Performance Monitoring",
-        "kpa_id": "KPA-009",
-        "kpa_description": "Vendor Performance Monitoring",
-        "specific_risk_id": "SR-117",
-        "specific_risk_description": "Risk that vendor SLAs and performance are not monitored periodically",
-        "control_description": "Governance control providing oversight of Vendor Performance Monitoring. Mitigates the risk: Risk that vendor SLAs and performance are not monitored periodically. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0123",
-        "control_title": "Program-level oversight of Sanctions Program Oversight",
-        "kpa_id": "KPA-018",
-        "kpa_description": "Sanctions Program Oversight",
-        "specific_risk_id": "SR-109",
-        "specific_risk_description": "Risk that the sanctions screening program has inadequate list coverage",
-        "control_description": "Governance control providing oversight of Sanctions Program Oversight. Mitigates the risk: Risk that the sanctions screening program has inadequate list coverage. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      },
-      {
-        "control_id": "CTRL-0124",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-124",
-        "specific_risk_description": "Risk that audit findings are not tracked to remediation",
-        "control_description": "Governance control providing oversight of Issue Management. Mitigates the risk: Risk that audit findings are not tracked to remediation. Evidence is produced at the program or framework level and is reviewed by second-line governance on a defined cadence."
-      }
-    ],
-    "specific_risk_coverage": [
-      {
-        "id": "SR-112",
-        "description": "Risk that payment instructions are not authorized before release"
-      },
-      {
-        "id": "SR-113",
-        "description": "Risk that daily payment reconciliations are not completed and reviewed"
-      },
-      {
-        "id": "SR-126",
-        "description": "Risk that fraud cases are not investigated and closed"
-      },
-      {
-        "id": "SR-128",
-        "description": "Risk that periodic entity-level risk assessments are not completed"
-      },
-      {
-        "id": "SR-106",
-        "description": "Risk that annual AML training is not delivered to in-scope staff"
-      },
-      {
-        "id": "SR-118",
-        "description": "Risk that production access is not provisioned per least-privilege policy"
-      },
-      {
-        "id": "SR-109",
-        "description": "Risk that the sanctions screening program has inadequate list coverage"
-      },
-      {
-        "id": "SR-116",
-        "description": "Risk that vendors are not onboarded per Third Party Risk policy"
-      },
-      {
-        "id": "SR-121",
-        "description": "Risk that emergency changes are not documented post-implementation"
-      },
-      {
-        "id": "SR-107",
-        "description": "Risk that transaction monitoring rules are not calibrated against typologies"
-      },
-      {
-        "id": "SR-117",
-        "description": "Risk that vendor SLAs and performance are not monitored periodically"
-      },
-      {
-        "id": "SR-124",
-        "description": "Risk that audit findings are not tracked to remediation"
-      }
-    ],
-    "kpa_coverage": [
-      {
-        "id": "KPA-004",
-        "description": "Payment Authorization"
-      },
-      {
-        "id": "KPA-019",
-        "description": "Fraud Case Management"
-      },
-      {
-        "id": "KPA-014",
-        "description": "Issue Management"
-      },
-      {
-        "id": "KPA-020",
-        "description": "Training & Awareness"
-      },
-      {
-        "id": "KPA-010",
-        "description": "Access Management"
-      },
-      {
-        "id": "KPA-018",
-        "description": "Sanctions Program Oversight"
-      },
-      {
-        "id": "KPA-008",
-        "description": "Vendor Due Diligence"
-      },
-      {
-        "id": "KPA-011",
-        "description": "Change Management"
-      },
-      {
-        "id": "KPA-017",
-        "description": "AML Transaction Monitoring Calibration"
-      },
-      {
-        "id": "KPA-009",
-        "description": "Vendor Performance Monitoring"
-      }
-    ]
+    "controls": [],
+    "specific_risk_coverage": [],
+    "kpa_coverage": []
   }
 ]
 ```
@@ -3720,2934 +266,12 @@ Quote Specific Risk IDs and Descriptions as evidence in every Task 5 finding. Th
 ```json
 [
   {
-    "entity_id": "AE-1",
-    "entity_name": "Consumer Lending",
-    "business_unit": "Global Consumer",
-    "line_of_defense": "1st Line of Defense",
-    "role": "target_context",
-    "horizontal_flag": false,
-    "handoff_description": "Processes are handed off related to consumer lending operations.",
-    "handoffs_to": [
-      {
-        "id": "AE-19",
-        "name": "Branch Operations",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-45",
-        "name": "Facilities Management",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-43",
-        "name": "Business Continuity",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-6",
-        "name": "ACH Processing",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-40",
-        "name": "Operational Risk",
-        "inactive_flag": false
-      }
-    ],
-    "handoffs_from": [
-      {
-        "id": "AE-24",
-        "name": "Fraud Detection",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-15",
-        "name": "Asset Management",
-        "inactive_flag": false
-      }
-    ],
-    "risks": [
-      {
-        "risk_category": "Compliance",
-        "residual_rating": "Critical",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Country",
-        "residual_rating": "High",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Credit",
-        "residual_rating": "Critical",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "External Fraud",
-        "residual_rating": "Not Applicable",
-        "inherent_rating": "Not Applicable",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Not Applicable",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Financial Reporting",
-        "residual_rating": "Not Applicable",
-        "inherent_rating": "Not Applicable",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Not Applicable",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Funding & Liquidity",
-        "residual_rating": "High",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Information Technology",
-        "residual_rating": "Medium",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Information Security",
-        "residual_rating": "Medium",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Model",
-        "residual_rating": "Medium",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Market",
-        "residual_rating": "Not Applicable",
-        "inherent_rating": "Not Applicable",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Not Applicable",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Operational",
-        "residual_rating": "High",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Reputational",
-        "residual_rating": "High",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Strategic & Business",
-        "residual_rating": "Medium",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Third Party",
-        "residual_rating": "High",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      }
-    ],
-    "controls_compact": [
-      {
-        "control_id": "CTRL-0001",
-        "control_title": "Operating control over Credit Origination",
-        "kpa_id": "KPA-002",
-        "kpa_description": "Credit Origination",
-        "specific_risk_id": "SR-110",
-        "specific_risk_description": "Risk that credit decisioning criteria are not applied at origination"
-      },
-      {
-        "control_id": "CTRL-0002",
-        "control_title": "Operating control over Credit Origination",
-        "kpa_id": "KPA-002",
-        "kpa_description": "Credit Origination",
-        "specific_risk_id": "SR-111",
-        "specific_risk_description": "Risk that credit limits are not approved per delegated authority"
-      },
-      {
-        "control_id": "CTRL-0003",
-        "control_title": "Operating control over Credit Origination",
-        "kpa_id": "KPA-002",
-        "kpa_description": "Credit Origination",
-        "specific_risk_id": "SR-111",
-        "specific_risk_description": "Risk that credit limits are not approved per delegated authority"
-      },
-      {
-        "control_id": "CTRL-0004",
-        "control_title": "Operating control over Account Servicing",
-        "kpa_id": "KPA-005",
-        "kpa_description": "Account Servicing",
-        "specific_risk_id": "SR-129",
-        "specific_risk_description": "Risk that customer complaints are not logged and triaged"
-      },
-      {
-        "control_id": "CTRL-0005",
-        "control_title": "Operating control over Account Servicing",
-        "kpa_id": "KPA-005",
-        "kpa_description": "Account Servicing",
-        "specific_risk_id": "SR-129",
-        "specific_risk_description": "Risk that customer complaints are not logged and triaged"
-      },
-      {
-        "control_id": "CTRL-0006",
-        "control_title": "Operating control over Account Servicing",
-        "kpa_id": "KPA-005",
-        "kpa_description": "Account Servicing",
-        "specific_risk_id": "SR-129",
-        "specific_risk_description": "Risk that customer complaints are not logged and triaged"
-      },
-      {
-        "control_id": "CTRL-0007",
-        "control_title": "Operating control over Customer Onboarding",
-        "kpa_id": "KPA-001",
-        "kpa_description": "Customer Onboarding",
-        "specific_risk_id": "SR-102",
-        "specific_risk_description": "Risk that Customer Due Diligence is not refreshed per policy cadence"
-      },
-      {
-        "control_id": "CTRL-0008",
-        "control_title": "Operating control over Customer Onboarding",
-        "kpa_id": "KPA-001",
-        "kpa_description": "Customer Onboarding",
-        "specific_risk_id": "SR-103",
-        "specific_risk_description": "Risk that sanctions screening is not performed at customer onboarding"
-      },
-      {
-        "control_id": "CTRL-0009",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-128",
-        "specific_risk_description": "Risk that periodic entity-level risk assessments are not completed"
-      },
-      {
-        "control_id": "CTRL-0010",
-        "control_title": "Program-level oversight of AML Program Framework",
-        "kpa_id": "KPA-016",
-        "kpa_description": "AML Program Framework",
-        "specific_risk_id": "SR-105",
-        "specific_risk_description": "Risk that the AML program framework and policies are not maintained"
-      },
-      {
-        "control_id": "CTRL-0011",
-        "control_title": "Program-level oversight of Vendor Performance Monitoring",
-        "kpa_id": "KPA-009",
-        "kpa_description": "Vendor Performance Monitoring",
-        "specific_risk_id": "SR-117",
-        "specific_risk_description": "Risk that vendor SLAs and performance are not monitored periodically"
-      },
-      {
-        "control_id": "CTRL-0012",
-        "control_title": "Operating control over Account Servicing",
-        "kpa_id": "KPA-005",
-        "kpa_description": "Account Servicing",
-        "specific_risk_id": "SR-129",
-        "specific_risk_description": "Risk that customer complaints are not logged and triaged"
-      },
-      {
-        "control_id": "CTRL-0013",
-        "control_title": "Operating control over Customer Onboarding",
-        "kpa_id": "KPA-001",
-        "kpa_description": "Customer Onboarding",
-        "specific_risk_id": "SR-102",
-        "specific_risk_description": "Risk that Customer Due Diligence is not refreshed per policy cadence"
-      },
-      {
-        "control_id": "CTRL-0014",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-124",
-        "specific_risk_description": "Risk that audit findings are not tracked to remediation"
-      },
-      {
-        "control_id": "CTRL-0015",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-108",
-        "specific_risk_description": "Risk that Suspicious Activity Reports are not filed within regulatory deadlines"
-      },
-      {
-        "control_id": "CTRL-0016",
-        "control_title": "Operating control over Customer Onboarding",
-        "kpa_id": "KPA-001",
-        "kpa_description": "Customer Onboarding",
-        "specific_risk_id": "SR-102",
-        "specific_risk_description": "Risk that Customer Due Diligence is not refreshed per policy cadence"
-      },
-      {
-        "control_id": "CTRL-0017",
-        "control_title": "Operating control over Customer Onboarding",
-        "kpa_id": "KPA-001",
-        "kpa_description": "Customer Onboarding",
-        "specific_risk_id": "SR-103",
-        "specific_risk_description": "Risk that sanctions screening is not performed at customer onboarding"
-      },
-      {
-        "control_id": "CTRL-0018",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-119",
-        "specific_risk_description": "Risk that user access is not recertified on the required cadence"
-      },
-      {
-        "control_id": "CTRL-0019",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-119",
-        "specific_risk_description": "Risk that user access is not recertified on the required cadence"
-      },
-      {
-        "control_id": "CTRL-0020",
-        "control_title": "Operating control over Customer Onboarding",
-        "kpa_id": "KPA-001",
-        "kpa_description": "Customer Onboarding",
-        "specific_risk_id": "SR-103",
-        "specific_risk_description": "Risk that sanctions screening is not performed at customer onboarding"
-      }
-    ],
-    "specific_risk_coverage": [
-      {
-        "id": "SR-110",
-        "description": "Risk that credit decisioning criteria are not applied at origination"
-      },
-      {
-        "id": "SR-111",
-        "description": "Risk that credit limits are not approved per delegated authority"
-      },
-      {
-        "id": "SR-129",
-        "description": "Risk that customer complaints are not logged and triaged"
-      },
-      {
-        "id": "SR-102",
-        "description": "Risk that Customer Due Diligence is not refreshed per policy cadence"
-      },
-      {
-        "id": "SR-103",
-        "description": "Risk that sanctions screening is not performed at customer onboarding"
-      },
-      {
-        "id": "SR-128",
-        "description": "Risk that periodic entity-level risk assessments are not completed"
-      },
-      {
-        "id": "SR-105",
-        "description": "Risk that the AML program framework and policies are not maintained"
-      },
-      {
-        "id": "SR-117",
-        "description": "Risk that vendor SLAs and performance are not monitored periodically"
-      },
-      {
-        "id": "SR-124",
-        "description": "Risk that audit findings are not tracked to remediation"
-      },
-      {
-        "id": "SR-108",
-        "description": "Risk that Suspicious Activity Reports are not filed within regulatory deadlines"
-      },
-      {
-        "id": "SR-119",
-        "description": "Risk that user access is not recertified on the required cadence"
-      }
-    ],
-    "kpa_coverage": [
-      {
-        "id": "KPA-002",
-        "description": "Credit Origination"
-      },
-      {
-        "id": "KPA-005",
-        "description": "Account Servicing"
-      },
-      {
-        "id": "KPA-001",
-        "description": "Customer Onboarding"
-      },
-      {
-        "id": "KPA-014",
-        "description": "Issue Management"
-      },
-      {
-        "id": "KPA-016",
-        "description": "AML Program Framework"
-      },
-      {
-        "id": "KPA-009",
-        "description": "Vendor Performance Monitoring"
-      },
-      {
-        "id": "KPA-017",
-        "description": "AML Transaction Monitoring Calibration"
-      },
-      {
-        "id": "KPA-010",
-        "description": "Access Management"
-      }
-    ]
-  },
-  {
-    "entity_id": "AE-17",
-    "entity_name": "Digital Banking",
-    "business_unit": "Global Commercial",
-    "line_of_defense": "2nd Line of Defense",
-    "role": "target_context",
-    "horizontal_flag": true,
-    "handoff_description": "Processes are handed off related to digital banking operations.",
-    "handoffs_to": [],
-    "handoffs_from": [
-      {
-        "id": "AE-23",
-        "name": "Sanctions Screening",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-45",
-        "name": "Facilities Management",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-40",
-        "name": "Operational Risk",
-        "inactive_flag": false
-      }
-    ],
-    "risks": [
-      {
-        "risk_category": "Compliance",
-        "residual_rating": "Not Applicable",
-        "inherent_rating": "Not Applicable",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Not Applicable",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Country",
-        "residual_rating": "High",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Credit",
-        "residual_rating": "Medium",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "External Fraud",
-        "residual_rating": "Critical",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Financial Reporting",
-        "residual_rating": "Medium",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Funding & Liquidity",
-        "residual_rating": "Not Applicable",
-        "inherent_rating": "Not Applicable",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Not Applicable",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Information Technology",
-        "residual_rating": "Medium",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Information Security",
-        "residual_rating": "High",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Model",
-        "residual_rating": "High",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Market",
-        "residual_rating": "Not Applicable",
-        "inherent_rating": "Not Applicable",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Not Applicable",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Operational",
-        "residual_rating": "Critical",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Reputational",
-        "residual_rating": "Medium",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Strategic & Business",
-        "residual_rating": "High",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Third Party",
-        "residual_rating": "Medium",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      }
-    ],
-    "controls_compact": [
-      {
-        "control_id": "CTRL-0305",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-118",
-        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy"
-      },
-      {
-        "control_id": "CTRL-0306",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-118",
-        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy"
-      },
-      {
-        "control_id": "CTRL-0307",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-118",
-        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy"
-      },
-      {
-        "control_id": "CTRL-0308",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-119",
-        "specific_risk_description": "Risk that user access is not recertified on the required cadence"
-      },
-      {
-        "control_id": "CTRL-0309",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-120",
-        "specific_risk_description": "Risk that production changes are not approved before release"
-      },
-      {
-        "control_id": "CTRL-0310",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-120",
-        "specific_risk_description": "Risk that production changes are not approved before release"
-      },
-      {
-        "control_id": "CTRL-0311",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-120",
-        "specific_risk_description": "Risk that production changes are not approved before release"
-      },
-      {
-        "control_id": "CTRL-0312",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-121",
-        "specific_risk_description": "Risk that emergency changes are not documented post-implementation"
-      },
-      {
-        "control_id": "CTRL-0313",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-130",
-        "specific_risk_description": "Risk that customer data is not protected in transit and at rest"
-      },
-      {
-        "control_id": "CTRL-0314",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-130",
-        "specific_risk_description": "Risk that customer data is not protected in transit and at rest"
-      },
-      {
-        "control_id": "CTRL-0315",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-130",
-        "specific_risk_description": "Risk that customer data is not protected in transit and at rest"
-      },
-      {
-        "control_id": "CTRL-0316",
-        "control_title": "Operating control over Account Servicing",
-        "kpa_id": "KPA-005",
-        "kpa_description": "Account Servicing",
-        "specific_risk_id": "SR-129",
-        "specific_risk_description": "Risk that customer complaints are not logged and triaged"
-      },
-      {
-        "control_id": "CTRL-0317",
-        "control_title": "Operating control over Customer Onboarding",
-        "kpa_id": "KPA-001",
-        "kpa_description": "Customer Onboarding",
-        "specific_risk_id": "SR-101",
-        "specific_risk_description": "Risk that KYC identity verification is not performed at customer onboarding"
-      },
-      {
-        "control_id": "CTRL-0318",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-124",
-        "specific_risk_description": "Risk that audit findings are not tracked to remediation"
-      },
-      {
-        "control_id": "CTRL-0319",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-107",
-        "specific_risk_description": "Risk that transaction monitoring rules are not calibrated against typologies"
-      },
-      {
-        "control_id": "CTRL-0320",
-        "control_title": "Operating control over Customer Onboarding",
-        "kpa_id": "KPA-001",
-        "kpa_description": "Customer Onboarding",
-        "specific_risk_id": "SR-101",
-        "specific_risk_description": "Risk that KYC identity verification is not performed at customer onboarding"
-      },
-      {
-        "control_id": "CTRL-0321",
-        "control_title": "Program-level oversight of Training & Awareness",
-        "kpa_id": "KPA-020",
-        "kpa_description": "Training & Awareness",
-        "specific_risk_id": "SR-106",
-        "specific_risk_description": "Risk that annual AML training is not delivered to in-scope staff"
-      },
-      {
-        "control_id": "CTRL-0322",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-107",
-        "specific_risk_description": "Risk that transaction monitoring rules are not calibrated against typologies"
-      },
-      {
-        "control_id": "CTRL-0323",
-        "control_title": "Program-level oversight of Training & Awareness",
-        "kpa_id": "KPA-020",
-        "kpa_description": "Training & Awareness",
-        "specific_risk_id": "SR-106",
-        "specific_risk_description": "Risk that annual AML training is not delivered to in-scope staff"
-      },
-      {
-        "control_id": "CTRL-0324",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-128",
-        "specific_risk_description": "Risk that periodic entity-level risk assessments are not completed"
-      },
-      {
-        "control_id": "CTRL-0325",
-        "control_title": "Program-level oversight of AML Program Framework",
-        "kpa_id": "KPA-016",
-        "kpa_description": "AML Program Framework",
-        "specific_risk_id": "SR-105",
-        "specific_risk_description": "Risk that the AML program framework and policies are not maintained"
-      },
-      {
-        "control_id": "CTRL-0326",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-130",
-        "specific_risk_description": "Risk that customer data is not protected in transit and at rest"
-      },
-      {
-        "control_id": "CTRL-0327",
-        "control_title": "Operating control over Customer Onboarding",
-        "kpa_id": "KPA-001",
-        "kpa_description": "Customer Onboarding",
-        "specific_risk_id": "SR-102",
-        "specific_risk_description": "Risk that Customer Due Diligence is not refreshed per policy cadence"
-      }
-    ],
-    "specific_risk_coverage": [
-      {
-        "id": "SR-118",
-        "description": "Risk that production access is not provisioned per least-privilege policy"
-      },
-      {
-        "id": "SR-119",
-        "description": "Risk that user access is not recertified on the required cadence"
-      },
-      {
-        "id": "SR-120",
-        "description": "Risk that production changes are not approved before release"
-      },
-      {
-        "id": "SR-121",
-        "description": "Risk that emergency changes are not documented post-implementation"
-      },
-      {
-        "id": "SR-130",
-        "description": "Risk that customer data is not protected in transit and at rest"
-      },
-      {
-        "id": "SR-129",
-        "description": "Risk that customer complaints are not logged and triaged"
-      },
-      {
-        "id": "SR-101",
-        "description": "Risk that KYC identity verification is not performed at customer onboarding"
-      },
-      {
-        "id": "SR-124",
-        "description": "Risk that audit findings are not tracked to remediation"
-      },
-      {
-        "id": "SR-107",
-        "description": "Risk that transaction monitoring rules are not calibrated against typologies"
-      },
-      {
-        "id": "SR-106",
-        "description": "Risk that annual AML training is not delivered to in-scope staff"
-      },
-      {
-        "id": "SR-128",
-        "description": "Risk that periodic entity-level risk assessments are not completed"
-      },
-      {
-        "id": "SR-105",
-        "description": "Risk that the AML program framework and policies are not maintained"
-      },
-      {
-        "id": "SR-102",
-        "description": "Risk that Customer Due Diligence is not refreshed per policy cadence"
-      }
-    ],
-    "kpa_coverage": [
-      {
-        "id": "KPA-010",
-        "description": "Access Management"
-      },
-      {
-        "id": "KPA-011",
-        "description": "Change Management"
-      },
-      {
-        "id": "KPA-005",
-        "description": "Account Servicing"
-      },
-      {
-        "id": "KPA-001",
-        "description": "Customer Onboarding"
-      },
-      {
-        "id": "KPA-014",
-        "description": "Issue Management"
-      },
-      {
-        "id": "KPA-017",
-        "description": "AML Transaction Monitoring Calibration"
-      },
-      {
-        "id": "KPA-020",
-        "description": "Training & Awareness"
-      },
-      {
-        "id": "KPA-016",
-        "description": "AML Program Framework"
-      }
-    ]
-  },
-  {
-    "entity_id": "AE-25",
-    "entity_name": "Dispute Resolution",
-    "business_unit": "Technology",
-    "line_of_defense": "2nd Line of Defense",
-    "role": "target_context",
-    "horizontal_flag": false,
-    "handoff_description": "Processes are handed off related to dispute resolution operations.",
-    "handoffs_to": [
-      {
-        "id": "AE-40",
-        "name": "Operational Risk",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-24",
-        "name": "Fraud Detection",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-28",
-        "name": "General Ledger",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-37",
-        "name": "Model Validation",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-32",
-        "name": "Cybersecurity",
-        "inactive_flag": false
-      }
-    ],
-    "handoffs_from": [
-      {
-        "id": "AE-31",
-        "name": "IT Infrastructure",
-        "inactive_flag": false
-      }
-    ],
-    "risks": [
-      {
-        "risk_category": "Compliance",
-        "residual_rating": "Low",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Country",
-        "residual_rating": "High",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Credit",
-        "residual_rating": "Medium",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "External Fraud",
-        "residual_rating": "Medium",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Financial Reporting",
-        "residual_rating": "High",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Funding & Liquidity",
-        "residual_rating": "Not Applicable",
-        "inherent_rating": "Not Applicable",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Not Applicable",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Information Technology",
-        "residual_rating": "High",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Information Security",
-        "residual_rating": "High",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Model",
-        "residual_rating": "Not Applicable",
-        "inherent_rating": "Not Applicable",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Not Applicable",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Market",
-        "residual_rating": "Medium",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Operational",
-        "residual_rating": "Medium",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Reputational",
-        "residual_rating": "High",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Strategic & Business",
-        "residual_rating": "High",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Third Party",
-        "residual_rating": "High",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      }
-    ],
-    "controls_compact": [
-      {
-        "control_id": "CTRL-0447",
-        "control_title": "Operating control over Fraud Case Management",
-        "kpa_id": "KPA-019",
-        "kpa_description": "Fraud Case Management",
-        "specific_risk_id": "SR-126",
-        "specific_risk_description": "Risk that fraud cases are not investigated and closed"
-      },
-      {
-        "control_id": "CTRL-0448",
-        "control_title": "Operating control over Fraud Case Management",
-        "kpa_id": "KPA-019",
-        "kpa_description": "Fraud Case Management",
-        "specific_risk_id": "SR-126",
-        "specific_risk_description": "Risk that fraud cases are not investigated and closed"
-      },
-      {
-        "control_id": "CTRL-0449",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-119",
-        "specific_risk_description": "Risk that user access is not recertified on the required cadence"
-      },
-      {
-        "control_id": "CTRL-0450",
-        "control_title": "Operating control over Fraud Case Management",
-        "kpa_id": "KPA-019",
-        "kpa_description": "Fraud Case Management",
-        "specific_risk_id": "SR-126",
-        "specific_risk_description": "Risk that fraud cases are not investigated and closed"
-      },
-      {
-        "control_id": "CTRL-0451",
-        "control_title": "Program-level oversight of Sanctions Program Oversight",
-        "kpa_id": "KPA-018",
-        "kpa_description": "Sanctions Program Oversight",
-        "specific_risk_id": "SR-109",
-        "specific_risk_description": "Risk that the sanctions screening program has inadequate list coverage"
-      },
-      {
-        "control_id": "CTRL-0452",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-130",
-        "specific_risk_description": "Risk that customer data is not protected in transit and at rest"
-      },
-      {
-        "control_id": "CTRL-0453",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-121",
-        "specific_risk_description": "Risk that emergency changes are not documented post-implementation"
-      },
-      {
-        "control_id": "CTRL-0454",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-107",
-        "specific_risk_description": "Risk that transaction monitoring rules are not calibrated against typologies"
-      },
-      {
-        "control_id": "CTRL-0455",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-119",
-        "specific_risk_description": "Risk that user access is not recertified on the required cadence"
-      },
-      {
-        "control_id": "CTRL-0456",
-        "control_title": "Program-level oversight of Training & Awareness",
-        "kpa_id": "KPA-020",
-        "kpa_description": "Training & Awareness",
-        "specific_risk_id": "SR-106",
-        "specific_risk_description": "Risk that annual AML training is not delivered to in-scope staff"
-      },
-      {
-        "control_id": "CTRL-0457",
-        "control_title": "Program-level oversight of Vendor Due Diligence",
-        "kpa_id": "KPA-008",
-        "kpa_description": "Vendor Due Diligence",
-        "specific_risk_id": "SR-116",
-        "specific_risk_description": "Risk that vendors are not onboarded per Third Party Risk policy"
-      },
-      {
-        "control_id": "CTRL-0458",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-128",
-        "specific_risk_description": "Risk that periodic entity-level risk assessments are not completed"
-      },
-      {
-        "control_id": "CTRL-0459",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-107",
-        "specific_risk_description": "Risk that transaction monitoring rules are not calibrated against typologies"
-      },
-      {
-        "control_id": "CTRL-0460",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-119",
-        "specific_risk_description": "Risk that user access is not recertified on the required cadence"
-      }
-    ],
-    "specific_risk_coverage": [
-      {
-        "id": "SR-126",
-        "description": "Risk that fraud cases are not investigated and closed"
-      },
-      {
-        "id": "SR-119",
-        "description": "Risk that user access is not recertified on the required cadence"
-      },
-      {
-        "id": "SR-109",
-        "description": "Risk that the sanctions screening program has inadequate list coverage"
-      },
-      {
-        "id": "SR-130",
-        "description": "Risk that customer data is not protected in transit and at rest"
-      },
-      {
-        "id": "SR-121",
-        "description": "Risk that emergency changes are not documented post-implementation"
-      },
-      {
-        "id": "SR-107",
-        "description": "Risk that transaction monitoring rules are not calibrated against typologies"
-      },
-      {
-        "id": "SR-106",
-        "description": "Risk that annual AML training is not delivered to in-scope staff"
-      },
-      {
-        "id": "SR-116",
-        "description": "Risk that vendors are not onboarded per Third Party Risk policy"
-      },
-      {
-        "id": "SR-128",
-        "description": "Risk that periodic entity-level risk assessments are not completed"
-      }
-    ],
-    "kpa_coverage": [
-      {
-        "id": "KPA-019",
-        "description": "Fraud Case Management"
-      },
-      {
-        "id": "KPA-010",
-        "description": "Access Management"
-      },
-      {
-        "id": "KPA-018",
-        "description": "Sanctions Program Oversight"
-      },
-      {
-        "id": "KPA-011",
-        "description": "Change Management"
-      },
-      {
-        "id": "KPA-017",
-        "description": "AML Transaction Monitoring Calibration"
-      },
-      {
-        "id": "KPA-020",
-        "description": "Training & Awareness"
-      },
-      {
-        "id": "KPA-008",
-        "description": "Vendor Due Diligence"
-      },
-      {
-        "id": "KPA-014",
-        "description": "Issue Management"
-      }
-    ]
-  },
-  {
-    "entity_id": "AE-27",
-    "entity_name": "Accounts Payable",
-    "business_unit": "Operations",
-    "line_of_defense": "1st Line of Defense",
-    "role": "target_context",
-    "horizontal_flag": false,
-    "handoff_description": "Processes are handed off related to accounts payable operations.",
-    "handoffs_to": [
-      {
-        "id": "AE-16",
-        "name": "Retail Banking",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-37",
-        "name": "Model Validation",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-21",
-        "name": "KYC/CDD",
-        "inactive_flag": false
-      }
-    ],
-    "handoffs_from": [
-      {
-        "id": "AE-16",
-        "name": "Retail Banking",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-40",
-        "name": "Operational Risk",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-14",
-        "name": "Investment Banking",
-        "inactive_flag": false
-      }
-    ],
-    "risks": [
-      {
-        "risk_category": "Compliance",
-        "residual_rating": "Low",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Country",
-        "residual_rating": "Medium",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Credit",
-        "residual_rating": "Medium",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "External Fraud",
-        "residual_rating": "High",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Financial Reporting",
-        "residual_rating": "Critical",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Funding & Liquidity",
-        "residual_rating": "High",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Information Technology",
-        "residual_rating": "Critical",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Information Security",
-        "residual_rating": "Medium",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Model",
-        "residual_rating": "Low",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Market",
-        "residual_rating": "Medium",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Operational",
-        "residual_rating": "High",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Reputational",
-        "residual_rating": "Medium",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Strategic & Business",
-        "residual_rating": "Medium",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Third Party",
-        "residual_rating": "Medium",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      }
-    ],
-    "controls_compact": [
-      {
-        "control_id": "CTRL-0471",
-        "control_title": "Operating control over Financial Reporting — Period Close",
-        "kpa_id": "KPA-006",
-        "kpa_description": "Financial Reporting — Period Close",
-        "specific_risk_id": "SR-114",
-        "specific_risk_description": "Risk that period-end financial statements contain material misstatement"
-      },
-      {
-        "control_id": "CTRL-0472",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-118",
-        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy"
-      },
-      {
-        "control_id": "CTRL-0473",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-121",
-        "specific_risk_description": "Risk that emergency changes are not documented post-implementation"
-      },
-      {
-        "control_id": "CTRL-0474",
-        "control_title": "Program-level oversight of Vendor Due Diligence",
-        "kpa_id": "KPA-008",
-        "kpa_description": "Vendor Due Diligence",
-        "specific_risk_id": "SR-116",
-        "specific_risk_description": "Risk that vendors are not onboarded per Third Party Risk policy"
-      },
-      {
-        "control_id": "CTRL-0475",
-        "control_title": "Program-level oversight of Sanctions Program Oversight",
-        "kpa_id": "KPA-018",
-        "kpa_description": "Sanctions Program Oversight",
-        "specific_risk_id": "SR-109",
-        "specific_risk_description": "Risk that the sanctions screening program has inadequate list coverage"
-      },
-      {
-        "control_id": "CTRL-0476",
-        "control_title": "Program-level oversight of Training & Awareness",
-        "kpa_id": "KPA-020",
-        "kpa_description": "Training & Awareness",
-        "specific_risk_id": "SR-106",
-        "specific_risk_description": "Risk that annual AML training is not delivered to in-scope staff"
-      },
-      {
-        "control_id": "CTRL-0477",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-130",
-        "specific_risk_description": "Risk that customer data is not protected in transit and at rest"
-      },
-      {
-        "control_id": "CTRL-0478",
-        "control_title": "Operating control over Financial Reporting — Period Close",
-        "kpa_id": "KPA-006",
-        "kpa_description": "Financial Reporting — Period Close",
-        "specific_risk_id": "SR-114",
-        "specific_risk_description": "Risk that period-end financial statements contain material misstatement"
-      },
-      {
-        "control_id": "CTRL-0479",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-108",
-        "specific_risk_description": "Risk that Suspicious Activity Reports are not filed within regulatory deadlines"
-      },
-      {
-        "control_id": "CTRL-0480",
-        "control_title": "Operating control over Payment Authorization",
-        "kpa_id": "KPA-004",
-        "kpa_description": "Payment Authorization",
-        "specific_risk_id": "SR-112",
-        "specific_risk_description": "Risk that payment instructions are not authorized before release"
-      },
-      {
-        "control_id": "CTRL-0481",
-        "control_title": "Program-level oversight of Vendor Due Diligence",
-        "kpa_id": "KPA-008",
-        "kpa_description": "Vendor Due Diligence",
-        "specific_risk_id": "SR-116",
-        "specific_risk_description": "Risk that vendors are not onboarded per Third Party Risk policy"
-      },
-      {
-        "control_id": "CTRL-0482",
-        "control_title": "Program-level oversight of Training & Awareness",
-        "kpa_id": "KPA-020",
-        "kpa_description": "Training & Awareness",
-        "specific_risk_id": "SR-106",
-        "specific_risk_description": "Risk that annual AML training is not delivered to in-scope staff"
-      },
-      {
-        "control_id": "CTRL-0483",
-        "control_title": "Operating control over Payment Authorization",
-        "kpa_id": "KPA-004",
-        "kpa_description": "Payment Authorization",
-        "specific_risk_id": "SR-112",
-        "specific_risk_description": "Risk that payment instructions are not authorized before release"
-      },
-      {
-        "control_id": "CTRL-0484",
-        "control_title": "Operating control over Payment Authorization",
-        "kpa_id": "KPA-004",
-        "kpa_description": "Payment Authorization",
-        "specific_risk_id": "SR-113",
-        "specific_risk_description": "Risk that daily payment reconciliations are not completed and reviewed"
-      },
-      {
-        "control_id": "CTRL-0485",
-        "control_title": "Program-level oversight of Vendor Performance Monitoring",
-        "kpa_id": "KPA-009",
-        "kpa_description": "Vendor Performance Monitoring",
-        "specific_risk_id": "SR-117",
-        "specific_risk_description": "Risk that vendor SLAs and performance are not monitored periodically"
-      },
-      {
-        "control_id": "CTRL-0486",
-        "control_title": "Program-level oversight of Vendor Performance Monitoring",
-        "kpa_id": "KPA-009",
-        "kpa_description": "Vendor Performance Monitoring",
-        "specific_risk_id": "SR-117",
-        "specific_risk_description": "Risk that vendor SLAs and performance are not monitored periodically"
-      },
-      {
-        "control_id": "CTRL-0487",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-130",
-        "specific_risk_description": "Risk that customer data is not protected in transit and at rest"
-      },
-      {
-        "control_id": "CTRL-0488",
-        "control_title": "Operating control over Payment Authorization",
-        "kpa_id": "KPA-004",
-        "kpa_description": "Payment Authorization",
-        "specific_risk_id": "SR-113",
-        "specific_risk_description": "Risk that daily payment reconciliations are not completed and reviewed"
-      },
-      {
-        "control_id": "CTRL-0489",
-        "control_title": "Program-level oversight of Vendor Performance Monitoring",
-        "kpa_id": "KPA-009",
-        "kpa_description": "Vendor Performance Monitoring",
-        "specific_risk_id": "SR-117",
-        "specific_risk_description": "Risk that vendor SLAs and performance are not monitored periodically"
-      },
-      {
-        "control_id": "CTRL-0490",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-124",
-        "specific_risk_description": "Risk that audit findings are not tracked to remediation"
-      },
-      {
-        "control_id": "CTRL-0491",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-130",
-        "specific_risk_description": "Risk that customer data is not protected in transit and at rest"
-      },
-      {
-        "control_id": "CTRL-0492",
-        "control_title": "Operating control over Payment Authorization",
-        "kpa_id": "KPA-004",
-        "kpa_description": "Payment Authorization",
-        "specific_risk_id": "SR-112",
-        "specific_risk_description": "Risk that payment instructions are not authorized before release"
-      },
-      {
-        "control_id": "CTRL-0493",
-        "control_title": "Program-level oversight of Vendor Due Diligence",
-        "kpa_id": "KPA-008",
-        "kpa_description": "Vendor Due Diligence",
-        "specific_risk_id": "SR-116",
-        "specific_risk_description": "Risk that vendors are not onboarded per Third Party Risk policy"
-      },
-      {
-        "control_id": "CTRL-0494",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-119",
-        "specific_risk_description": "Risk that user access is not recertified on the required cadence"
-      }
-    ],
-    "specific_risk_coverage": [
-      {
-        "id": "SR-114",
-        "description": "Risk that period-end financial statements contain material misstatement"
-      },
-      {
-        "id": "SR-118",
-        "description": "Risk that production access is not provisioned per least-privilege policy"
-      },
-      {
-        "id": "SR-121",
-        "description": "Risk that emergency changes are not documented post-implementation"
-      },
-      {
-        "id": "SR-116",
-        "description": "Risk that vendors are not onboarded per Third Party Risk policy"
-      },
-      {
-        "id": "SR-109",
-        "description": "Risk that the sanctions screening program has inadequate list coverage"
-      },
-      {
-        "id": "SR-106",
-        "description": "Risk that annual AML training is not delivered to in-scope staff"
-      },
-      {
-        "id": "SR-130",
-        "description": "Risk that customer data is not protected in transit and at rest"
-      },
-      {
-        "id": "SR-108",
-        "description": "Risk that Suspicious Activity Reports are not filed within regulatory deadlines"
-      },
-      {
-        "id": "SR-112",
-        "description": "Risk that payment instructions are not authorized before release"
-      },
-      {
-        "id": "SR-113",
-        "description": "Risk that daily payment reconciliations are not completed and reviewed"
-      },
-      {
-        "id": "SR-117",
-        "description": "Risk that vendor SLAs and performance are not monitored periodically"
-      },
-      {
-        "id": "SR-124",
-        "description": "Risk that audit findings are not tracked to remediation"
-      },
-      {
-        "id": "SR-119",
-        "description": "Risk that user access is not recertified on the required cadence"
-      }
-    ],
-    "kpa_coverage": [
-      {
-        "id": "KPA-006",
-        "description": "Financial Reporting — Period Close"
-      },
-      {
-        "id": "KPA-010",
-        "description": "Access Management"
-      },
-      {
-        "id": "KPA-011",
-        "description": "Change Management"
-      },
-      {
-        "id": "KPA-008",
-        "description": "Vendor Due Diligence"
-      },
-      {
-        "id": "KPA-018",
-        "description": "Sanctions Program Oversight"
-      },
-      {
-        "id": "KPA-020",
-        "description": "Training & Awareness"
-      },
-      {
-        "id": "KPA-017",
-        "description": "AML Transaction Monitoring Calibration"
-      },
-      {
-        "id": "KPA-004",
-        "description": "Payment Authorization"
-      },
-      {
-        "id": "KPA-009",
-        "description": "Vendor Performance Monitoring"
-      },
-      {
-        "id": "KPA-014",
-        "description": "Issue Management"
-      }
-    ]
-  },
-  {
-    "entity_id": "AE-30",
-    "entity_name": "Regulatory Reporting",
-    "business_unit": "Technology",
-    "line_of_defense": "2nd Line of Defense",
-    "role": "target_context",
-    "horizontal_flag": false,
-    "handoff_description": "Processes are handed off related to regulatory reporting operations.",
-    "handoffs_to": [
-      {
-        "id": "AE-5",
-        "name": "Wire Transfers",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-27",
-        "name": "Accounts Payable",
-        "inactive_flag": false
-      }
-    ],
-    "handoffs_from": [
-      {
-        "id": "AE-2",
-        "name": "Commercial Banking",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-31",
-        "name": "IT Infrastructure",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-14",
-        "name": "Investment Banking",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-29",
-        "name": "Financial Reporting",
-        "inactive_flag": false
-      }
-    ],
-    "risks": [
-      {
-        "risk_category": "Compliance",
-        "residual_rating": "Medium",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Country",
-        "residual_rating": "Low",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Credit",
-        "residual_rating": "Critical",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "External Fraud",
-        "residual_rating": "High",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Financial Reporting",
-        "residual_rating": "Medium",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Funding & Liquidity",
-        "residual_rating": "Medium",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Information Technology",
-        "residual_rating": "Critical",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Information Security",
-        "residual_rating": "Medium",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Model",
-        "residual_rating": "Not Applicable",
-        "inherent_rating": "Not Applicable",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Not Applicable",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Market",
-        "residual_rating": "Not Applicable",
-        "inherent_rating": "Not Applicable",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Not Applicable",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Operational",
-        "residual_rating": "High",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Reputational",
-        "residual_rating": "High",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Strategic & Business",
-        "residual_rating": "High",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Third Party",
-        "residual_rating": "High",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      }
-    ],
-    "controls_compact": [
-      {
-        "control_id": "CTRL-0535",
-        "control_title": "Operating control over Regulatory Reporting",
-        "kpa_id": "KPA-015",
-        "kpa_description": "Regulatory Reporting",
-        "specific_risk_id": "SR-125",
-        "specific_risk_description": "Risk that regulatory reports are not filed by required deadlines"
-      },
-      {
-        "control_id": "CTRL-0536",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-128",
-        "specific_risk_description": "Risk that periodic entity-level risk assessments are not completed"
-      },
-      {
-        "control_id": "CTRL-0537",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-128",
-        "specific_risk_description": "Risk that periodic entity-level risk assessments are not completed"
-      },
-      {
-        "control_id": "CTRL-0538",
-        "control_title": "Operating control over Financial Reporting — Period Close",
-        "kpa_id": "KPA-006",
-        "kpa_description": "Financial Reporting — Period Close",
-        "specific_risk_id": "SR-114",
-        "specific_risk_description": "Risk that period-end financial statements contain material misstatement"
-      },
-      {
-        "control_id": "CTRL-0539",
-        "control_title": "Operating control over Financial Reporting — Period Close",
-        "kpa_id": "KPA-006",
-        "kpa_description": "Financial Reporting — Period Close",
-        "specific_risk_id": "SR-114",
-        "specific_risk_description": "Risk that period-end financial statements contain material misstatement"
-      },
-      {
-        "control_id": "CTRL-0540",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-118",
-        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy"
-      },
-      {
-        "control_id": "CTRL-0541",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-128",
-        "specific_risk_description": "Risk that periodic entity-level risk assessments are not completed"
-      },
-      {
-        "control_id": "CTRL-0542",
-        "control_title": "Program-level oversight of AML Program Framework",
-        "kpa_id": "KPA-016",
-        "kpa_description": "AML Program Framework",
-        "specific_risk_id": "SR-105",
-        "specific_risk_description": "Risk that the AML program framework and policies are not maintained"
-      },
-      {
-        "control_id": "CTRL-0543",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-118",
-        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy"
-      },
-      {
-        "control_id": "CTRL-0544",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-121",
-        "specific_risk_description": "Risk that emergency changes are not documented post-implementation"
-      },
-      {
-        "control_id": "CTRL-0545",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-120",
-        "specific_risk_description": "Risk that production changes are not approved before release"
-      },
-      {
-        "control_id": "CTRL-0546",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-120",
-        "specific_risk_description": "Risk that production changes are not approved before release"
-      },
-      {
-        "control_id": "CTRL-0547",
-        "control_title": "Program-level oversight of Vendor Performance Monitoring",
-        "kpa_id": "KPA-009",
-        "kpa_description": "Vendor Performance Monitoring",
-        "specific_risk_id": "SR-117",
-        "specific_risk_description": "Risk that vendor SLAs and performance are not monitored periodically"
-      },
-      {
-        "control_id": "CTRL-0548",
-        "control_title": "Program-level oversight of Training & Awareness",
-        "kpa_id": "KPA-020",
-        "kpa_description": "Training & Awareness",
-        "specific_risk_id": "SR-106",
-        "specific_risk_description": "Risk that annual AML training is not delivered to in-scope staff"
-      },
-      {
-        "control_id": "CTRL-0549",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-119",
-        "specific_risk_description": "Risk that user access is not recertified on the required cadence"
-      },
-      {
-        "control_id": "CTRL-0550",
-        "control_title": "Program-level oversight of Vendor Due Diligence",
-        "kpa_id": "KPA-008",
-        "kpa_description": "Vendor Due Diligence",
-        "specific_risk_id": "SR-116",
-        "specific_risk_description": "Risk that vendors are not onboarded per Third Party Risk policy"
-      },
-      {
-        "control_id": "CTRL-0551",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-121",
-        "specific_risk_description": "Risk that emergency changes are not documented post-implementation"
-      },
-      {
-        "control_id": "CTRL-0552",
-        "control_title": "Operating control over Financial Reporting — Period Close",
-        "kpa_id": "KPA-006",
-        "kpa_description": "Financial Reporting — Period Close",
-        "specific_risk_id": "SR-114",
-        "specific_risk_description": "Risk that period-end financial statements contain material misstatement"
-      },
-      {
-        "control_id": "CTRL-0553",
-        "control_title": "Program-level oversight of AML Program Framework",
-        "kpa_id": "KPA-016",
-        "kpa_description": "AML Program Framework",
-        "specific_risk_id": "SR-105",
-        "specific_risk_description": "Risk that the AML program framework and policies are not maintained"
-      }
-    ],
-    "specific_risk_coverage": [
-      {
-        "id": "SR-125",
-        "description": "Risk that regulatory reports are not filed by required deadlines"
-      },
-      {
-        "id": "SR-128",
-        "description": "Risk that periodic entity-level risk assessments are not completed"
-      },
-      {
-        "id": "SR-114",
-        "description": "Risk that period-end financial statements contain material misstatement"
-      },
-      {
-        "id": "SR-118",
-        "description": "Risk that production access is not provisioned per least-privilege policy"
-      },
-      {
-        "id": "SR-105",
-        "description": "Risk that the AML program framework and policies are not maintained"
-      },
-      {
-        "id": "SR-121",
-        "description": "Risk that emergency changes are not documented post-implementation"
-      },
-      {
-        "id": "SR-120",
-        "description": "Risk that production changes are not approved before release"
-      },
-      {
-        "id": "SR-117",
-        "description": "Risk that vendor SLAs and performance are not monitored periodically"
-      },
-      {
-        "id": "SR-106",
-        "description": "Risk that annual AML training is not delivered to in-scope staff"
-      },
-      {
-        "id": "SR-119",
-        "description": "Risk that user access is not recertified on the required cadence"
-      },
-      {
-        "id": "SR-116",
-        "description": "Risk that vendors are not onboarded per Third Party Risk policy"
-      }
-    ],
-    "kpa_coverage": [
-      {
-        "id": "KPA-015",
-        "description": "Regulatory Reporting"
-      },
-      {
-        "id": "KPA-014",
-        "description": "Issue Management"
-      },
-      {
-        "id": "KPA-006",
-        "description": "Financial Reporting — Period Close"
-      },
-      {
-        "id": "KPA-010",
-        "description": "Access Management"
-      },
-      {
-        "id": "KPA-016",
-        "description": "AML Program Framework"
-      },
-      {
-        "id": "KPA-011",
-        "description": "Change Management"
-      },
-      {
-        "id": "KPA-009",
-        "description": "Vendor Performance Monitoring"
-      },
-      {
-        "id": "KPA-020",
-        "description": "Training & Awareness"
-      },
-      {
-        "id": "KPA-008",
-        "description": "Vendor Due Diligence"
-      }
-    ]
-  },
-  {
-    "entity_id": "AE-32",
-    "entity_name": "Cybersecurity",
-    "business_unit": "Wealth & Investment",
-    "line_of_defense": "2nd Line of Defense",
-    "role": "target_context",
-    "horizontal_flag": true,
-    "handoff_description": "Processes are handed off related to cybersecurity operations.",
-    "handoffs_to": [
-      {
-        "id": "AE-15",
-        "name": "Asset Management",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-36",
-        "name": "Vendor Management",
-        "inactive_flag": false
-      }
-    ],
-    "handoffs_from": [],
-    "risks": [
-      {
-        "risk_category": "Compliance",
-        "residual_rating": "Medium",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Country",
-        "residual_rating": "Not Applicable",
-        "inherent_rating": "Not Applicable",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Not Applicable",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Credit",
-        "residual_rating": "Critical",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "External Fraud",
-        "residual_rating": "High",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Financial Reporting",
-        "residual_rating": "High",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Funding & Liquidity",
-        "residual_rating": "High",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Information Technology",
-        "residual_rating": "Low",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Information Security",
-        "residual_rating": "Medium",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Model",
-        "residual_rating": "High",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Market",
-        "residual_rating": "Medium",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Operational",
-        "residual_rating": "High",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Reputational",
-        "residual_rating": "Medium",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Strategic & Business",
-        "residual_rating": "Medium",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Third Party",
-        "residual_rating": "High",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      }
-    ],
-    "controls_compact": [
-      {
-        "control_id": "CTRL-0574",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-118",
-        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy"
-      },
-      {
-        "control_id": "CTRL-0575",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-119",
-        "specific_risk_description": "Risk that user access is not recertified on the required cadence"
-      },
-      {
-        "control_id": "CTRL-0576",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-119",
-        "specific_risk_description": "Risk that user access is not recertified on the required cadence"
-      },
-      {
-        "control_id": "CTRL-0577",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-130",
-        "specific_risk_description": "Risk that customer data is not protected in transit and at rest"
-      },
-      {
-        "control_id": "CTRL-0578",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-120",
-        "specific_risk_description": "Risk that production changes are not approved before release"
-      },
-      {
-        "control_id": "CTRL-0579",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-120",
-        "specific_risk_description": "Risk that production changes are not approved before release"
-      },
-      {
-        "control_id": "CTRL-0580",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-121",
-        "specific_risk_description": "Risk that emergency changes are not documented post-implementation"
-      },
-      {
-        "control_id": "CTRL-0581",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-121",
-        "specific_risk_description": "Risk that emergency changes are not documented post-implementation"
-      },
-      {
-        "control_id": "CTRL-0582",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-121",
-        "specific_risk_description": "Risk that emergency changes are not documented post-implementation"
-      },
-      {
-        "control_id": "CTRL-0583",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-108",
-        "specific_risk_description": "Risk that Suspicious Activity Reports are not filed within regulatory deadlines"
-      },
-      {
-        "control_id": "CTRL-0584",
-        "control_title": "Program-level oversight of Training & Awareness",
-        "kpa_id": "KPA-020",
-        "kpa_description": "Training & Awareness",
-        "specific_risk_id": "SR-106",
-        "specific_risk_description": "Risk that annual AML training is not delivered to in-scope staff"
-      },
-      {
-        "control_id": "CTRL-0585",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-120",
-        "specific_risk_description": "Risk that production changes are not approved before release"
-      },
-      {
-        "control_id": "CTRL-0586",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-119",
-        "specific_risk_description": "Risk that user access is not recertified on the required cadence"
-      },
-      {
-        "control_id": "CTRL-0587",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-130",
-        "specific_risk_description": "Risk that customer data is not protected in transit and at rest"
-      },
-      {
-        "control_id": "CTRL-0588",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-128",
-        "specific_risk_description": "Risk that periodic entity-level risk assessments are not completed"
-      },
-      {
-        "control_id": "CTRL-0589",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-107",
-        "specific_risk_description": "Risk that transaction monitoring rules are not calibrated against typologies"
-      },
-      {
-        "control_id": "CTRL-0590",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-121",
-        "specific_risk_description": "Risk that emergency changes are not documented post-implementation"
-      },
-      {
-        "control_id": "CTRL-0591",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-124",
-        "specific_risk_description": "Risk that audit findings are not tracked to remediation"
-      },
-      {
-        "control_id": "CTRL-0592",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-128",
-        "specific_risk_description": "Risk that periodic entity-level risk assessments are not completed"
-      },
-      {
-        "control_id": "CTRL-0593",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-120",
-        "specific_risk_description": "Risk that production changes are not approved before release"
-      },
-      {
-        "control_id": "CTRL-0594",
-        "control_title": "Program-level oversight of Vendor Performance Monitoring",
-        "kpa_id": "KPA-009",
-        "kpa_description": "Vendor Performance Monitoring",
-        "specific_risk_id": "SR-117",
-        "specific_risk_description": "Risk that vendor SLAs and performance are not monitored periodically"
-      },
-      {
-        "control_id": "CTRL-0595",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-128",
-        "specific_risk_description": "Risk that periodic entity-level risk assessments are not completed"
-      },
-      {
-        "control_id": "CTRL-0596",
-        "control_title": "Program-level oversight of Vendor Due Diligence",
-        "kpa_id": "KPA-008",
-        "kpa_description": "Vendor Due Diligence",
-        "specific_risk_id": "SR-116",
-        "specific_risk_description": "Risk that vendors are not onboarded per Third Party Risk policy"
-      },
-      {
-        "control_id": "CTRL-0597",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-124",
-        "specific_risk_description": "Risk that audit findings are not tracked to remediation"
-      },
-      {
-        "control_id": "CTRL-0598",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-118",
-        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy"
-      },
-      {
-        "control_id": "CTRL-0599",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-107",
-        "specific_risk_description": "Risk that transaction monitoring rules are not calibrated against typologies"
-      },
-      {
-        "control_id": "CTRL-0600",
-        "control_title": "Program-level oversight of Sanctions Program Oversight",
-        "kpa_id": "KPA-018",
-        "kpa_description": "Sanctions Program Oversight",
-        "specific_risk_id": "SR-109",
-        "specific_risk_description": "Risk that the sanctions screening program has inadequate list coverage"
-      },
-      {
-        "control_id": "CTRL-0601",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-124",
-        "specific_risk_description": "Risk that audit findings are not tracked to remediation"
-      }
-    ],
-    "specific_risk_coverage": [
-      {
-        "id": "SR-118",
-        "description": "Risk that production access is not provisioned per least-privilege policy"
-      },
-      {
-        "id": "SR-119",
-        "description": "Risk that user access is not recertified on the required cadence"
-      },
-      {
-        "id": "SR-130",
-        "description": "Risk that customer data is not protected in transit and at rest"
-      },
-      {
-        "id": "SR-120",
-        "description": "Risk that production changes are not approved before release"
-      },
-      {
-        "id": "SR-121",
-        "description": "Risk that emergency changes are not documented post-implementation"
-      },
-      {
-        "id": "SR-108",
-        "description": "Risk that Suspicious Activity Reports are not filed within regulatory deadlines"
-      },
-      {
-        "id": "SR-106",
-        "description": "Risk that annual AML training is not delivered to in-scope staff"
-      },
-      {
-        "id": "SR-128",
-        "description": "Risk that periodic entity-level risk assessments are not completed"
-      },
-      {
-        "id": "SR-107",
-        "description": "Risk that transaction monitoring rules are not calibrated against typologies"
-      },
-      {
-        "id": "SR-124",
-        "description": "Risk that audit findings are not tracked to remediation"
-      },
-      {
-        "id": "SR-117",
-        "description": "Risk that vendor SLAs and performance are not monitored periodically"
-      },
-      {
-        "id": "SR-116",
-        "description": "Risk that vendors are not onboarded per Third Party Risk policy"
-      },
-      {
-        "id": "SR-109",
-        "description": "Risk that the sanctions screening program has inadequate list coverage"
-      }
-    ],
-    "kpa_coverage": [
-      {
-        "id": "KPA-010",
-        "description": "Access Management"
-      },
-      {
-        "id": "KPA-011",
-        "description": "Change Management"
-      },
-      {
-        "id": "KPA-017",
-        "description": "AML Transaction Monitoring Calibration"
-      },
-      {
-        "id": "KPA-020",
-        "description": "Training & Awareness"
-      },
-      {
-        "id": "KPA-014",
-        "description": "Issue Management"
-      },
-      {
-        "id": "KPA-009",
-        "description": "Vendor Performance Monitoring"
-      },
-      {
-        "id": "KPA-008",
-        "description": "Vendor Due Diligence"
-      },
-      {
-        "id": "KPA-018",
-        "description": "Sanctions Program Oversight"
-      }
-    ]
-  },
-  {
-    "entity_id": "AE-37",
-    "entity_name": "Model Validation",
-    "business_unit": "Operations",
-    "line_of_defense": "1st Line of Defense",
-    "role": "target_context",
-    "horizontal_flag": true,
-    "handoff_description": "Processes are handed off related to model validation operations.",
-    "handoffs_to": [
-      {
-        "id": "AE-45",
-        "name": "Facilities Management",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-42",
-        "name": "Internal Controls",
-        "inactive_flag": false
-      }
-    ],
-    "handoffs_from": [
-      {
-        "id": "AE-26",
-        "name": "Payroll Processing",
-        "inactive_flag": false
-      }
-    ],
-    "risks": [
-      {
-        "risk_category": "Compliance",
-        "residual_rating": "Low",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Country",
-        "residual_rating": "Medium",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Credit",
-        "residual_rating": "High",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "External Fraud",
-        "residual_rating": "Low",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Financial Reporting",
-        "residual_rating": "High",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Funding & Liquidity",
-        "residual_rating": "High",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Information Technology",
-        "residual_rating": "Critical",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Information Security",
-        "residual_rating": "High",
-        "inherent_rating": "Medium",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Model",
-        "residual_rating": "Low",
-        "inherent_rating": "Low",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Market",
-        "residual_rating": "High",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Operational",
-        "residual_rating": "Low",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Reputational",
-        "residual_rating": "Medium",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Partially Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Strategic & Business",
-        "residual_rating": "Low",
-        "inherent_rating": "High",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Well Controlled",
-        "control_assessment_prose": ""
-      },
-      {
-        "risk_category": "Third Party",
-        "residual_rating": "High",
-        "inherent_rating": "Critical",
-        "inherent_rationale": "",
-        "control_assessment_rating": "Insufficiently Controlled",
-        "control_assessment_prose": ""
-      }
-    ],
-    "controls_compact": [
-      {
-        "control_id": "CTRL-0698",
-        "control_title": "Operating control over Model Validation",
-        "kpa_id": "KPA-013",
-        "kpa_description": "Model Validation",
-        "specific_risk_id": "SR-122",
-        "specific_risk_description": "Risk that models are not validated before production deployment"
-      },
-      {
-        "control_id": "CTRL-0699",
-        "control_title": "Operating control over Model Validation",
-        "kpa_id": "KPA-013",
-        "kpa_description": "Model Validation",
-        "specific_risk_id": "SR-122",
-        "specific_risk_description": "Risk that models are not validated before production deployment"
-      },
-      {
-        "control_id": "CTRL-0700",
-        "control_title": "Program-level oversight of Model Validation",
-        "kpa_id": "KPA-013",
-        "kpa_description": "Model Validation",
-        "specific_risk_id": "SR-123",
-        "specific_risk_description": "Risk that model performance is not monitored against thresholds"
-      },
-      {
-        "control_id": "CTRL-0701",
-        "control_title": "Program-level oversight of Model Validation",
-        "kpa_id": "KPA-013",
-        "kpa_description": "Model Validation",
-        "specific_risk_id": "SR-123",
-        "specific_risk_description": "Risk that model performance is not monitored against thresholds"
-      },
-      {
-        "control_id": "CTRL-0702",
-        "control_title": "Program-level oversight of Model Validation",
-        "kpa_id": "KPA-013",
-        "kpa_description": "Model Validation",
-        "specific_risk_id": "SR-123",
-        "specific_risk_description": "Risk that model performance is not monitored against thresholds"
-      },
-      {
-        "control_id": "CTRL-0703",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-120",
-        "specific_risk_description": "Risk that production changes are not approved before release"
-      },
-      {
-        "control_id": "CTRL-0704",
-        "control_title": "Program-level oversight of Sanctions Program Oversight",
-        "kpa_id": "KPA-018",
-        "kpa_description": "Sanctions Program Oversight",
-        "specific_risk_id": "SR-109",
-        "specific_risk_description": "Risk that the sanctions screening program has inadequate list coverage"
-      },
-      {
-        "control_id": "CTRL-0705",
-        "control_title": "Program-level oversight of AML Program Framework",
-        "kpa_id": "KPA-016",
-        "kpa_description": "AML Program Framework",
-        "specific_risk_id": "SR-105",
-        "specific_risk_description": "Risk that the AML program framework and policies are not maintained"
-      },
-      {
-        "control_id": "CTRL-0706",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-130",
-        "specific_risk_description": "Risk that customer data is not protected in transit and at rest"
-      },
-      {
-        "control_id": "CTRL-0707",
-        "control_title": "Program-level oversight of Training & Awareness",
-        "kpa_id": "KPA-020",
-        "kpa_description": "Training & Awareness",
-        "specific_risk_id": "SR-106",
-        "specific_risk_description": "Risk that annual AML training is not delivered to in-scope staff"
-      },
-      {
-        "control_id": "CTRL-0708",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-130",
-        "specific_risk_description": "Risk that customer data is not protected in transit and at rest"
-      },
-      {
-        "control_id": "CTRL-0709",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-119",
-        "specific_risk_description": "Risk that user access is not recertified on the required cadence"
-      },
-      {
-        "control_id": "CTRL-0710",
-        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
-        "kpa_id": "KPA-017",
-        "kpa_description": "AML Transaction Monitoring Calibration",
-        "specific_risk_id": "SR-108",
-        "specific_risk_description": "Risk that Suspicious Activity Reports are not filed within regulatory deadlines"
-      },
-      {
-        "control_id": "CTRL-0711",
-        "control_title": "Program-level oversight of Vendor Performance Monitoring",
-        "kpa_id": "KPA-009",
-        "kpa_description": "Vendor Performance Monitoring",
-        "specific_risk_id": "SR-117",
-        "specific_risk_description": "Risk that vendor SLAs and performance are not monitored periodically"
-      },
-      {
-        "control_id": "CTRL-0712",
-        "control_title": "Operating control over Access Management",
-        "kpa_id": "KPA-010",
-        "kpa_description": "Access Management",
-        "specific_risk_id": "SR-130",
-        "specific_risk_description": "Risk that customer data is not protected in transit and at rest"
-      },
-      {
-        "control_id": "CTRL-0713",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-120",
-        "specific_risk_description": "Risk that production changes are not approved before release"
-      },
-      {
-        "control_id": "CTRL-0714",
-        "control_title": "Operating control over Change Management",
-        "kpa_id": "KPA-011",
-        "kpa_description": "Change Management",
-        "specific_risk_id": "SR-120",
-        "specific_risk_description": "Risk that production changes are not approved before release"
-      },
-      {
-        "control_id": "CTRL-0715",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-128",
-        "specific_risk_description": "Risk that periodic entity-level risk assessments are not completed"
-      },
-      {
-        "control_id": "CTRL-0716",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-128",
-        "specific_risk_description": "Risk that periodic entity-level risk assessments are not completed"
-      },
-      {
-        "control_id": "CTRL-0717",
-        "control_title": "Program-level oversight of Issue Management",
-        "kpa_id": "KPA-014",
-        "kpa_description": "Issue Management",
-        "specific_risk_id": "SR-128",
-        "specific_risk_description": "Risk that periodic entity-level risk assessments are not completed"
-      }
-    ],
-    "specific_risk_coverage": [
-      {
-        "id": "SR-122",
-        "description": "Risk that models are not validated before production deployment"
-      },
-      {
-        "id": "SR-123",
-        "description": "Risk that model performance is not monitored against thresholds"
-      },
-      {
-        "id": "SR-120",
-        "description": "Risk that production changes are not approved before release"
-      },
-      {
-        "id": "SR-109",
-        "description": "Risk that the sanctions screening program has inadequate list coverage"
-      },
-      {
-        "id": "SR-105",
-        "description": "Risk that the AML program framework and policies are not maintained"
-      },
-      {
-        "id": "SR-130",
-        "description": "Risk that customer data is not protected in transit and at rest"
-      },
-      {
-        "id": "SR-106",
-        "description": "Risk that annual AML training is not delivered to in-scope staff"
-      },
-      {
-        "id": "SR-119",
-        "description": "Risk that user access is not recertified on the required cadence"
-      },
-      {
-        "id": "SR-108",
-        "description": "Risk that Suspicious Activity Reports are not filed within regulatory deadlines"
-      },
-      {
-        "id": "SR-117",
-        "description": "Risk that vendor SLAs and performance are not monitored periodically"
-      },
-      {
-        "id": "SR-128",
-        "description": "Risk that periodic entity-level risk assessments are not completed"
-      }
-    ],
-    "kpa_coverage": [
-      {
-        "id": "KPA-013",
-        "description": "Model Validation"
-      },
-      {
-        "id": "KPA-011",
-        "description": "Change Management"
-      },
-      {
-        "id": "KPA-018",
-        "description": "Sanctions Program Oversight"
-      },
-      {
-        "id": "KPA-016",
-        "description": "AML Program Framework"
-      },
-      {
-        "id": "KPA-010",
-        "description": "Access Management"
-      },
-      {
-        "id": "KPA-020",
-        "description": "Training & Awareness"
-      },
-      {
-        "id": "KPA-017",
-        "description": "AML Transaction Monitoring Calibration"
-      },
-      {
-        "id": "KPA-009",
-        "description": "Vendor Performance Monitoring"
-      },
-      {
-        "id": "KPA-014",
-        "description": "Issue Management"
-      }
-    ]
-  }
-]
-```
-
-## Source-context entities (handoff sources — reference for reciprocity checks; do not produce findings about them)
-
-```json
-[
-  {
-    "entity_id": "AE-11",
-    "entity_name": "Trade Finance",
-    "role": "source_context",
-    "handoff_description": "Processes are handed off related to trade finance operations.",
-    "handoffs_to": [
-      {
-        "id": "AE-26",
-        "name": "Payroll Processing",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-31",
-        "name": "IT Infrastructure",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-22",
-        "name": "AML Monitoring",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-14",
-        "name": "Investment Banking",
-        "inactive_flag": false
-      }
-    ]
-  },
-  {
-    "entity_id": "AE-14",
-    "entity_name": "Investment Banking",
-    "role": "source_context",
-    "handoff_description": "nan",
-    "handoffs_to": [
-      {
-        "id": "AE-34",
-        "name": "Cloud Services",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-39",
-        "name": "Market Risk Management",
-        "inactive_flag": false
-      }
-    ]
-  },
-  {
-    "entity_id": "AE-16",
-    "entity_name": "Retail Banking",
-    "role": "source_context",
-    "handoff_description": "Processes are handed off related to retail banking operations.",
-    "handoffs_to": []
-  },
-  {
-    "entity_id": "AE-19",
-    "entity_name": "Branch Operations",
-    "role": "source_context",
-    "handoff_description": "Processes are handed off related to branch operations operations.",
-    "handoffs_to": [
-      {
-        "id": "AE-32",
-        "name": "Cybersecurity",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-42",
-        "name": "Internal Controls",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-12",
-        "name": "Foreign Exchange",
-        "inactive_flag": false
-      }
-    ]
-  },
-  {
     "entity_id": "AE-21",
     "entity_name": "KYC/CDD",
-    "role": "source_context",
+    "business_unit": "Technology",
+    "line_of_defense": "1st Line of Defense",
+    "role": "target_context",
+    "horizontal_flag": true,
     "handoff_description": "Processes are handed off related to kyc/cdd operations.",
     "handoffs_to": [
       {
@@ -6670,108 +294,1495 @@ Quote Specific Risk IDs and Descriptions as evidence in every Task 5 finding. Th
         "name": "Capital Markets",
         "inactive_flag": false
       }
+    ],
+    "handoffs_from": [
+      {
+        "id": "AE-24",
+        "name": "Fraud Detection",
+        "inactive_flag": false
+      }
+    ],
+    "risks": [
+      {
+        "risk_category": "Compliance",
+        "residual_rating": "Low",
+        "inherent_rating": "Critical",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Well Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Country",
+        "residual_rating": "Not Applicable",
+        "inherent_rating": "Not Applicable",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Not Applicable",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Credit",
+        "residual_rating": "Not Applicable",
+        "inherent_rating": "Not Applicable",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Not Applicable",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "External Fraud",
+        "residual_rating": "Medium",
+        "inherent_rating": "Critical",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Well Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Financial Reporting",
+        "residual_rating": "Critical",
+        "inherent_rating": "Low",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Insufficiently Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Funding & Liquidity",
+        "residual_rating": "High",
+        "inherent_rating": "Medium",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Insufficiently Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Information Technology",
+        "residual_rating": "Low",
+        "inherent_rating": "Medium",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Well Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Information Security",
+        "residual_rating": "Medium",
+        "inherent_rating": "Medium",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Partially Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Model",
+        "residual_rating": "Medium",
+        "inherent_rating": "High",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Partially Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Market",
+        "residual_rating": "Medium",
+        "inherent_rating": "Low",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Well Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Operational",
+        "residual_rating": "Critical",
+        "inherent_rating": "Critical",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Insufficiently Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Reputational",
+        "residual_rating": "Medium",
+        "inherent_rating": "Low",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Well Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Strategic & Business",
+        "residual_rating": "High",
+        "inherent_rating": "Critical",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Partially Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Third Party",
+        "residual_rating": "Not Applicable",
+        "inherent_rating": "Not Applicable",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Not Applicable",
+        "control_assessment_prose": ""
+      }
+    ],
+    "controls_compact": [
+      {
+        "control_id": "CTRL-0385",
+        "control_title": "Operating control over Customer Onboarding",
+        "kpa_id": "KPA-001",
+        "kpa_description": "Customer Onboarding",
+        "specific_risk_id": "SR-101",
+        "specific_risk_description": "Risk that KYC identity verification is not performed at customer onboarding"
+      },
+      {
+        "control_id": "CTRL-0386",
+        "control_title": "Operating control over Customer Onboarding",
+        "kpa_id": "KPA-001",
+        "kpa_description": "Customer Onboarding",
+        "specific_risk_id": "SR-102",
+        "specific_risk_description": "Risk that Customer Due Diligence is not refreshed per policy cadence"
+      },
+      {
+        "control_id": "CTRL-0387",
+        "control_title": "Operating control over Customer Onboarding",
+        "kpa_id": "KPA-001",
+        "kpa_description": "Customer Onboarding",
+        "specific_risk_id": "SR-102",
+        "specific_risk_description": "Risk that Customer Due Diligence is not refreshed per policy cadence"
+      },
+      {
+        "control_id": "CTRL-0388",
+        "control_title": "Operating control over Customer Onboarding",
+        "kpa_id": "KPA-001",
+        "kpa_description": "Customer Onboarding",
+        "specific_risk_id": "SR-102",
+        "specific_risk_description": "Risk that Customer Due Diligence is not refreshed per policy cadence"
+      },
+      {
+        "control_id": "CTRL-0389",
+        "control_title": "Operating control over Customer Onboarding",
+        "kpa_id": "KPA-001",
+        "kpa_description": "Customer Onboarding",
+        "specific_risk_id": "SR-103",
+        "specific_risk_description": "Risk that sanctions screening is not performed at customer onboarding"
+      },
+      {
+        "control_id": "CTRL-0390",
+        "control_title": "Operating control over Customer Onboarding",
+        "kpa_id": "KPA-001",
+        "kpa_description": "Customer Onboarding",
+        "specific_risk_id": "SR-103",
+        "specific_risk_description": "Risk that sanctions screening is not performed at customer onboarding"
+      },
+      {
+        "control_id": "CTRL-0391",
+        "control_title": "Operating control over Customer Onboarding",
+        "kpa_id": "KPA-001",
+        "kpa_description": "Customer Onboarding",
+        "specific_risk_id": "SR-103",
+        "specific_risk_description": "Risk that sanctions screening is not performed at customer onboarding"
+      },
+      {
+        "control_id": "CTRL-0392",
+        "control_title": "Operating control over Customer Onboarding",
+        "kpa_id": "KPA-001",
+        "kpa_description": "Customer Onboarding",
+        "specific_risk_id": "SR-104",
+        "specific_risk_description": "Risk that enhanced due diligence is not completed for high-risk customers"
+      },
+      {
+        "control_id": "CTRL-0393",
+        "control_title": "Operating control over Customer Onboarding",
+        "kpa_id": "KPA-001",
+        "kpa_description": "Customer Onboarding",
+        "specific_risk_id": "SR-104",
+        "specific_risk_description": "Risk that enhanced due diligence is not completed for high-risk customers"
+      },
+      {
+        "control_id": "CTRL-0394",
+        "control_title": "Operating control over Customer Onboarding",
+        "kpa_id": "KPA-001",
+        "kpa_description": "Customer Onboarding",
+        "specific_risk_id": "SR-104",
+        "specific_risk_description": "Risk that enhanced due diligence is not completed for high-risk customers"
+      },
+      {
+        "control_id": "CTRL-0395",
+        "control_title": "Operating control over Access Management",
+        "kpa_id": "KPA-010",
+        "kpa_description": "Access Management",
+        "specific_risk_id": "SR-118",
+        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy"
+      },
+      {
+        "control_id": "CTRL-0396",
+        "control_title": "Program-level oversight of AML Program Framework",
+        "kpa_id": "KPA-016",
+        "kpa_description": "AML Program Framework",
+        "specific_risk_id": "SR-105",
+        "specific_risk_description": "Risk that the AML program framework and policies are not maintained"
+      },
+      {
+        "control_id": "CTRL-0397",
+        "control_title": "Program-level oversight of Sanctions Program Oversight",
+        "kpa_id": "KPA-018",
+        "kpa_description": "Sanctions Program Oversight",
+        "specific_risk_id": "SR-109",
+        "specific_risk_description": "Risk that the sanctions screening program has inadequate list coverage"
+      }
+    ],
+    "specific_risk_coverage": [
+      {
+        "id": "SR-101",
+        "description": "Risk that KYC identity verification is not performed at customer onboarding"
+      },
+      {
+        "id": "SR-102",
+        "description": "Risk that Customer Due Diligence is not refreshed per policy cadence"
+      },
+      {
+        "id": "SR-103",
+        "description": "Risk that sanctions screening is not performed at customer onboarding"
+      },
+      {
+        "id": "SR-104",
+        "description": "Risk that enhanced due diligence is not completed for high-risk customers"
+      },
+      {
+        "id": "SR-118",
+        "description": "Risk that production access is not provisioned per least-privilege policy"
+      },
+      {
+        "id": "SR-105",
+        "description": "Risk that the AML program framework and policies are not maintained"
+      },
+      {
+        "id": "SR-109",
+        "description": "Risk that the sanctions screening program has inadequate list coverage"
+      }
+    ],
+    "kpa_coverage": [
+      {
+        "id": "KPA-001",
+        "description": "Customer Onboarding"
+      },
+      {
+        "id": "KPA-010",
+        "description": "Access Management"
+      },
+      {
+        "id": "KPA-016",
+        "description": "AML Program Framework"
+      },
+      {
+        "id": "KPA-018",
+        "description": "Sanctions Program Oversight"
+      }
     ]
   },
   {
-    "entity_id": "AE-24",
-    "entity_name": "Fraud Detection",
-    "role": "source_context",
-    "handoff_description": "Processes are handed off related to fraud detection operations.",
+    "entity_id": "AE-23",
+    "entity_name": "Sanctions Screening",
+    "business_unit": "Technology",
+    "line_of_defense": "1st Line of Defense",
+    "role": "target_context",
+    "horizontal_flag": true,
+    "handoff_description": "Processes are handed off related to sanctions screening operations.",
     "handoffs_to": [
       {
-        "id": "AE-11",
-        "name": "Trade Finance",
+        "id": "AE-15",
+        "name": "Asset Management",
         "inactive_flag": false
       },
       {
-        "id": "AE-28",
-        "name": "General Ledger",
+        "id": "AE-4",
+        "name": "Treasury Operations",
         "inactive_flag": false
       },
+      {
+        "id": "AE-39",
+        "name": "Market Risk Management",
+        "inactive_flag": false
+      },
+      {
+        "id": "AE-32",
+        "name": "Cybersecurity",
+        "inactive_flag": false
+      }
+    ],
+    "handoffs_from": [
       {
         "id": "AE-43",
         "name": "Business Continuity",
         "inactive_flag": false
       },
       {
-        "id": "AE-32",
-        "name": "Cybersecurity",
+        "id": "AE-39",
+        "name": "Market Risk Management",
         "inactive_flag": false
+      }
+    ],
+    "risks": [
+      {
+        "risk_category": "Compliance",
+        "residual_rating": "Medium",
+        "inherent_rating": "High",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Well Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Country",
+        "residual_rating": "Not Applicable",
+        "inherent_rating": "Not Applicable",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Not Applicable",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Credit",
+        "residual_rating": "Critical",
+        "inherent_rating": "High",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Insufficiently Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "External Fraud",
+        "residual_rating": "Not Applicable",
+        "inherent_rating": "Not Applicable",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Not Applicable",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Financial Reporting",
+        "residual_rating": "High",
+        "inherent_rating": "High",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Insufficiently Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Funding & Liquidity",
+        "residual_rating": "Not Applicable",
+        "inherent_rating": "Not Applicable",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Not Applicable",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Information Technology",
+        "residual_rating": "Not Applicable",
+        "inherent_rating": "Not Applicable",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Not Applicable",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Information Security",
+        "residual_rating": "Critical",
+        "inherent_rating": "High",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Insufficiently Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Model",
+        "residual_rating": "Critical",
+        "inherent_rating": "Medium",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Insufficiently Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Market",
+        "residual_rating": "Low",
+        "inherent_rating": "Low",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Well Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Operational",
+        "residual_rating": "Critical",
+        "inherent_rating": "Critical",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Insufficiently Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Reputational",
+        "residual_rating": "Not Applicable",
+        "inherent_rating": "Not Applicable",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Not Applicable",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Strategic & Business",
+        "residual_rating": "High",
+        "inherent_rating": "Medium",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Partially Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Third Party",
+        "residual_rating": "Critical",
+        "inherent_rating": "High",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Insufficiently Controlled",
+        "control_assessment_prose": ""
+      }
+    ],
+    "controls_compact": [
+      {
+        "control_id": "CTRL-0412",
+        "control_title": "Program-level oversight of Sanctions Program Oversight",
+        "kpa_id": "KPA-018",
+        "kpa_description": "Sanctions Program Oversight",
+        "specific_risk_id": "SR-109",
+        "specific_risk_description": "Risk that the sanctions screening program has inadequate list coverage"
+      },
+      {
+        "control_id": "CTRL-0413",
+        "control_title": "Program-level oversight of Sanctions Program Oversight",
+        "kpa_id": "KPA-018",
+        "kpa_description": "Sanctions Program Oversight",
+        "specific_risk_id": "SR-109",
+        "specific_risk_description": "Risk that the sanctions screening program has inadequate list coverage"
+      },
+      {
+        "control_id": "CTRL-0414",
+        "control_title": "Program-level oversight of Sanctions Program Oversight",
+        "kpa_id": "KPA-018",
+        "kpa_description": "Sanctions Program Oversight",
+        "specific_risk_id": "SR-109",
+        "specific_risk_description": "Risk that the sanctions screening program has inadequate list coverage"
+      },
+      {
+        "control_id": "CTRL-0415",
+        "control_title": "Program-level oversight of Vendor Performance Monitoring",
+        "kpa_id": "KPA-009",
+        "kpa_description": "Vendor Performance Monitoring",
+        "specific_risk_id": "SR-117",
+        "specific_risk_description": "Risk that vendor SLAs and performance are not monitored periodically"
+      },
+      {
+        "control_id": "CTRL-0416",
+        "control_title": "Operating control over Access Management",
+        "kpa_id": "KPA-010",
+        "kpa_description": "Access Management",
+        "specific_risk_id": "SR-119",
+        "specific_risk_description": "Risk that user access is not recertified on the required cadence"
+      },
+      {
+        "control_id": "CTRL-0417",
+        "control_title": "Program-level oversight of Vendor Performance Monitoring",
+        "kpa_id": "KPA-009",
+        "kpa_description": "Vendor Performance Monitoring",
+        "specific_risk_id": "SR-117",
+        "specific_risk_description": "Risk that vendor SLAs and performance are not monitored periodically"
+      },
+      {
+        "control_id": "CTRL-0418",
+        "control_title": "Program-level oversight of Vendor Due Diligence",
+        "kpa_id": "KPA-008",
+        "kpa_description": "Vendor Due Diligence",
+        "specific_risk_id": "SR-116",
+        "specific_risk_description": "Risk that vendors are not onboarded per Third Party Risk policy"
+      },
+      {
+        "control_id": "CTRL-0419",
+        "control_title": "Program-level oversight of Vendor Performance Monitoring",
+        "kpa_id": "KPA-009",
+        "kpa_description": "Vendor Performance Monitoring",
+        "specific_risk_id": "SR-117",
+        "specific_risk_description": "Risk that vendor SLAs and performance are not monitored periodically"
+      },
+      {
+        "control_id": "CTRL-0420",
+        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
+        "kpa_id": "KPA-017",
+        "kpa_description": "AML Transaction Monitoring Calibration",
+        "specific_risk_id": "SR-108",
+        "specific_risk_description": "Risk that Suspicious Activity Reports are not filed within regulatory deadlines"
+      },
+      {
+        "control_id": "CTRL-0421",
+        "control_title": "Program-level oversight of Vendor Due Diligence",
+        "kpa_id": "KPA-008",
+        "kpa_description": "Vendor Due Diligence",
+        "specific_risk_id": "SR-116",
+        "specific_risk_description": "Risk that vendors are not onboarded per Third Party Risk policy"
+      },
+      {
+        "control_id": "CTRL-0422",
+        "control_title": "Program-level oversight of Vendor Due Diligence",
+        "kpa_id": "KPA-008",
+        "kpa_description": "Vendor Due Diligence",
+        "specific_risk_id": "SR-116",
+        "specific_risk_description": "Risk that vendors are not onboarded per Third Party Risk policy"
+      },
+      {
+        "control_id": "CTRL-0423",
+        "control_title": "Program-level oversight of Training & Awareness",
+        "kpa_id": "KPA-020",
+        "kpa_description": "Training & Awareness",
+        "specific_risk_id": "SR-106",
+        "specific_risk_description": "Risk that annual AML training is not delivered to in-scope staff"
+      },
+      {
+        "control_id": "CTRL-0424",
+        "control_title": "Program-level oversight of Issue Management",
+        "kpa_id": "KPA-014",
+        "kpa_description": "Issue Management",
+        "specific_risk_id": "SR-124",
+        "specific_risk_description": "Risk that audit findings are not tracked to remediation"
+      },
+      {
+        "control_id": "CTRL-0425",
+        "control_title": "Program-level oversight of Vendor Due Diligence",
+        "kpa_id": "KPA-008",
+        "kpa_description": "Vendor Due Diligence",
+        "specific_risk_id": "SR-116",
+        "specific_risk_description": "Risk that vendors are not onboarded per Third Party Risk policy"
+      },
+      {
+        "control_id": "CTRL-0426",
+        "control_title": "Program-level oversight of AML Program Framework",
+        "kpa_id": "KPA-016",
+        "kpa_description": "AML Program Framework",
+        "specific_risk_id": "SR-105",
+        "specific_risk_description": "Risk that the AML program framework and policies are not maintained"
+      }
+    ],
+    "specific_risk_coverage": [
+      {
+        "id": "SR-109",
+        "description": "Risk that the sanctions screening program has inadequate list coverage"
+      },
+      {
+        "id": "SR-117",
+        "description": "Risk that vendor SLAs and performance are not monitored periodically"
+      },
+      {
+        "id": "SR-119",
+        "description": "Risk that user access is not recertified on the required cadence"
+      },
+      {
+        "id": "SR-116",
+        "description": "Risk that vendors are not onboarded per Third Party Risk policy"
+      },
+      {
+        "id": "SR-108",
+        "description": "Risk that Suspicious Activity Reports are not filed within regulatory deadlines"
+      },
+      {
+        "id": "SR-106",
+        "description": "Risk that annual AML training is not delivered to in-scope staff"
+      },
+      {
+        "id": "SR-124",
+        "description": "Risk that audit findings are not tracked to remediation"
+      },
+      {
+        "id": "SR-105",
+        "description": "Risk that the AML program framework and policies are not maintained"
+      }
+    ],
+    "kpa_coverage": [
+      {
+        "id": "KPA-018",
+        "description": "Sanctions Program Oversight"
+      },
+      {
+        "id": "KPA-009",
+        "description": "Vendor Performance Monitoring"
+      },
+      {
+        "id": "KPA-010",
+        "description": "Access Management"
+      },
+      {
+        "id": "KPA-008",
+        "description": "Vendor Due Diligence"
+      },
+      {
+        "id": "KPA-017",
+        "description": "AML Transaction Monitoring Calibration"
+      },
+      {
+        "id": "KPA-020",
+        "description": "Training & Awareness"
+      },
+      {
+        "id": "KPA-014",
+        "description": "Issue Management"
+      },
+      {
+        "id": "KPA-016",
+        "description": "AML Program Framework"
       }
     ]
   },
   {
-    "entity_id": "AE-26",
-    "entity_name": "Payroll Processing",
-    "role": "source_context",
-    "handoff_description": "Processes are handed off related to payroll processing operations.",
-    "handoffs_to": []
-  },
-  {
-    "entity_id": "AE-31",
-    "entity_name": "IT Infrastructure",
-    "role": "source_context",
-    "handoff_description": "Processes are handed off related to it infrastructure operations.",
-    "handoffs_to": [
-      {
-        "id": "AE-12",
-        "name": "Foreign Exchange",
-        "inactive_flag": false
-      }
-    ]
-  },
-  {
-    "entity_id": "AE-35",
-    "entity_name": "Application Development",
-    "role": "source_context",
-    "handoff_description": "Processes are handed off related to application development operations.",
-    "handoffs_to": [
-      {
-        "id": "AE-9",
-        "name": "Mortgage Origination",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-1",
-        "name": "Consumer Lending",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-11",
-        "name": "Trade Finance",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-32",
-        "name": "Cybersecurity",
-        "inactive_flag": false
-      },
-      {
-        "id": "AE-23",
-        "name": "Sanctions Screening",
-        "inactive_flag": false
-      }
-    ]
-  },
-  {
-    "entity_id": "AE-45",
-    "entity_name": "Facilities Management",
-    "role": "source_context",
+    "entity_id": "AE-34",
+    "entity_name": "Cloud Services",
+    "business_unit": "Corporate Functions",
+    "line_of_defense": "1st Line of Defense",
+    "role": "target_context",
+    "horizontal_flag": false,
     "handoff_description": "nan",
+    "handoffs_to": [],
+    "handoffs_from": [
+      {
+        "id": "AE-45",
+        "name": "Facilities Management",
+        "inactive_flag": false
+      },
+      {
+        "id": "AE-29",
+        "name": "Financial Reporting",
+        "inactive_flag": false
+      },
+      {
+        "id": "AE-14",
+        "name": "Investment Banking",
+        "inactive_flag": false
+      },
+      {
+        "id": "AE-6",
+        "name": "ACH Processing",
+        "inactive_flag": false
+      }
+    ],
+    "risks": [
+      {
+        "risk_category": "Compliance",
+        "residual_rating": "Not Applicable",
+        "inherent_rating": "Not Applicable",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Not Applicable",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Country",
+        "residual_rating": "High",
+        "inherent_rating": "Medium",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Insufficiently Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Credit",
+        "residual_rating": "Medium",
+        "inherent_rating": "High",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Well Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "External Fraud",
+        "residual_rating": "Not Applicable",
+        "inherent_rating": "Not Applicable",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Not Applicable",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Financial Reporting",
+        "residual_rating": "Medium",
+        "inherent_rating": "Low",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Partially Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Funding & Liquidity",
+        "residual_rating": "Not Applicable",
+        "inherent_rating": "Not Applicable",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Not Applicable",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Information Technology",
+        "residual_rating": "Medium",
+        "inherent_rating": "Medium",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Partially Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Information Security",
+        "residual_rating": "Medium",
+        "inherent_rating": "Low",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Well Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Model",
+        "residual_rating": "Not Applicable",
+        "inherent_rating": "Not Applicable",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Not Applicable",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Market",
+        "residual_rating": "Low",
+        "inherent_rating": "Critical",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Well Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Operational",
+        "residual_rating": "Medium",
+        "inherent_rating": "Low",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Partially Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Reputational",
+        "residual_rating": "Medium",
+        "inherent_rating": "Medium",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Partially Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Strategic & Business",
+        "residual_rating": "Medium",
+        "inherent_rating": "Low",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Well Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Third Party",
+        "residual_rating": "Medium",
+        "inherent_rating": "High",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Well Controlled",
+        "control_assessment_prose": ""
+      }
+    ],
+    "controls_compact": [
+      {
+        "control_id": "CTRL-0631",
+        "control_title": "Operating control over Access Management",
+        "kpa_id": "KPA-010",
+        "kpa_description": "Access Management",
+        "specific_risk_id": "SR-118",
+        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy"
+      },
+      {
+        "control_id": "CTRL-0632",
+        "control_title": "Operating control over Change Management",
+        "kpa_id": "KPA-011",
+        "kpa_description": "Change Management",
+        "specific_risk_id": "SR-120",
+        "specific_risk_description": "Risk that production changes are not approved before release"
+      },
+      {
+        "control_id": "CTRL-0633",
+        "control_title": "Program-level oversight of AML Program Framework",
+        "kpa_id": "KPA-016",
+        "kpa_description": "AML Program Framework",
+        "specific_risk_id": "SR-105",
+        "specific_risk_description": "Risk that the AML program framework and policies are not maintained"
+      },
+      {
+        "control_id": "CTRL-0634",
+        "control_title": "Program-level oversight of AML Program Framework",
+        "kpa_id": "KPA-016",
+        "kpa_description": "AML Program Framework",
+        "specific_risk_id": "SR-105",
+        "specific_risk_description": "Risk that the AML program framework and policies are not maintained"
+      },
+      {
+        "control_id": "CTRL-0635",
+        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
+        "kpa_id": "KPA-017",
+        "kpa_description": "AML Transaction Monitoring Calibration",
+        "specific_risk_id": "SR-107",
+        "specific_risk_description": "Risk that transaction monitoring rules are not calibrated against typologies"
+      },
+      {
+        "control_id": "CTRL-0636",
+        "control_title": "Operating control over Change Management",
+        "kpa_id": "KPA-011",
+        "kpa_description": "Change Management",
+        "specific_risk_id": "SR-121",
+        "specific_risk_description": "Risk that emergency changes are not documented post-implementation"
+      },
+      {
+        "control_id": "CTRL-0637",
+        "control_title": "Program-level oversight of Vendor Due Diligence",
+        "kpa_id": "KPA-008",
+        "kpa_description": "Vendor Due Diligence",
+        "specific_risk_id": "SR-116",
+        "specific_risk_description": "Risk that vendors are not onboarded per Third Party Risk policy"
+      },
+      {
+        "control_id": "CTRL-0638",
+        "control_title": "Program-level oversight of Training & Awareness",
+        "kpa_id": "KPA-020",
+        "kpa_description": "Training & Awareness",
+        "specific_risk_id": "SR-106",
+        "specific_risk_description": "Risk that annual AML training is not delivered to in-scope staff"
+      },
+      {
+        "control_id": "CTRL-0639",
+        "control_title": "Program-level oversight of Vendor Performance Monitoring",
+        "kpa_id": "KPA-009",
+        "kpa_description": "Vendor Performance Monitoring",
+        "specific_risk_id": "SR-117",
+        "specific_risk_description": "Risk that vendor SLAs and performance are not monitored periodically"
+      },
+      {
+        "control_id": "CTRL-0640",
+        "control_title": "Operating control over Access Management",
+        "kpa_id": "KPA-010",
+        "kpa_description": "Access Management",
+        "specific_risk_id": "SR-130",
+        "specific_risk_description": "Risk that customer data is not protected in transit and at rest"
+      },
+      {
+        "control_id": "CTRL-0641",
+        "control_title": "Operating control over Access Management",
+        "kpa_id": "KPA-010",
+        "kpa_description": "Access Management",
+        "specific_risk_id": "SR-118",
+        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy"
+      },
+      {
+        "control_id": "CTRL-0642",
+        "control_title": "Operating control over Access Management",
+        "kpa_id": "KPA-010",
+        "kpa_description": "Access Management",
+        "specific_risk_id": "SR-119",
+        "specific_risk_description": "Risk that user access is not recertified on the required cadence"
+      },
+      {
+        "control_id": "CTRL-0643",
+        "control_title": "Program-level oversight of AML Program Framework",
+        "kpa_id": "KPA-016",
+        "kpa_description": "AML Program Framework",
+        "specific_risk_id": "SR-105",
+        "specific_risk_description": "Risk that the AML program framework and policies are not maintained"
+      },
+      {
+        "control_id": "CTRL-0644",
+        "control_title": "Operating control over Change Management",
+        "kpa_id": "KPA-011",
+        "kpa_description": "Change Management",
+        "specific_risk_id": "SR-121",
+        "specific_risk_description": "Risk that emergency changes are not documented post-implementation"
+      },
+      {
+        "control_id": "CTRL-0645",
+        "control_title": "Program-level oversight of AML Program Framework",
+        "kpa_id": "KPA-016",
+        "kpa_description": "AML Program Framework",
+        "specific_risk_id": "SR-105",
+        "specific_risk_description": "Risk that the AML program framework and policies are not maintained"
+      },
+      {
+        "control_id": "CTRL-0646",
+        "control_title": "Operating control over Change Management",
+        "kpa_id": "KPA-011",
+        "kpa_description": "Change Management",
+        "specific_risk_id": "SR-121",
+        "specific_risk_description": "Risk that emergency changes are not documented post-implementation"
+      },
+      {
+        "control_id": "CTRL-0647",
+        "control_title": "Operating control over Access Management",
+        "kpa_id": "KPA-010",
+        "kpa_description": "Access Management",
+        "specific_risk_id": "SR-119",
+        "specific_risk_description": "Risk that user access is not recertified on the required cadence"
+      },
+      {
+        "control_id": "CTRL-0648",
+        "control_title": "Operating control over Change Management",
+        "kpa_id": "KPA-011",
+        "kpa_description": "Change Management",
+        "specific_risk_id": "SR-121",
+        "specific_risk_description": "Risk that emergency changes are not documented post-implementation"
+      },
+      {
+        "control_id": "CTRL-0649",
+        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
+        "kpa_id": "KPA-017",
+        "kpa_description": "AML Transaction Monitoring Calibration",
+        "specific_risk_id": "SR-108",
+        "specific_risk_description": "Risk that Suspicious Activity Reports are not filed within regulatory deadlines"
+      },
+      {
+        "control_id": "CTRL-0650",
+        "control_title": "Operating control over Access Management",
+        "kpa_id": "KPA-010",
+        "kpa_description": "Access Management",
+        "specific_risk_id": "SR-118",
+        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy"
+      },
+      {
+        "control_id": "CTRL-0651",
+        "control_title": "Program-level oversight of Sanctions Program Oversight",
+        "kpa_id": "KPA-018",
+        "kpa_description": "Sanctions Program Oversight",
+        "specific_risk_id": "SR-109",
+        "specific_risk_description": "Risk that the sanctions screening program has inadequate list coverage"
+      },
+      {
+        "control_id": "CTRL-0652",
+        "control_title": "Program-level oversight of AML Program Framework",
+        "kpa_id": "KPA-016",
+        "kpa_description": "AML Program Framework",
+        "specific_risk_id": "SR-105",
+        "specific_risk_description": "Risk that the AML program framework and policies are not maintained"
+      },
+      {
+        "control_id": "CTRL-0653",
+        "control_title": "Operating control over Access Management",
+        "kpa_id": "KPA-010",
+        "kpa_description": "Access Management",
+        "specific_risk_id": "SR-118",
+        "specific_risk_description": "Risk that production access is not provisioned per least-privilege policy"
+      },
+      {
+        "control_id": "CTRL-0654",
+        "control_title": "Program-level oversight of Issue Management",
+        "kpa_id": "KPA-014",
+        "kpa_description": "Issue Management",
+        "specific_risk_id": "SR-128",
+        "specific_risk_description": "Risk that periodic entity-level risk assessments are not completed"
+      },
+      {
+        "control_id": "CTRL-0655",
+        "control_title": "Program-level oversight of Training & Awareness",
+        "kpa_id": "KPA-020",
+        "kpa_description": "Training & Awareness",
+        "specific_risk_id": "SR-106",
+        "specific_risk_description": "Risk that annual AML training is not delivered to in-scope staff"
+      },
+      {
+        "control_id": "CTRL-0656",
+        "control_title": "Program-level oversight of Issue Management",
+        "kpa_id": "KPA-014",
+        "kpa_description": "Issue Management",
+        "specific_risk_id": "SR-124",
+        "specific_risk_description": "Risk that audit findings are not tracked to remediation"
+      },
+      {
+        "control_id": "CTRL-0657",
+        "control_title": "Operating control over Access Management",
+        "kpa_id": "KPA-010",
+        "kpa_description": "Access Management",
+        "specific_risk_id": "SR-119",
+        "specific_risk_description": "Risk that user access is not recertified on the required cadence"
+      },
+      {
+        "control_id": "CTRL-0658",
+        "control_title": "Operating control over Access Management",
+        "kpa_id": "KPA-010",
+        "kpa_description": "Access Management",
+        "specific_risk_id": "SR-119",
+        "specific_risk_description": "Risk that user access is not recertified on the required cadence"
+      },
+      {
+        "control_id": "CTRL-0659",
+        "control_title": "Program-level oversight of Training & Awareness",
+        "kpa_id": "KPA-020",
+        "kpa_description": "Training & Awareness",
+        "specific_risk_id": "SR-106",
+        "specific_risk_description": "Risk that annual AML training is not delivered to in-scope staff"
+      },
+      {
+        "control_id": "CTRL-0660",
+        "control_title": "Operating control over Change Management",
+        "kpa_id": "KPA-011",
+        "kpa_description": "Change Management",
+        "specific_risk_id": "SR-121",
+        "specific_risk_description": "Risk that emergency changes are not documented post-implementation"
+      }
+    ],
+    "specific_risk_coverage": [
+      {
+        "id": "SR-118",
+        "description": "Risk that production access is not provisioned per least-privilege policy"
+      },
+      {
+        "id": "SR-120",
+        "description": "Risk that production changes are not approved before release"
+      },
+      {
+        "id": "SR-105",
+        "description": "Risk that the AML program framework and policies are not maintained"
+      },
+      {
+        "id": "SR-107",
+        "description": "Risk that transaction monitoring rules are not calibrated against typologies"
+      },
+      {
+        "id": "SR-121",
+        "description": "Risk that emergency changes are not documented post-implementation"
+      },
+      {
+        "id": "SR-116",
+        "description": "Risk that vendors are not onboarded per Third Party Risk policy"
+      },
+      {
+        "id": "SR-106",
+        "description": "Risk that annual AML training is not delivered to in-scope staff"
+      },
+      {
+        "id": "SR-117",
+        "description": "Risk that vendor SLAs and performance are not monitored periodically"
+      },
+      {
+        "id": "SR-130",
+        "description": "Risk that customer data is not protected in transit and at rest"
+      },
+      {
+        "id": "SR-119",
+        "description": "Risk that user access is not recertified on the required cadence"
+      },
+      {
+        "id": "SR-108",
+        "description": "Risk that Suspicious Activity Reports are not filed within regulatory deadlines"
+      },
+      {
+        "id": "SR-109",
+        "description": "Risk that the sanctions screening program has inadequate list coverage"
+      },
+      {
+        "id": "SR-128",
+        "description": "Risk that periodic entity-level risk assessments are not completed"
+      },
+      {
+        "id": "SR-124",
+        "description": "Risk that audit findings are not tracked to remediation"
+      }
+    ],
+    "kpa_coverage": [
+      {
+        "id": "KPA-010",
+        "description": "Access Management"
+      },
+      {
+        "id": "KPA-011",
+        "description": "Change Management"
+      },
+      {
+        "id": "KPA-016",
+        "description": "AML Program Framework"
+      },
+      {
+        "id": "KPA-017",
+        "description": "AML Transaction Monitoring Calibration"
+      },
+      {
+        "id": "KPA-008",
+        "description": "Vendor Due Diligence"
+      },
+      {
+        "id": "KPA-020",
+        "description": "Training & Awareness"
+      },
+      {
+        "id": "KPA-009",
+        "description": "Vendor Performance Monitoring"
+      },
+      {
+        "id": "KPA-018",
+        "description": "Sanctions Program Oversight"
+      },
+      {
+        "id": "KPA-014",
+        "description": "Issue Management"
+      }
+    ]
+  },
+  {
+    "entity_id": "AE-5",
+    "entity_name": "Wire Transfers",
+    "business_unit": "Risk & Compliance",
+    "line_of_defense": "1st Line of Defense",
+    "role": "target_context",
+    "horizontal_flag": false,
+    "handoff_description": "Processes are handed off related to wire transfers operations.",
+    "handoffs_to": [],
+    "handoffs_from": [],
+    "risks": [
+      {
+        "risk_category": "Compliance",
+        "residual_rating": "Medium",
+        "inherent_rating": "High",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Well Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Country",
+        "residual_rating": "High",
+        "inherent_rating": "Critical",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Insufficiently Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Credit",
+        "residual_rating": "Not Applicable",
+        "inherent_rating": "Not Applicable",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Not Applicable",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "External Fraud",
+        "residual_rating": "High",
+        "inherent_rating": "Medium",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Insufficiently Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Financial Reporting",
+        "residual_rating": "Medium",
+        "inherent_rating": "Medium",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Partially Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Funding & Liquidity",
+        "residual_rating": "Not Applicable",
+        "inherent_rating": "Not Applicable",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Not Applicable",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Information Technology",
+        "residual_rating": "Medium",
+        "inherent_rating": "Low",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Partially Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Information Security",
+        "residual_rating": "High",
+        "inherent_rating": "Low",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Partially Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Model",
+        "residual_rating": "Low",
+        "inherent_rating": "Medium",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Well Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Market",
+        "residual_rating": "Medium",
+        "inherent_rating": "Medium",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Partially Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Operational",
+        "residual_rating": "Medium",
+        "inherent_rating": "High",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Partially Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Reputational",
+        "residual_rating": "Medium",
+        "inherent_rating": "Low",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Partially Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Strategic & Business",
+        "residual_rating": "Medium",
+        "inherent_rating": "Medium",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Well Controlled",
+        "control_assessment_prose": ""
+      },
+      {
+        "risk_category": "Third Party",
+        "residual_rating": "Low",
+        "inherent_rating": "Medium",
+        "inherent_rationale": "",
+        "control_assessment_rating": "Well Controlled",
+        "control_assessment_prose": ""
+      }
+    ],
+    "controls_compact": [
+      {
+        "control_id": "CTRL-0071",
+        "control_title": "Operating control over Payment Authorization",
+        "kpa_id": "KPA-004",
+        "kpa_description": "Payment Authorization",
+        "specific_risk_id": "SR-112",
+        "specific_risk_description": "Risk that payment instructions are not authorized before release"
+      },
+      {
+        "control_id": "CTRL-0072",
+        "control_title": "Operating control over Payment Authorization",
+        "kpa_id": "KPA-004",
+        "kpa_description": "Payment Authorization",
+        "specific_risk_id": "SR-112",
+        "specific_risk_description": "Risk that payment instructions are not authorized before release"
+      },
+      {
+        "control_id": "CTRL-0073",
+        "control_title": "Operating control over Payment Authorization",
+        "kpa_id": "KPA-004",
+        "kpa_description": "Payment Authorization",
+        "specific_risk_id": "SR-112",
+        "specific_risk_description": "Risk that payment instructions are not authorized before release"
+      },
+      {
+        "control_id": "CTRL-0074",
+        "control_title": "Operating control over Payment Authorization",
+        "kpa_id": "KPA-004",
+        "kpa_description": "Payment Authorization",
+        "specific_risk_id": "SR-113",
+        "specific_risk_description": "Risk that daily payment reconciliations are not completed and reviewed"
+      },
+      {
+        "control_id": "CTRL-0075",
+        "control_title": "Operating control over Payment Authorization",
+        "kpa_id": "KPA-004",
+        "kpa_description": "Payment Authorization",
+        "specific_risk_id": "SR-113",
+        "specific_risk_description": "Risk that daily payment reconciliations are not completed and reviewed"
+      },
+      {
+        "control_id": "CTRL-0076",
+        "control_title": "Operating control over Payment Authorization",
+        "kpa_id": "KPA-004",
+        "kpa_description": "Payment Authorization",
+        "specific_risk_id": "SR-112",
+        "specific_risk_description": "Risk that payment instructions are not authorized before release"
+      },
+      {
+        "control_id": "CTRL-0077",
+        "control_title": "Operating control over Access Management",
+        "kpa_id": "KPA-010",
+        "kpa_description": "Access Management",
+        "specific_risk_id": "SR-119",
+        "specific_risk_description": "Risk that user access is not recertified on the required cadence"
+      },
+      {
+        "control_id": "CTRL-0078",
+        "control_title": "Program-level oversight of Sanctions Program Oversight",
+        "kpa_id": "KPA-018",
+        "kpa_description": "Sanctions Program Oversight",
+        "specific_risk_id": "SR-109",
+        "specific_risk_description": "Risk that the sanctions screening program has inadequate list coverage"
+      },
+      {
+        "control_id": "CTRL-0079",
+        "control_title": "Operating control over Access Management",
+        "kpa_id": "KPA-010",
+        "kpa_description": "Access Management",
+        "specific_risk_id": "SR-130",
+        "specific_risk_description": "Risk that customer data is not protected in transit and at rest"
+      },
+      {
+        "control_id": "CTRL-0080",
+        "control_title": "Program-level oversight of Issue Management",
+        "kpa_id": "KPA-014",
+        "kpa_description": "Issue Management",
+        "specific_risk_id": "SR-124",
+        "specific_risk_description": "Risk that audit findings are not tracked to remediation"
+      },
+      {
+        "control_id": "CTRL-0081",
+        "control_title": "Program-level oversight of Training & Awareness",
+        "kpa_id": "KPA-020",
+        "kpa_description": "Training & Awareness",
+        "specific_risk_id": "SR-106",
+        "specific_risk_description": "Risk that annual AML training is not delivered to in-scope staff"
+      },
+      {
+        "control_id": "CTRL-0082",
+        "control_title": "Program-level oversight of AML Transaction Monitoring Calibration",
+        "kpa_id": "KPA-017",
+        "kpa_description": "AML Transaction Monitoring Calibration",
+        "specific_risk_id": "SR-107",
+        "specific_risk_description": "Risk that transaction monitoring rules are not calibrated against typologies"
+      },
+      {
+        "control_id": "CTRL-0083",
+        "control_title": "Operating control over Access Management",
+        "kpa_id": "KPA-010",
+        "kpa_description": "Access Management",
+        "specific_risk_id": "SR-119",
+        "specific_risk_description": "Risk that user access is not recertified on the required cadence"
+      }
+    ],
+    "specific_risk_coverage": [
+      {
+        "id": "SR-112",
+        "description": "Risk that payment instructions are not authorized before release"
+      },
+      {
+        "id": "SR-113",
+        "description": "Risk that daily payment reconciliations are not completed and reviewed"
+      },
+      {
+        "id": "SR-119",
+        "description": "Risk that user access is not recertified on the required cadence"
+      },
+      {
+        "id": "SR-109",
+        "description": "Risk that the sanctions screening program has inadequate list coverage"
+      },
+      {
+        "id": "SR-130",
+        "description": "Risk that customer data is not protected in transit and at rest"
+      },
+      {
+        "id": "SR-124",
+        "description": "Risk that audit findings are not tracked to remediation"
+      },
+      {
+        "id": "SR-106",
+        "description": "Risk that annual AML training is not delivered to in-scope staff"
+      },
+      {
+        "id": "SR-107",
+        "description": "Risk that transaction monitoring rules are not calibrated against typologies"
+      }
+    ],
+    "kpa_coverage": [
+      {
+        "id": "KPA-004",
+        "description": "Payment Authorization"
+      },
+      {
+        "id": "KPA-010",
+        "description": "Access Management"
+      },
+      {
+        "id": "KPA-018",
+        "description": "Sanctions Program Oversight"
+      },
+      {
+        "id": "KPA-014",
+        "description": "Issue Management"
+      },
+      {
+        "id": "KPA-020",
+        "description": "Training & Awareness"
+      },
+      {
+        "id": "KPA-017",
+        "description": "AML Transaction Monitoring Calibration"
+      }
+    ]
+  }
+]
+```
+
+## Source-context entities (handoff sources — reference for reciprocity checks; do not produce findings about them)
+
+```json
+[
+  {
+    "entity_id": "AE-20",
+    "entity_name": "Customer Onboarding",
+    "role": "source_context",
+    "handoff_description": "Processes are handed off related to customer onboarding operations.",
     "handoffs_to": [
+      {
+        "id": "AE-25",
+        "name": "Dispute Resolution",
+        "inactive_flag": false
+      },
+      {
+        "id": "AE-27",
+        "name": "Accounts Payable",
+        "inactive_flag": false
+      },
+      {
+        "id": "AE-22",
+        "name": "AML Monitoring",
+        "inactive_flag": false
+      },
+      {
+        "id": "AE-43",
+        "name": "Business Continuity",
+        "inactive_flag": false
+      }
+    ]
+  },
+  {
+    "entity_id": "AE-32",
+    "entity_name": "Cybersecurity",
+    "role": "source_context",
+    "handoff_description": "Processes are handed off related to cybersecurity operations.",
+    "handoffs_to": [
+      {
+        "id": "AE-15",
+        "name": "Asset Management",
+        "inactive_flag": false
+      },
+      {
+        "id": "AE-36",
+        "name": "Vendor Management",
+        "inactive_flag": false
+      }
+    ]
+  },
+  {
+    "entity_id": "AE-37",
+    "entity_name": "Model Validation",
+    "role": "source_context",
+    "handoff_description": "Processes are handed off related to model validation operations.",
+    "handoffs_to": [
+      {
+        "id": "AE-45",
+        "name": "Facilities Management",
+        "inactive_flag": false
+      },
       {
         "id": "AE-42",
         "name": "Internal Controls",
         "inactive_flag": false
-      },
+      }
+    ]
+  },
+  {
+    "entity_id": "AE-43",
+    "entity_name": "Business Continuity",
+    "role": "source_context",
+    "handoff_description": "Processes are handed off related to business continuity operations.",
+    "handoffs_to": [
       {
-        "id": "AE-11",
-        "name": "Trade Finance",
+        "id": "AE-37",
+        "name": "Model Validation",
         "inactive_flag": false
       },
       {
-        "id": "AE-8",
-        "name": "Merchant Services",
+        "id": "AE-30",
+        "name": "Regulatory Reporting",
+        "inactive_flag": false
+      },
+      {
+        "id": "AE-10",
+        "name": "Mortgage Servicing",
         "inactive_flag": false
       }
     ]
