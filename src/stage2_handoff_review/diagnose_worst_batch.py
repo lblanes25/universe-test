@@ -105,12 +105,21 @@ def _print_table(headers: list[str], rows: list[list[str]], col_widths: list[int
         print(fmt.format(*row))
 
 
-def run_diagnostic(risk_path: Path, controls_path: Path, config_path: Path) -> None:
+def run_diagnostic(risk_path: Path, controls_path: Path, config_path: Path, show_ids: bool = False) -> None:
     config = _load_config(config_path)
     tpc = config.get("tokens_per_char", 0.25)
 
     df_raw = _read_table(risk_path)
     focal_df, referenceable_df, _class_stats = classify_entities(df_raw)
+
+    # Apply exclusion list from config. Excluded entities stay referenceable
+    # (still resolve as handoff partners for other focal entities) but do not
+    # appear as focal themselves. This is the same rule applied in generate.py.
+    excluded = set(config.get("exclude_entity_ids", []) or [])
+    if excluded:
+        before = len(focal_df)
+        focal_df = focal_df[~focal_df["Audit Entity ID"].isin(excluded)].reset_index(drop=True)
+        print(f"[diagnose] excluded {before - len(focal_df)} entities from focal per config: {sorted(excluded)}")
 
     all_nodes = build_nodes(referenceable_df, HORIZONTAL_KEYWORDS)
     focal_ids = set(focal_df["Audit Entity ID"])
@@ -222,19 +231,37 @@ def run_diagnostic(risk_path: Path, controls_path: Path, config_path: Path) -> N
     )
     print()
 
+    # Role label helpers — when show_ids is True, append entity ID to each
+    # role label so the user can cross-reference to the CSV. Privacy-preserving
+    # default stays anonymous.
+    def focal_label(i: int) -> str:
+        base = f"focal_{i}"
+        if show_ids:
+            return f"{base} ({focal_payloads[i-1].get('entity_id', '?')})"
+        return base
+
+    def target_label(i: int) -> str:
+        base = f"target_{i}"
+        if show_ids:
+            return f"{base} ({target_payloads[i-1].get('entity_id', '?')})"
+        return base
+
+    focal_label_width = max([len(focal_label(i)) for i in range(1, len(focal_bd) + 1)] + [len("MAX")], default=8)
+    target_label_width = max([len(target_label(i)) for i in range(1, len(target_bd) + 1)] + [len("MAX")], default=10)
+
     # Focal breakdown
     if focal_bd:
         headers = ["role"] + FOCAL_COMPONENTS + ["subtotal"]
         rows = []
         for i, bd in enumerate(focal_bd, 1):
             subtotal = sum(bd.values())
-            rows.append([f"focal_{i}"] + [_fmt(bd[c]) for c in FOCAL_COMPONENTS] + [_fmt(subtotal)])
+            rows.append([focal_label(i)] + [_fmt(bd[c]) for c in FOCAL_COMPONENTS] + [_fmt(subtotal)])
         means = {c: sum(bd[c] for bd in focal_bd) // len(focal_bd) for c in FOCAL_COMPONENTS}
         maxs = {c: max(bd[c] for bd in focal_bd) for c in FOCAL_COMPONENTS}
         rows.append(["MEAN"] + [_fmt(means[c]) for c in FOCAL_COMPONENTS] + [_fmt(sum(means.values()))])
         rows.append(["MAX"] + [_fmt(maxs[c]) for c in FOCAL_COMPONENTS] + [_fmt(sum(maxs.values()))])
         print(f"Focal breakdown ({len(focal_bd)} entities, tokens per component):")
-        _print_table(headers, rows, col_widths=[8] + [10] * len(FOCAL_COMPONENTS) + [10])
+        _print_table(headers, rows, col_widths=[focal_label_width] + [10] * len(FOCAL_COMPONENTS) + [10])
         print()
 
     # Target-context breakdown
@@ -243,13 +270,13 @@ def run_diagnostic(risk_path: Path, controls_path: Path, config_path: Path) -> N
         rows = []
         for i, bd in enumerate(target_bd, 1):
             subtotal = sum(bd.values())
-            rows.append([f"target_{i}"] + [_fmt(bd[c]) for c in TARGET_COMPONENTS] + [_fmt(subtotal)])
+            rows.append([target_label(i)] + [_fmt(bd[c]) for c in TARGET_COMPONENTS] + [_fmt(subtotal)])
         means = {c: sum(bd[c] for bd in target_bd) // len(target_bd) for c in TARGET_COMPONENTS}
         maxs = {c: max(bd[c] for bd in target_bd) for c in TARGET_COMPONENTS}
         rows.append(["MEAN"] + [_fmt(means[c]) for c in TARGET_COMPONENTS] + [_fmt(sum(means.values()))])
         rows.append(["MAX"] + [_fmt(maxs[c]) for c in TARGET_COMPONENTS] + [_fmt(sum(maxs.values()))])
         print(f"Target-ctx breakdown ({len(target_bd)} entities, tokens per component):")
-        _print_table(headers, rows, col_widths=[10] + [14] * len(TARGET_COMPONENTS) + [10])
+        _print_table(headers, rows, col_widths=[target_label_width] + [14] * len(TARGET_COMPONENTS) + [10])
         print()
 
     # Source-ctx summary
@@ -263,14 +290,37 @@ def run_diagnostic(risk_path: Path, controls_path: Path, config_path: Path) -> N
     else:
         print("Source-ctx: none")
 
+    # Highest-subtotal focal — identify which focal_k is the driver.
+    # ID revealed only with --show-ids; otherwise points at the role label.
+    if focal_bd:
+        totals = [sum(bd.values()) for bd in focal_bd]
+        worst_idx = max(range(len(totals)), key=lambda i: totals[i])
+        id_hint = (
+            focal_payloads[worst_idx].get("entity_id", "?")
+            if show_ids
+            else "(rerun with --show-ids to reveal entity_id)"
+        )
+        print()
+        print(
+            f"Highest-subtotal focal in this batch: focal_{worst_idx+1}  "
+            f"subtotal {_fmt(totals[worst_idx])} tokens  ->  {id_hint}"
+        )
+
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--risk-assessment", type=Path, default=DEFAULT_RISK_ASSESSMENT)
     parser.add_argument("--controls", type=Path, default=DEFAULT_CONTROLS)
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
+    parser.add_argument(
+        "--show-ids",
+        action="store_true",
+        help="Append entity_id to each role label (focal_1 (AE-XXX)) and reveal "
+             "the highest-subtotal focal's entity_id. Off by default so the "
+             "output is safe to share in structural summaries.",
+    )
     args = parser.parse_args()
-    run_diagnostic(args.risk_assessment, args.controls, args.config)
+    run_diagnostic(args.risk_assessment, args.controls, args.config, show_ids=args.show_ids)
 
 
 if __name__ == "__main__":

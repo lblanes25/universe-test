@@ -1,23 +1,19 @@
 {
   "_comment": "Tuning parameters for src/stage2_handoff_review. Edit without touching code. Calibrate after first real-data dry-run.",
-
   "focal_per_batch": 7,
   "target_token_budget": 85000,
   "hard_token_ceiling": 110000,
-
   "louvain_resolution": 1.5,
   "louvain_seed": 42,
-
   "target_context_include_control_description": false,
   "focal_control_description_max_tokens": 250,
-
   "tokens_per_char": 0.25,
   "fixed_prompt_overhead_tokens": 4000,
-
   "worst_case_control_count_multiplier": 1.5,
-
   "gate_thresholds": {
-    "task3_control_layer_min_fraction": 0.70,
-    "task5_control_layer_min_fraction": 0.50
-  }
+    "task3_control_layer_min_fraction": 0.7,
+    "task5_control_layer_min_fraction": 0.5
+  },
+  "_exclude_entity_ids_comment": "Entities listed here are removed from focal after classify but stay referenceable, so others' handoffs to them still resolve. Use when a single entity's payload is too large for batch budget and you want to skip it from Stage 2 evaluation without editing the CSV.",
+  "exclude_entity_ids": []
 }

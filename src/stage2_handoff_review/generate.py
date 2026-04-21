@@ -311,6 +311,16 @@ def run(
         f"dropped={class_stats['dropped_count']}"
     )
 
+    # Apply exclusion list from config. Excluded entities stay in referenceable
+    # so others' handoffs to them still resolve (name_by_id, inactive_flag), but
+    # they do not appear as focal and get no payload evaluation. Use for single
+    # entities whose payload is too large for the batch budget.
+    excluded = set(config.get("exclude_entity_ids", []) or [])
+    if excluded:
+        before = len(focal_df)
+        focal_df = focal_df[~focal_df["Audit Entity ID"].isin(excluded)].reset_index(drop=True)
+        print(f"[generate] excluded {before - len(focal_df)} entities from focal per config: {sorted(excluded)}")
+
     # Nodes / horizontal flags / name lookup span all referenceable entities so that
     # inactive-referenceable partners resolve to real names and the graph-construction
     # helpers can reason about them. Focal assignment uses only focal_ids.
