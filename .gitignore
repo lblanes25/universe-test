@@ -9,9 +9,10 @@ env/
 .mypy_cache/
 .ruff_cache/
 
-# IDE
+# IDE / agent local state
 .idea/
 .vscode/
+.claude/
 *.swp
 .DS_Store
 Thumbs.db
@@ -19,6 +20,9 @@ Thumbs.db
 # Generated pipeline outputs
 data/output/*.xlsx
 data/output/*.html
+
+# Stage 2 handoff review artifacts (prompts, pasted responses, aggregated findings)
+runs/
 
 # Local env
 .env

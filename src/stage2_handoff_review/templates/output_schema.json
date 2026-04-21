@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Stage 2 Handoff Review — Batch Response",
+  "type": "object",
+  "required": ["findings", "ranked_summary"],
+  "properties": {
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "task",
+          "manual_requirement",
+          "focal_entity_id",
+          "focal_entity_name",
+          "specific_risk_ids",
+          "kpa_ids",
+          "evidence_layer",
+          "evidence_quote",
+          "classification",
+          "reasoning"
+        ],
+        "properties": {
+          "task": {"type": "integer", "minimum": 1, "maximum": 5},
+          "manual_requirement": {"type": "string"},
+          "focal_entity_id": {"type": "string"},
+          "focal_entity_name": {"type": "string"},
+          "risk_category": {"type": ["string", "null"]},
+          "specific_risk_ids": {"type": "array", "items": {"type": "string"}},
+          "kpa_ids": {"type": "array", "items": {"type": "string"}},
+          "evidence_layer": {
+            "type": "string",
+            "enum": ["control", "category_summary", "entity_prose", "structured_handoffs"]
+          },
+          "evidence_quote": {"type": "string"},
+          "classification": {
+            "type": "string",
+            "enum": ["conforms", "documentation issue", "likely coverage gap"]
+          },
+          "reasoning": {"type": "string"},
+          "cross_entity_partner_id": {"type": ["string", "null"]}
+        }
+      }
+    },
+    "ranked_summary": {
+      "type": "object",
+      "required": ["likely_coverage_gaps", "systemic_documentation_issues", "manual_gaps_exposed"],
+      "properties": {
+        "likely_coverage_gaps": {"type": "array"},
+        "systemic_documentation_issues": {"type": "array"},
+        "manual_gaps_exposed": {"type": "array"}
+      }
+    }
+  }
+}
