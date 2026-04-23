@@ -276,6 +276,7 @@ def _write_gate_log(path: Path, gates: list[GateResult], missing: list[str]) -> 
 
 def _write_ranked_summary(path: Path, batch_dirs: list[Path], allow_partial: bool) -> None:
     lines = ["# Stage 2 — Aggregated Ranked Summary", ""]
+    malformed: list[str] = []
     for d in batch_dirs:
         rp = d / "response.json"
         if not rp.exists() or rp.stat().st_size == 0:
@@ -287,6 +288,9 @@ def _write_ranked_summary(path: Path, batch_dirs: list[Path], allow_partial: boo
         if response is None:
             continue
         s = response.get("ranked_summary") or {}
+        if not isinstance(s, dict):
+            malformed.append(d.name)
+            continue
         gaps = s.get("likely_coverage_gaps") or []
         issues = s.get("systemic_documentation_issues") or []
         manual_gaps = s.get("manual_gaps_exposed") or []
@@ -307,6 +311,13 @@ def _write_ranked_summary(path: Path, batch_dirs: list[Path], allow_partial: boo
             for g in manual_gaps:
                 lines.append(f"- {g.get('area','?')}: {g.get('summary','')}")
         lines.append("")
+    if malformed:
+        lines.append("---")
+        lines.append("")
+        lines.append(f"**Skipped {len(malformed)} batch(es) with malformed `ranked_summary` (not a dict):** "
+                     f"{', '.join(malformed)}")
+        print(f"[aggregate] WARNING: skipped {len(malformed)} batch(es) with malformed ranked_summary: "
+              f"{', '.join(malformed)}")
     path.write_text("\n".join(lines), encoding="utf-8")
 
 
