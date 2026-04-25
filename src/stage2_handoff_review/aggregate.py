@@ -39,6 +39,15 @@ class GateResult:
     checks: dict[str, tuple[bool, str]]  # check_name -> (ok, detail)
 
 
+@dataclass
+class MismatchResult:
+    batch_id: int
+    manifest_focal: list[str]
+    response_focal: list[str]
+    unknown_focal: list[str]
+    detail: str
+
+
 def _load_config(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
@@ -96,6 +105,30 @@ def _validate_schema(response: dict) -> list[str]:
         if key not in summary or not isinstance(summary[key], list):
             errors.append(f"ranked_summary.{key} missing or not an array")
     return errors
+
+
+def _check_manifest_alignment(response: dict, manifest: dict) -> tuple[bool, list[str], list[str]]:
+    """Return (mismatched, response_focal_ids, unknown_focal_ids).
+
+    Mismatched means the response cites at least one focal_entity_id that is
+    not in the manifest's focal_ids. This is the strongest signal that a
+    response.json was pasted into the wrong batch folder.
+    """
+    manifest_focal = set(manifest.get("focal_ids", []) or [])
+    response_focal: set[str] = set()
+    for f in response.get("findings", []) or []:
+        eid = f.get("focal_entity_id")
+        if eid:
+            response_focal.add(str(eid).strip())
+    summary = response.get("ranked_summary") or {}
+    if isinstance(summary, dict):
+        for g in summary.get("likely_coverage_gaps", []) or []:
+            eid = g.get("focal_entity_id")
+            if eid:
+                response_focal.add(str(eid).strip())
+    unknown = sorted(response_focal - manifest_focal)
+    mismatched = bool(unknown) or (bool(response_focal) and not (response_focal & manifest_focal))
+    return mismatched, sorted(response_focal), unknown
 
 
 def _run_gate(
@@ -203,6 +236,7 @@ def run(
 
     all_rows: list[dict] = []
     gate_log: list[GateResult] = []
+    mismatches: list[MismatchResult] = []
     missing_responses: list[str] = []
     first_batch_id: int | None = None
 
@@ -223,6 +257,20 @@ def run(
         if response is None:
             missing_responses.append(d.name)
             continue
+
+        mismatched, response_focal, unknown_focal = _check_manifest_alignment(response, manifest)
+        if mismatched:
+            mismatches.append(MismatchResult(
+                batch_id=batch_id,
+                manifest_focal=sorted(manifest.get("focal_ids", []) or []),
+                response_focal=response_focal,
+                unknown_focal=unknown_focal,
+                detail=(f"{len(unknown_focal)} response focal_entity_id(s) not in manifest: "
+                        f"{', '.join(unknown_focal)}") if unknown_focal else
+                       "response cites focal entities, none overlap manifest",
+            ))
+            continue
+
         gate = _run_gate(batch_id, response, manifest, config)
         gate_log.append(gate)
 
@@ -248,22 +296,48 @@ def run(
     findings_df.to_csv(findings_path, index=False)
     print(f"[aggregate] wrote {len(findings_df)} findings -> {findings_path}")
 
-    _write_gate_log(aggregated_root / "gate_log.md", gate_log, missing_responses)
-    _write_ranked_summary(aggregated_root / "ranked_summary.md", batch_dirs, override_gate)
+    _write_gate_log(aggregated_root / "gate_log.md", gate_log, missing_responses, mismatches)
+    _write_ranked_summary(aggregated_root / "ranked_summary.md", batch_dirs, override_gate, mismatches)
+
+    if mismatches:
+        names = ", ".join(f"batch_{m.batch_id:03d}" for m in mismatches)
+        print(f"[aggregate] WARNING: {len(mismatches)} batch(es) have manifest mismatches "
+              f"(likely wrong-folder paste): {names}")
+        print(f"[aggregate] mismatched batches were excluded from findings.csv. See gate_log.md for detail.")
 
     return {
         "processed": len(gate_log),
         "missing": missing_responses,
+        "mismatched": [m.batch_id for m in mismatches],
         "gated": gate_log,
         "findings_rows": len(findings_df),
     }
 
 
-def _write_gate_log(path: Path, gates: list[GateResult], missing: list[str]) -> None:
+def _write_gate_log(
+    path: Path,
+    gates: list[GateResult],
+    missing: list[str],
+    mismatches: list[MismatchResult] | None = None,
+) -> None:
     lines = ["# Stage 2 — Gate Log", ""]
     if missing:
         lines.append(f"**Missing response.json for:** {', '.join(missing)}")
         lines.append("")
+    if mismatches:
+        lines.append("## Manifest Mismatches — likely wrong-folder paste")
+        lines.append("")
+        lines.append("These batches were **excluded from findings.csv**. Response cites focal "
+                     "entities not in the batch's manifest — usually a copy-paste swap. "
+                     "Re-paste the correct response and re-run aggregation.")
+        lines.append("")
+        for m in mismatches:
+            lines.append(f"### batch_{m.batch_id:03d} — MISMATCH")
+            lines.append(f"- Manifest focal: `{', '.join(m.manifest_focal) or '(none)'}`")
+            lines.append(f"- Response focal: `{', '.join(m.response_focal) or '(none)'}`")
+            lines.append(f"- Unknown focal in response: `{', '.join(m.unknown_focal) or '(none)'}`")
+            lines.append(f"- {m.detail}")
+            lines.append("")
     for g in gates:
         status = "PASS" if g.passed else "FAIL"
         lines.append(f"## batch_{g.batch_id:03d} — {status}")
@@ -274,12 +348,24 @@ def _write_gate_log(path: Path, gates: list[GateResult], missing: list[str]) -> 
     path.write_text("\n".join(lines), encoding="utf-8")
 
 
-def _write_ranked_summary(path: Path, batch_dirs: list[Path], allow_partial: bool) -> None:
+def _write_ranked_summary(
+    path: Path,
+    batch_dirs: list[Path],
+    allow_partial: bool,
+    mismatches: list[MismatchResult] | None = None,
+) -> None:
+    skip_ids = {m.batch_id for m in (mismatches or [])}
     lines = ["# Stage 2 — Aggregated Ranked Summary", ""]
     malformed: list[str] = []
     for d in batch_dirs:
         rp = d / "response.json"
         if not rp.exists() or rp.stat().st_size == 0:
+            continue
+        try:
+            batch_id = int(d.name.split("_")[1])
+        except (ValueError, IndexError):
+            batch_id = -1
+        if batch_id in skip_ids:
             continue
         try:
             response = parse_response(rp)
