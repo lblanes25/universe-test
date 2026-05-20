@@ -34,6 +34,7 @@ from src.stage2_handoff_review.payload import (  # noqa: E402
     build_target_context_payload,
     partition_context,
 )
+from src.stage2_handoff_review import labels  # noqa: E402
 
 DEFAULT_CONFIG = ROOT / "config" / "stage2_batching.json"
 DEFAULT_RISK_ASSESSMENT = ROOT / "data" / "input" / "dummy_audit_universe_50.csv"
@@ -249,6 +250,8 @@ def _render_prompt(template: str, batch_id: int, focal: list[dict], target: list
         return json.dumps(payload, ensure_ascii=False, indent=2)
     return (
         template.replace("{batch_id}", f"{batch_id:03d}")
+        .replace("{framework_section}", labels.render_framework_section())
+        .replace("{tasks_section}", labels.render_tasks_section())
         .replace("{focal_json}", dump(focal))
         .replace("{target_context_json}", dump(target))
         .replace("{source_context_json}", dump(source))

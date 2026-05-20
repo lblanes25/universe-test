@@ -49,11 +49,28 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from src.utils.excel_writer import write_workbook  # noqa: E402
+from src.stage2_handoff_review import labels  # noqa: E402
 
 DEFAULT_FINDINGS = ROOT / "runs" / "stage2" / "aggregated" / "findings.csv"
 DEFAULT_GATE_LOG = ROOT / "runs" / "stage2" / "aggregated" / "gate_log.md"
 DEFAULT_NODES = ROOT / "data" / "output" / "layer1_output.xlsx"
 DEFAULT_OUT = ROOT / "runs" / "stage2" / "aggregated" / "findings_rollup.xlsx"
+
+
+def _classification_value(canonical_substring: str) -> str:
+    """Look up a classification's canonical value from a stable substring.
+
+    Used so filters in this module don't hardcode the literal string — when
+    the team renames a classification in config/stage2_prompt.yaml, this still
+    resolves to whatever string the corpus actually contains.
+    """
+    for v in labels.classification_values():
+        if canonical_substring in v.lower():
+            return v
+    raise ValueError(
+        f"No classification value contains {canonical_substring!r}; "
+        "edit config/stage2_prompt.yaml or update this lookup."
+    )
 
 
 def _parse_gate_log(path: Path) -> dict[int, bool]:
@@ -160,13 +177,13 @@ def _top_entities(df: pd.DataFrame, nodes: pd.DataFrame | None) -> pd.DataFrame:
     return pivot
 
 
-def _gaps_by_entity(df: pd.DataFrame) -> pd.DataFrame:
+def _gaps_by_entity(df: pd.DataFrame, gap_value: str) -> pd.DataFrame:
     """One row per likely-coverage-gap finding."""
-    gaps = df[df["classification"].str.lower().eq("likely coverage gap")].copy()
+    gaps = df[df["classification"].str.lower().eq(gap_value.lower())].copy()
     if gaps.empty:
         return gaps
     keep_cols = [
-        "batch_id", "task", "focal_entity_id", "focal_entity_name",
+        "batch_id", "task", "task_name", "focal_entity_id", "focal_entity_name",
         "cross_entity_partner_id", "risk_category", "specific_risk_ids",
         "kpa_ids", "evidence_layer", "manual_requirement",
         "evidence_quote", "reasoning", "gate_passed",
@@ -202,6 +219,12 @@ def run(
     findings = pd.read_csv(findings_path)
     findings["classification"] = findings["classification"].fillna("").astype(str)
 
+    task_displays = labels.task_displays()
+    if "task" in findings.columns:
+        findings["task_name"] = findings["task"].map(
+            lambda t: task_displays.get(int(t)) if pd.notna(t) and str(t).strip() != "" else ""
+        ).fillna("")
+
     gate_map = _parse_gate_log(gate_log_path)
     if gate_map:
         findings["gate_passed"] = findings["batch_id"].map(gate_map).fillna(False).astype(bool)
@@ -210,8 +233,10 @@ def run(
 
     nodes = _load_nodes(nodes_path)
 
-    docs = findings[findings["classification"].str.lower().eq("documentation issue")]
-    gaps = findings[findings["classification"].str.lower().eq("likely coverage gap")]
+    doc_value = _classification_value("documentation")
+    gap_value = _classification_value("coverage gap")
+    docs = findings[findings["classification"].str.lower().eq(doc_value.lower())]
+    gaps = findings[findings["classification"].str.lower().eq(gap_value.lower())]
     manual = (findings[findings["manual_requirement"].astype(str).str.lower().isin({"true", "1", "yes"})]
               if "manual_requirement" in findings.columns else findings.iloc[0:0])
 
@@ -220,7 +245,7 @@ def run(
         "Gaps by Risk Category": _by_risk_category(gaps),
         "Doc Issues by Risk Category": _by_risk_category(docs),
         "Top Entities by Issue Count": _top_entities(findings, nodes),
-        "Gaps by Entity": _gaps_by_entity(findings),
+        "Gaps by Entity": _gaps_by_entity(findings, gap_value),
         "Manual Requirements": manual.reset_index(drop=True),
     }
 

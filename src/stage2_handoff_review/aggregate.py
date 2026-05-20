@@ -19,6 +19,8 @@ ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from src.stage2_handoff_review import labels  # noqa: E402
+
 DEFAULT_BATCHES_ROOT = ROOT / "runs" / "stage2" / "batches"
 DEFAULT_AGGREGATED_ROOT = ROOT / "runs" / "stage2" / "aggregated"
 DEFAULT_CONFIG = ROOT / "config" / "stage2_batching.json"
@@ -28,8 +30,6 @@ FINDING_REQUIRED = {
     "specific_risk_ids", "kpa_ids", "evidence_layer", "evidence_quote",
     "classification", "reasoning",
 }
-EVIDENCE_LAYERS = {"control", "category_summary", "entity_prose", "structured_handoffs"}
-CLASSIFICATIONS = {"conforms", "documentation issue", "likely coverage gap"}
 
 
 @dataclass
@@ -89,9 +89,9 @@ def _validate_schema(response: dict) -> list[str]:
         if missing:
             errors.append(f"finding #{i}: missing fields {sorted(missing)}")
             continue
-        if f["evidence_layer"] not in EVIDENCE_LAYERS:
+        if f["evidence_layer"] not in labels.evidence_layer_values():
             errors.append(f"finding #{i}: invalid evidence_layer={f['evidence_layer']!r}")
-        if f["classification"] not in CLASSIFICATIONS:
+        if f["classification"] not in labels.classification_values():
             errors.append(f"finding #{i}: invalid classification={f['classification']!r}")
         if not isinstance(f["specific_risk_ids"], list):
             errors.append(f"finding #{i}: specific_risk_ids must be array")
@@ -101,7 +101,7 @@ def _validate_schema(response: dict) -> list[str]:
             errors.append(f"finding #{i}: Task 5 finding missing cross_entity_partner_id")
 
     summary = response.get("ranked_summary", {})
-    for key in ("likely_coverage_gaps", "systemic_documentation_issues", "manual_gaps_exposed"):
+    for key in labels.ranked_summary_keys():
         if key not in summary or not isinstance(summary[key], list):
             errors.append(f"ranked_summary.{key} missing or not an array")
     return errors
@@ -191,7 +191,7 @@ def _run_gate(
 
     summary = response.get("ranked_summary", {})
     checks["has_ranked_summary"] = (
-        all(k in summary for k in ("likely_coverage_gaps", "systemic_documentation_issues", "manual_gaps_exposed")),
+        all(k in summary for k in labels.ranked_summary_keys()),
         "present" if summary else "missing",
     )
 
@@ -377,6 +377,7 @@ def _write_ranked_summary(
         if not isinstance(s, dict):
             malformed.append(d.name)
             continue
+        displays = labels.ranked_summary_displays()
         gaps = s.get("likely_coverage_gaps") or []
         issues = s.get("systemic_documentation_issues") or []
         manual_gaps = s.get("manual_gaps_exposed") or []
@@ -384,16 +385,16 @@ def _write_ranked_summary(
             continue
         lines.append(f"## {d.name}")
         if gaps:
-            lines.append("**Likely coverage gaps:**")
+            lines.append(f"**{displays['likely_coverage_gaps']}:**")
             for g in gaps:
                 lines.append(f"- `{g.get('focal_entity_id','?')}` ({g.get('confidence','?')}): {g.get('summary','')} "
                              f"[SRs: {', '.join(g.get('specific_risk_ids', []) or [])}]")
         if issues:
-            lines.append("**Systemic documentation issues:**")
+            lines.append(f"**{displays['systemic_documentation_issues']}:**")
             for g in issues:
                 lines.append(f"- {g.get('pattern','?')} (n={g.get('affected_entity_count','?')}): {g.get('summary','')}")
         if manual_gaps:
-            lines.append("**Manual gaps exposed:**")
+            lines.append(f"**{displays['manual_gaps_exposed']}:**")
             for g in manual_gaps:
                 lines.append(f"- {g.get('area','?')}: {g.get('summary','')}")
         lines.append("")

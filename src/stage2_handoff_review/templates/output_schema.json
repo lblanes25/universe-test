@@ -1,6 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Stage 2 Handoff Review — Batch Response",
+  "description": "Documentation-only reference for the LLM response shape. No code loads this file at runtime; the aggregator at src/stage2_handoff_review/aggregate.py validates responses directly from the enums in config/stage2_prompt.yaml. If you rename a classification, evidence_layer, or ranked_summary key in the YAML, update this file too — or delete it.",
   "type": "object",
   "required": ["findings", "ranked_summary"],
   "properties": {
