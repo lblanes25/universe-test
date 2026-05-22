@@ -120,6 +120,12 @@ body.light .cat-tag { background: #eaeef2; color: #1f2328; }
   <label><input type="checkbox" id="tog-edge-tip"><span style="color:#8b949e;font-size:10px;">&#9432;</span> Edge tooltips</label>
 </div>
 
+<div class="panel" id="gap-panel">
+  <h3>Likely Coverage Gaps</h3>
+  <label><input type="checkbox" id="tog-gaps" checked><span class="edge-color" style="background:#f85149"></span> Show likely gaps</label>
+  <label><input type="checkbox" id="tog-gaps-failed"><span style="color:#f85149;font-size:11px;">&#9476;&#9476;</span> Include failed-gate (dashed)</label>
+</div>
+
 <div class="panel">
   <h3>Risk Rating Filter</h3>
   <div class="filter-btns" id="risk-filter-btns">
@@ -232,6 +238,7 @@ let W, H, dpr, transform = {x:0,y:0,k:1};
 let nodes = DATA.nodes, visibleNodes = new Set(), visibleEdges = [];
 let hoveredNode = null, selectedSearch = null, selectedNode = null;
 let showHandoffs=true, showApps=false, showVendors=false, showPrsas=false, crossOnly=false, showEdgeTooltips=false;
+let showGaps=true, showFailedGaps=false;
 let activeFilter='all', activeRisk='all', activeAsset='', activePrsa='', hzMode='off';
 let groupBy='leader', egoMode='off', egoCenter=null;
 let impactMode=false, impactExternals=new Set(), darkMode=true;
@@ -245,6 +252,24 @@ const EDGE_STYLES = {
 const CC = ['#1f6feb44','#da3633aa','#238636aa','#a371f7aa','#d29922aa','#f778baaa','#79c0ffaa','#56d364aa','#f0883eaa','#b392f0aa'];
 
 const nodeById = {}; DATA.nodes.forEach(n => { nodeById[n.id] = n; });
+const HAS_GAPS = DATA.edges.some(e=>e.gap) || DATA.nodes.some(n=>n.gap);
+if(!HAS_GAPS){const gp=document.getElementById('gap-panel'); if(gp) gp.style.display='none';}
+// True when a gap should currently render (respects the failed-gate toggle).
+function gapVisible(g){return g && showGaps && (g.countPassed>0 || showFailedGaps);}
+function gapDashed(g){return g.countPassed===0;}
+function _esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+// Shared gap section for tooltips/detail panel. cls is 'tt' or 'nd'.
+function gapHtml(g, cls){
+  if(!gapVisible(g)) return '';
+  cls = cls || 'tt';
+  const role = g.task===5 ? 'cross-entity (Task 5)' : 'coarse-handoff (Task 3)';
+  let h='<div class="'+cls+'-row"><span class="'+cls+'-label" style="color:#f85149;font-weight:600;">&#9888; Likely gaps</span><span class="'+cls+'-val" style="color:#f85149;font-weight:600;">'+g.count+'</span></div>';
+  h+='<div class="'+cls+'-row"><span class="'+cls+'-label">Finding type</span><span class="'+cls+'-val">'+role+'</span></div>';
+  h+='<div class="'+cls+'-row"><span class="'+cls+'-label">Gate pass / fail</span><span class="'+cls+'-val">'+g.countPassed+' / '+g.countFailed+'</span></div>';
+  if(g.srIds&&g.srIds.length){h+='<div style="margin-top:3px;">'+g.srIds.slice(0,12).map(s=>'<span class="cat-tag">'+_esc(s)+'</span>').join('')+(g.srIds.length>12?' <span style="font-size:9px;color:#8b949e;">+'+(g.srIds.length-12)+'</span>':'')+'</div>';}
+  if(g.example)h+='<div class="'+cls+'-risks">'+_esc(g.example)+'</div>';
+  return h;
+}
 const edgesByType = {handoff_to:[],handoff_from:[],shared_app:[],shared_vendor:[],shared_prsa:[]};
 const edgesByNode = {};
 DATA.edges.forEach(e => {
@@ -469,6 +494,9 @@ function updateVisibility() {
   if(showApps) addEdges(edgesByType.shared_app);
   if(showVendors) addEdges(edgesByType.shared_vendor);
   if(showPrsas) addEdges(edgesByType.shared_prsa);
+  if(showGaps && !showHandoffs){const seen=new Set(visibleEdges);
+    edgesByType.handoff_to.concat(edgesByType.handoff_from).forEach(e=>{
+      if(gapVisible(e.gap)&&vn.has(e.source)&&vn.has(e.target)&&!seen.has(e)){visibleEdges.push(e);seen.add(e);}});}
 
   // Info panels
   if(assetFocus){
@@ -520,6 +548,8 @@ function drawNode(n,dimmed){
     if(isPr){ctx.lineWidth=3*transform.k;ctx.strokeStyle='#f0f6fc';ctx.stroke();}
     if(isHz){ctx.setLineDash([4,3]);ctx.lineWidth=2*transform.k;ctx.strokeStyle='#da3633';ctx.stroke();ctx.setLineDash([]);}
     ctx.restore();}
+  if(gapVisible(n.gap)){ctx.beginPath();ctx.arc(x,y,r+3*transform.k,0,Math.PI*2);ctx.strokeStyle='#f85149';ctx.lineWidth=2.5*transform.k;
+    if(gapDashed(n.gap)){ctx.setLineDash([4,3]);}ctx.stroke();ctx.setLineDash([]);}
   if(egoMode!=='off'&&egoCenter===n.id){ctx.beginPath();ctx.arc(x,y,r+5*transform.k,0,Math.PI*2);ctx.strokeStyle='#58a6ff';ctx.lineWidth=2.5;ctx.stroke();}
   const fs=transform.k>0.6?(transform.k>1.2?11:10):0;
   if(fs>0){ctx.font='500 '+fs+'px monospace';ctx.fillStyle=dimmed?(darkMode?'rgba(240,246,252,0.12)':'rgba(31,35,40,0.12)'):(darkMode?'#f0f6fc':'#1f2328');ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText(transform.k>1.5?n.name:n.id,x,y+r+3);}
@@ -549,13 +579,15 @@ function draw(){
     if(Math.max(pa.x,pb.x)<-50||Math.min(pa.x,pb.x)>W+50||Math.max(pa.y,pb.y)<-50||Math.min(pa.y,pb.y)>H+50)return;
     const st=EDGE_STYLES[e.edgeType];let dim=false;
     if(sA&&!((e.source===selectedSearch||e.target===selectedSearch)&&(e.edgeType==='handoff_to'||e.edgeType==='handoff_from')))dim=true;
-    ctx.globalAlpha=dim?0.04:(st.alpha||0.7);ctx.strokeStyle=st.color;
-    ctx.lineWidth=(bidirectional.has(e.source+'-'+e.target)?st.width*2:st.width)*Math.min(transform.k,1.5);
-    ctx.setLineDash(st.dash);ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);ctx.stroke();
+    const isGapEdge=gapVisible(e.gap);
+    ctx.globalAlpha=dim?0.04:(isGapEdge?0.95:(st.alpha||0.7));ctx.strokeStyle=isGapEdge?'#f85149':st.color;
+    let ew=(bidirectional.has(e.source+'-'+e.target)?st.width*2:st.width);if(isGapEdge)ew=Math.max(ew,2.2);
+    ctx.lineWidth=ew*Math.min(transform.k,1.5);
+    ctx.setLineDash(isGapEdge&&gapDashed(e.gap)?[5,4]:st.dash);ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);ctx.stroke();
     if(impactMode&&(e.edgeType==='handoff_to'||e.edgeType==='handoff_from')&&!dim){
       const dx=pb.x-pa.x,dy=pb.y-pa.y,len=Math.sqrt(dx*dx+dy*dy);
       if(len>10){const nr=nodeRadius(b)*transform.k,ax=pb.x-dx/len*nr,ay=pb.y-dy/len*nr,ang=Math.atan2(dy,dx),aS=6*Math.min(transform.k,1.5);
-        ctx.fillStyle=st.color;ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(ax-aS*Math.cos(ang-0.4),ay-aS*Math.sin(ang-0.4));ctx.lineTo(ax-aS*Math.cos(ang+0.4),ay-aS*Math.sin(ang+0.4));ctx.closePath();ctx.fill();}}
+        ctx.fillStyle=isGapEdge?'#f85149':st.color;ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(ax-aS*Math.cos(ang-0.4),ay-aS*Math.sin(ang-0.4));ctx.lineTo(ax-aS*Math.cos(ang+0.4),ay-aS*Math.sin(ang+0.4));ctx.closePath();ctx.fill();}}
   });ctx.setLineDash([]);ctx.globalAlpha=1;
 
   nodes.forEach(n=>{if(!visibleNodes.has(n.id))return;let dim=false;if(sA&&n.id!==selectedSearch&&!sN.has(n.id))dim=true;if(selActive&&n.id!==selectedNode&&!selNeighbors.has(n.id))dim=true;drawNode(n,dim);});
@@ -585,6 +617,7 @@ canvas.addEventListener('mousemove',e=>{
     h+='<div class="tt-row"><span class="tt-label">In Scope / Overdue</span><span class="tt-val">'+n.inScope+' / '+n.overdue+'</span></div>';
     h+='<div class="tt-row"><span class="tt-label">Handoff To / From</span><span class="tt-val">'+n.handoffTo+' / '+n.handoffFrom+'</span></div>';
     h+='<div class="tt-row"><span class="tt-label">Type</span><span class="tt-val">'+n.horizontalFlag+'</span></div>';
+    h+=gapHtml(n.gap,'tt');
     if(n.hcRisks)h+='<div class="tt-risks">'+n.hcRisks+'</div>';
     tooltip.innerHTML=h;tooltip.style.display='block';
     let tx=e.clientX-330+12,ty=e.clientY+12;if(tx+340>W)tx=e.clientX-330-350;if(ty+220>H)ty=e.clientY-220;
@@ -636,6 +669,8 @@ canvas.addEventListener('mousemove',e=>{
         h+='<div class="tt-row"><span class="tt-label">To</span><span class="tt-val">'+hoveredEdge.target+(tn?' — '+tn.name:'')+'</span></div>';
         if(hoveredEdge.detail)h+='<div class="tt-row"><span class="tt-label">Detail</span><span class="tt-val">'+hoveredEdge.detail+'</span></div>';
         if(hoveredEdge.category&&hoveredEdge.category!=='UNKNOWN'&&hoveredEdge.category!=='')h+='<div class="tt-row"><span class="tt-label">Category</span><span class="tt-val"><span class="cat-tag">'+hoveredEdge.category+'</span></span></div>';
+        if(hoveredEdge.synthetic)h+='<div class="tt-row"><span class="tt-label">Note</span><span class="tt-val">structural / undocumented handoff</span></div>';
+        h+=gapHtml(hoveredEdge.gap,'tt');
         tooltip.innerHTML=h;tooltip.style.display='block';
         let tx=e.clientX-330+12,ty=e.clientY+12;if(tx+340>W)tx=e.clientX-330-350;if(ty+180>H)ty=e.clientY-180;
         tooltip.style.left=tx+'px';tooltip.style.top=ty+'px';
@@ -685,6 +720,7 @@ function showNodeDetail(n){
     [...targets].sort().forEach(tid=>{const tn=nodeById[tid];if(tn)h+='<span style="color:'+(RISK_COLORS[tn.riskRating]||'#95a5a6')+'">'+tid+'</span> ';});
     h+='</div>';
   }
+  h+=gapHtml(n.gap,'nd');
   if(n.hcRisks) h+='<div class="nd-risks" style="margin-top:5px;">'+n.hcRisks+'</div>';
   det.innerHTML=h;panel.style.display='block';
 }
@@ -726,6 +762,8 @@ document.getElementById('tog-vendor').addEventListener('change',function(){showV
 document.getElementById('tog-prsa').addEventListener('change',function(){showPrsas=this.checked;updateVisibility();draw();});
 document.getElementById('tog-crossonly').addEventListener('change',function(){crossOnly=this.checked;updateVisibility();draw();});
 document.getElementById('tog-edge-tip').addEventListener('change',function(){showEdgeTooltips=this.checked;});
+{const tg=document.getElementById('tog-gaps');if(tg)tg.addEventListener('change',function(){showGaps=this.checked;updateVisibility();draw();});
+ const tf=document.getElementById('tog-gaps-failed');if(tf)tf.addEventListener('change',function(){showFailedGaps=this.checked;updateVisibility();draw();});}
 document.getElementById('btn-theme').addEventListener('click',()=>{
   darkMode=!darkMode;document.body.classList.toggle('light',!darkMode);
   document.getElementById('btn-theme').innerHTML=darkMode?'&#9788;':'&#9790;';draw();
@@ -753,8 +791,10 @@ document.getElementById('search-input').addEventListener('input',function(){cons
 document.getElementById('btn-reset').addEventListener('click',()=>{
   activeFilter='all';activeRisk='all';activeAsset='';activePrsa='';selectedSearch=null;selectedNode=null;egoMode='off';egoCenter=null;hzMode='off';crossOnly=false;
   showHandoffs=true;showApps=false;showVendors=false;showPrsas=false;showEdgeTooltips=false;groupBy='leader';lastZoomedCluster=null;
+  showGaps=true;showFailedGaps=false;
   document.getElementById('tog-handoff').checked=true;document.getElementById('tog-app').checked=false;
   document.getElementById('tog-vendor').checked=false;document.getElementById('tog-prsa').checked=false;document.getElementById('tog-crossonly').checked=false;document.getElementById('tog-edge-tip').checked=false;
+  {const tg=document.getElementById('tog-gaps');if(tg)tg.checked=true;const tf=document.getElementById('tog-gaps-failed');if(tf)tf.checked=false;}
   document.getElementById('node-detail-panel').style.display='none';
   document.querySelectorAll('.leader-cb').forEach(cb=>{cb.checked=true;});
   assetSelect.value='';prsaSelect.value='';document.getElementById('search-input').value='';

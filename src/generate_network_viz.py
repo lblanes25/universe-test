@@ -20,7 +20,7 @@ Optional:
 Dependencies:
     pip install pandas openpyxl
 """
-import argparse, glob, json, os, sys
+import argparse, glob, json, os, re, sys
 from datetime import datetime
 import pandas as pd
 
@@ -38,12 +38,29 @@ def _find_latest(input_dir, base_name, ext=".xlsx"):
     return None
 
 
+def _find_findings_rollup(input_dir):
+    """Locate the Stage 2 findings rollup xlsx (optional gap-overlay input).
+
+    Checks the input dir first, then the repo-default runs/stage2/aggregated
+    location. Returns None when absent — the overlay is purely optional.
+    """
+    candidates = [
+        os.path.join(input_dir, "findings_rollup.xlsx"),
+        os.path.join(_TPL_DIR, "..", "runs", "stage2", "aggregated", "findings_rollup.xlsx"),
+    ]
+    for c in candidates:
+        if os.path.isfile(c):
+            return os.path.abspath(c)
+    return None
+
+
 def read_pipeline(input_dir):
     """Read all pipeline files and return raw DataFrames."""
     l1 = _find_latest(input_dir, "layer1_output")
     ed = _find_latest(input_dir, "edge_derivation_output")
     l2 = _find_latest(input_dir, "layer2_coverage_matrix")
     hc = os.path.join(input_dir, "handoff_categories.csv")
+    fr = _find_findings_rollup(input_dir)
     for name, p in [("layer1_output", l1), ("edge_derivation_output", ed), ("layer2_coverage_matrix", l2)]:
         if p is None:
             sys.exit(f"ERROR: Missing file: {name}*.xlsx in {input_dir}")
@@ -65,7 +82,97 @@ def read_pipeline(input_dir):
     else:
         print(f"  No handoff_categories.csv — 2-hop will use structural tracing")
         dfs["categories"] = None
+    if fr is not None:
+        try:
+            dfs["findings"] = pd.read_excel(fr, sheet_name="All Findings (Tagged)")
+            print(f"  Found findings_rollup.xlsx — enabling likely-gap overlay")
+        except Exception:
+            print(f"  findings_rollup.xlsx present but unreadable — gap overlay disabled")
+            dfs["findings"] = None
+    else:
+        print(f"  No findings_rollup.xlsx — gap overlay disabled (viz unchanged)")
+        dfs["findings"] = None
     return dfs
+
+
+def _split_ids(val):
+    """Split a multi-id cell on ';' or ',' and trim, dropping blanks."""
+    if val is None or (isinstance(val, float) and pd.isna(val)):
+        return []
+    return [s.strip() for s in re.split(r"[;,]", str(val)) if s.strip()]
+
+
+def _gate_passed(row):
+    """Read gate_passed defensively — default True when missing or blank."""
+    gp = row.get("gate_passed", True)
+    if gp is None or (isinstance(gp, float) and pd.isna(gp)):
+        return True
+    return bool(gp)
+
+
+def _attach_gap_findings(node_list, edge_list, findings):
+    """Overlay Task 3/5 likely-coverage-gap findings onto nodes and edges.
+
+    Task 5 names its partner -> aggregate onto the matching handoff edge (either
+    orientation), or a synthetic dashed edge when the handoff isn't in the master
+    edge list. Task 3's receiver is free-text only -> aggregate onto the focal
+    node. Multiple findings per edge/node aggregate into one `gap` dict.
+
+    Returns (gap_edges_unplaced, gap_nodes_unmatched) for honest reporting.
+    """
+    node_by_id = {n["id"]: n for n in node_list}
+    edge_by_pair = {}
+    for e in edge_list:
+        if e["edgeType"] in ("handoff_to", "handoff_from"):
+            edge_by_pair.setdefault(frozenset((e["source"], e["target"])), []).append(e)
+
+    def _merge(target, row, task):
+        g = target.setdefault("gap", dict(count=0, countPassed=0, countFailed=0,
+                                          srIds=[], example="", task=task))
+        g["count"] += 1
+        if _gate_passed(row):
+            g["countPassed"] += 1
+        else:
+            g["countFailed"] += 1
+        seen = set(g["srIds"])
+        for sr in _split_ids(row.get("specific_risk_ids")):
+            if sr not in seen:
+                seen.add(sr)
+                g["srIds"].append(sr)
+        if not g["example"]:
+            r = row.get("reasoning")
+            if isinstance(r, str) and r.strip():
+                g["example"] = r.strip()[:400]
+
+    cls = findings["classification"].astype(str).str.lower()
+    task_num = pd.to_numeric(findings["task"], errors="coerce")
+    gaps = findings[cls.str.contains("coverage gap", na=False) & task_num.isin([3, 5])]
+
+    unplaced = unmatched = 0
+    for _, row in gaps.iterrows():
+        task = int(row["task"]) if pd.notna(row["task"]) else 0
+        focal = str(row["focal_entity_id"]).strip()
+        if task == 5:
+            partner = row.get("cross_entity_partner_id")
+            partner = str(partner).strip() if partner is not None and pd.notna(partner) else ""
+            matches = edge_by_pair.get(frozenset((focal, partner))) if partner else None
+            if matches:
+                for e in matches:
+                    _merge(e, row, 5)
+            elif partner and focal in node_by_id and partner in node_by_id:
+                syn = dict(source=focal, target=partner, edgeType="handoff_to",
+                           detail="", highFreq=False, category="", synthetic=True)
+                _merge(syn, row, 5)
+                edge_list.append(syn)
+                edge_by_pair.setdefault(frozenset((focal, partner)), []).append(syn)
+            else:
+                unplaced += 1
+        else:  # Task 3 — receiver unknown, anchor on the focal node
+            if focal in node_by_id:
+                _merge(node_by_id[focal], row, 3)
+            else:
+                unmatched += 1
+    return unplaced, unmatched
 
 
 def build_network_data(dfs):
@@ -150,8 +257,13 @@ def build_network_data(dfs):
         prsa_map.setdefault(pv, []).append(eid)
     prsa_list = [dict(value=k, entityIds=v) for k,v in sorted(prsa_map.items(), key=lambda x: -len(x[1]))]
 
-    return dict(nodes=node_list, edges=edge_list, assets=asset_list, entityApps=ea_list,
-                entityVendors=ev_list, concRisk=conc_list, prsaClusters=prsa_list, handoffCategories=all_cats)
+    result = dict(nodes=node_list, edges=edge_list, assets=asset_list, entityApps=ea_list,
+                  entityVendors=ev_list, concRisk=conc_list, prsaClusters=prsa_list, handoffCategories=all_cats)
+    if dfs.get("findings") is not None:
+        unplaced, unmatched = _attach_gap_findings(node_list, edge_list, dfs["findings"])
+        result["gapEdgesUnplaced"] = unplaced
+        result["gapNodesUnmatched"] = unmatched
+    return result
 
 
 def build_chord_data(dfs):
@@ -345,6 +457,14 @@ def generate(input_dir, output_dir):
     net_data = build_network_data(dfs)
     cats_tagged = sum(1 for e in net_data["edges"] if e.get("category") and e["category"] not in ("","UNKNOWN"))
     print(f"  Network: {len(net_data['nodes'])} nodes, {len(net_data['edges'])} edges, {cats_tagged} categorized handoffs")
+    if "gapEdgesUnplaced" in net_data:
+        gap_edges = sum(1 for e in net_data["edges"] if e.get("gap"))
+        gap_nodes = sum(1 for n in net_data["nodes"] if n.get("gap"))
+        print(f"  Gaps: {gap_edges} edges (Task 5), {gap_nodes} nodes (Task 3); "
+              f"unplaced T5={net_data['gapEdgesUnplaced']}, unmatched T3={net_data['gapNodesUnmatched']}")
+        # Counters are for the console only — keep them out of the injected JSON.
+        net_data.pop("gapEdgesUnplaced", None)
+        net_data.pop("gapNodesUnmatched", None)
     net_json = json.dumps(net_data, separators=(",",":"))
     with open(os.path.join(_TPL_DIR, "_network_template.html"), "r", encoding="utf-8") as f:
         net_html = f.read().replace("%%DATA_INJECTION%%", "const DATA = " + net_json + ";")
