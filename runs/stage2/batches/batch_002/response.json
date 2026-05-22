@@ -1,0 +1,514 @@
+{
+  "findings": [
+    {
+      "task": 5,
+      "manual_requirement": "Require attribute-level handoff documentation",
+      "focal_entity_id": "AE-12",
+      "focal_entity_name": "Foreign Exchange",
+      "cross_entity_partner_id": "AE-5",
+      "risk_category": "Funding & Liquidity",
+      "specific_risk_ids": [
+        "SR-853",
+        "SR-928"
+      ],
+      "kpa_ids": [
+        "KPA-785"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cFunding & Liquidity risk is monitored at the program level.\u201d",
+      "classification": "likely coverage gap",
+      "reasoning": "Foreign Exchange transfers the funding & liquidity slice to Wire Transfers; Wire Transfers's control library covers the category but not the specific risk statement, leaving it without an owner."
+    },
+    {
+      "task": 3,
+      "manual_requirement": "Create a single coverage view / assurance map",
+      "focal_entity_id": "AE-12",
+      "focal_entity_name": "Foreign Exchange",
+      "cross_entity_partner_id": null,
+      "risk_category": "External Fraud",
+      "specific_risk_ids": [
+        "SR-136",
+        "SR-695"
+      ],
+      "kpa_ids": [
+        "KPA-797"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cExternal Fraud risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Foreign Exchange's embedded external fraud controls align with the program-level handoff."
+    },
+    {
+      "task": 1,
+      "manual_requirement": "Create a single coverage view / assurance map",
+      "focal_entity_id": "AE-12",
+      "focal_entity_name": "Foreign Exchange",
+      "cross_entity_partner_id": null,
+      "risk_category": "Strategic & Business",
+      "specific_risk_ids": [
+        "SR-480",
+        "SR-657"
+      ],
+      "kpa_ids": [
+        "KPA-555"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cStrategic & Business risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Manual requires explicit ownership; Foreign Exchange documents the handoff in prose but does not state which register carries strategic & business risk."
+    },
+    {
+      "task": 2,
+      "manual_requirement": "Make audit-entity risk ownership explicit",
+      "focal_entity_id": "AE-12",
+      "focal_entity_name": "Foreign Exchange",
+      "cross_entity_partner_id": null,
+      "risk_category": "Third Party",
+      "specific_risk_ids": [
+        "SR-472",
+        "SR-576"
+      ],
+      "kpa_ids": [
+        "KPA-426"
+      ],
+      "evidence_layer": "category_summary",
+      "evidence_quote": "\u201cThird Party risk is monitored at the program level.\u201d",
+      "classification": "conforms",
+      "reasoning": "Foreign Exchange describes a third party handoff, but the residual rating is still applied with no acknowledgment of partial retention."
+    },
+    {
+      "task": 4,
+      "manual_requirement": "Require attribute-level handoff documentation",
+      "focal_entity_id": "AE-12",
+      "focal_entity_name": "Foreign Exchange",
+      "cross_entity_partner_id": null,
+      "risk_category": "Model",
+      "specific_risk_ids": [
+        "SR-341",
+        "SR-336"
+      ],
+      "kpa_ids": [
+        "KPA-124"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cModel risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Foreign Exchange's overview describes activity that should generate model controls; the library is silent on that process's KPA."
+    },
+    {
+      "task": 5,
+      "manual_requirement": "Create a single coverage view / assurance map",
+      "focal_entity_id": "AE-20",
+      "focal_entity_name": "Customer Onboarding",
+      "cross_entity_partner_id": "AE-27",
+      "risk_category": "Credit",
+      "specific_risk_ids": [
+        "SR-622",
+        "SR-468"
+      ],
+      "kpa_ids": [
+        "KPA-626"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cCredit risk is monitored at the program level.\u201d",
+      "classification": "likely coverage gap",
+      "reasoning": "Customer Onboarding transfers the credit slice to Accounts Payable; Accounts Payable's control library covers the category but not the specific risk statement, leaving it without an owner."
+    },
+    {
+      "task": 3,
+      "manual_requirement": "Strengthen handoff hygiene to match reliance sufficiency",
+      "focal_entity_id": "AE-20",
+      "focal_entity_name": "Customer Onboarding",
+      "cross_entity_partner_id": null,
+      "risk_category": "Information Security",
+      "specific_risk_ids": [
+        "SR-852",
+        "SR-637"
+      ],
+      "kpa_ids": [
+        "KPA-881"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cInformation Security risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Customer Onboarding's embedded information security controls align with the program-level handoff."
+    },
+    {
+      "task": 1,
+      "manual_requirement": "Strengthen handoff hygiene to match reliance sufficiency",
+      "focal_entity_id": "AE-20",
+      "focal_entity_name": "Customer Onboarding",
+      "cross_entity_partner_id": null,
+      "risk_category": "Third Party",
+      "specific_risk_ids": [
+        "SR-265",
+        "SR-872"
+      ],
+      "kpa_ids": [
+        "KPA-509"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cThird Party risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Manual requires explicit ownership; Customer Onboarding documents the handoff in prose but does not state which register carries third party risk."
+    },
+    {
+      "task": 2,
+      "manual_requirement": "Require attribute-level handoff documentation",
+      "focal_entity_id": "AE-20",
+      "focal_entity_name": "Customer Onboarding",
+      "cross_entity_partner_id": null,
+      "risk_category": "Model",
+      "specific_risk_ids": [
+        "SR-601",
+        "SR-385"
+      ],
+      "kpa_ids": [
+        "KPA-610"
+      ],
+      "evidence_layer": "category_summary",
+      "evidence_quote": "\u201cModel risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Customer Onboarding describes a model handoff, but the residual rating is still applied with no acknowledgment of partial retention."
+    },
+    {
+      "task": 4,
+      "manual_requirement": "Strengthen handoff hygiene to match reliance sufficiency",
+      "focal_entity_id": "AE-20",
+      "focal_entity_name": "Customer Onboarding",
+      "cross_entity_partner_id": null,
+      "risk_category": "Operational",
+      "specific_risk_ids": [
+        "SR-572",
+        "SR-459"
+      ],
+      "kpa_ids": [
+        "KPA-681"
+      ],
+      "evidence_layer": "entity_prose",
+      "evidence_quote": "\u201cOperational risk is monitored at the program level.\u201d",
+      "classification": "conforms",
+      "reasoning": "Customer Onboarding's overview describes activity that should generate operational controls; the library is silent on that process's KPA."
+    },
+    {
+      "task": 5,
+      "manual_requirement": "Require attribute-level handoff documentation",
+      "focal_entity_id": "AE-38",
+      "focal_entity_name": "Credit Risk Management",
+      "cross_entity_partner_id": "AE-2",
+      "risk_category": "Funding & Liquidity",
+      "specific_risk_ids": [
+        "SR-997",
+        "SR-731"
+      ],
+      "kpa_ids": [
+        "KPA-374"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cFunding & Liquidity risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Commercial Banking's controls cover the funding & liquidity risk Credit Risk Management handed off."
+    },
+    {
+      "task": 3,
+      "manual_requirement": "Create a single coverage view / assurance map",
+      "focal_entity_id": "AE-38",
+      "focal_entity_name": "Credit Risk Management",
+      "cross_entity_partner_id": null,
+      "risk_category": "Financial Reporting",
+      "specific_risk_ids": [
+        "SR-675",
+        "SR-630"
+      ],
+      "kpa_ids": [
+        "KPA-619"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cFinancial Reporting risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Credit Risk Management's embedded financial reporting controls align with the program-level handoff."
+    },
+    {
+      "task": 1,
+      "manual_requirement": "Require attribute-level handoff documentation",
+      "focal_entity_id": "AE-38",
+      "focal_entity_name": "Credit Risk Management",
+      "cross_entity_partner_id": null,
+      "risk_category": "Reputational",
+      "specific_risk_ids": [
+        "SR-600",
+        "SR-624"
+      ],
+      "kpa_ids": [
+        "KPA-475"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cReputational risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Manual requires explicit ownership; Credit Risk Management documents the handoff in prose but does not state which register carries reputational risk."
+    },
+    {
+      "task": 2,
+      "manual_requirement": "Explicitly address the coarse-handoff failure mode",
+      "focal_entity_id": "AE-38",
+      "focal_entity_name": "Credit Risk Management",
+      "cross_entity_partner_id": null,
+      "risk_category": "Country",
+      "specific_risk_ids": [
+        "SR-843",
+        "SR-108"
+      ],
+      "kpa_ids": [
+        "KPA-934"
+      ],
+      "evidence_layer": "category_summary",
+      "evidence_quote": "\u201cCountry risk is monitored at the program level.\u201d",
+      "classification": "conforms",
+      "reasoning": "Credit Risk Management describes a country handoff, but the residual rating is still applied with no acknowledgment of partial retention."
+    },
+    {
+      "task": 4,
+      "manual_requirement": "Make audit-entity risk ownership explicit",
+      "focal_entity_id": "AE-38",
+      "focal_entity_name": "Credit Risk Management",
+      "cross_entity_partner_id": null,
+      "risk_category": "Market",
+      "specific_risk_ids": [
+        "SR-379",
+        "SR-705"
+      ],
+      "kpa_ids": [
+        "KPA-332"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cMarket risk is monitored at the program level.\u201d",
+      "classification": "conforms",
+      "reasoning": "Credit Risk Management's overview describes activity that should generate market controls; the library is silent on that process's KPA."
+    },
+    {
+      "task": 5,
+      "manual_requirement": "Require attribute-level handoff documentation",
+      "focal_entity_id": "AE-5",
+      "focal_entity_name": "Wire Transfers",
+      "cross_entity_partner_id": "AE-21",
+      "risk_category": "Financial Reporting",
+      "specific_risk_ids": [
+        "SR-944",
+        "SR-315"
+      ],
+      "kpa_ids": [
+        "KPA-161"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cFinancial Reporting risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "KYC/CDD's controls cover the financial reporting risk Wire Transfers handed off."
+    },
+    {
+      "task": 3,
+      "manual_requirement": "Make audit-entity risk ownership explicit",
+      "focal_entity_id": "AE-5",
+      "focal_entity_name": "Wire Transfers",
+      "cross_entity_partner_id": null,
+      "risk_category": "Compliance",
+      "specific_risk_ids": [
+        "SR-471",
+        "SR-468"
+      ],
+      "kpa_ids": [
+        "KPA-276"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cCompliance risk is monitored at the program level.\u201d",
+      "classification": "conforms",
+      "reasoning": "Wire Transfers's embedded compliance controls align with the program-level handoff."
+    },
+    {
+      "task": 1,
+      "manual_requirement": "Make audit-entity risk ownership explicit",
+      "focal_entity_id": "AE-5",
+      "focal_entity_name": "Wire Transfers",
+      "cross_entity_partner_id": null,
+      "risk_category": "Country",
+      "specific_risk_ids": [
+        "SR-141",
+        "SR-846"
+      ],
+      "kpa_ids": [
+        "KPA-121"
+      ],
+      "evidence_layer": "entity_prose",
+      "evidence_quote": "\u201cCountry risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Manual requires explicit ownership; Wire Transfers documents the handoff in prose but does not state which register carries country risk."
+    },
+    {
+      "task": 2,
+      "manual_requirement": "Require attribute-level handoff documentation",
+      "focal_entity_id": "AE-5",
+      "focal_entity_name": "Wire Transfers",
+      "cross_entity_partner_id": null,
+      "risk_category": "Credit",
+      "specific_risk_ids": [
+        "SR-635",
+        "SR-808"
+      ],
+      "kpa_ids": [
+        "KPA-101"
+      ],
+      "evidence_layer": "category_summary",
+      "evidence_quote": "\u201cCredit risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Wire Transfers describes a credit handoff, but the residual rating is still applied with no acknowledgment of partial retention."
+    },
+    {
+      "task": 4,
+      "manual_requirement": "Make audit-entity risk ownership explicit",
+      "focal_entity_id": "AE-5",
+      "focal_entity_name": "Wire Transfers",
+      "cross_entity_partner_id": null,
+      "risk_category": "Credit",
+      "specific_risk_ids": [
+        "SR-104",
+        "SR-452"
+      ],
+      "kpa_ids": [
+        "KPA-730"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cCredit risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Wire Transfers's overview describes activity that should generate credit controls; the library is silent on that process's KPA."
+    },
+    {
+      "task": 5,
+      "manual_requirement": "Strengthen handoff hygiene to match reliance sufficiency",
+      "focal_entity_id": "AE-9",
+      "focal_entity_name": "Mortgage Origination",
+      "cross_entity_partner_id": "AE-38",
+      "risk_category": "Funding & Liquidity",
+      "specific_risk_ids": [
+        "SR-131",
+        "SR-415"
+      ],
+      "kpa_ids": [
+        "KPA-559"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cFunding & Liquidity risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Credit Risk Management's controls cover the funding & liquidity risk Mortgage Origination handed off."
+    },
+    {
+      "task": 3,
+      "manual_requirement": "Explicitly address the coarse-handoff failure mode",
+      "focal_entity_id": "AE-9",
+      "focal_entity_name": "Mortgage Origination",
+      "cross_entity_partner_id": null,
+      "risk_category": "Compliance",
+      "specific_risk_ids": [
+        "SR-873",
+        "SR-511"
+      ],
+      "kpa_ids": [
+        "KPA-983"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cCompliance risk is monitored at the program level.\u201d",
+      "classification": "conforms",
+      "reasoning": "Mortgage Origination's embedded compliance controls align with the program-level handoff."
+    },
+    {
+      "task": 1,
+      "manual_requirement": "Explicitly address the coarse-handoff failure mode",
+      "focal_entity_id": "AE-9",
+      "focal_entity_name": "Mortgage Origination",
+      "cross_entity_partner_id": null,
+      "risk_category": "Country",
+      "specific_risk_ids": [
+        "SR-958",
+        "SR-204"
+      ],
+      "kpa_ids": [
+        "KPA-124"
+      ],
+      "evidence_layer": "entity_prose",
+      "evidence_quote": "\u201cCountry risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Manual requires explicit ownership; Mortgage Origination documents the handoff in prose but does not state which register carries country risk."
+    },
+    {
+      "task": 2,
+      "manual_requirement": "Create a single coverage view / assurance map",
+      "focal_entity_id": "AE-9",
+      "focal_entity_name": "Mortgage Origination",
+      "cross_entity_partner_id": null,
+      "risk_category": "Credit",
+      "specific_risk_ids": [
+        "SR-698",
+        "SR-899"
+      ],
+      "kpa_ids": [
+        "KPA-502"
+      ],
+      "evidence_layer": "category_summary",
+      "evidence_quote": "\u201cCredit risk is monitored at the program level.\u201d",
+      "classification": "conforms",
+      "reasoning": "Mortgage Origination describes a credit handoff, but the residual rating is still applied with no acknowledgment of partial retention."
+    },
+    {
+      "task": 4,
+      "manual_requirement": "Explicitly address the coarse-handoff failure mode",
+      "focal_entity_id": "AE-9",
+      "focal_entity_name": "Mortgage Origination",
+      "cross_entity_partner_id": null,
+      "risk_category": "Financial Reporting",
+      "specific_risk_ids": [
+        "SR-720",
+        "SR-529"
+      ],
+      "kpa_ids": [
+        "KPA-768"
+      ],
+      "evidence_layer": "entity_prose",
+      "evidence_quote": "\u201cFinancial Reporting risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Mortgage Origination's overview describes activity that should generate financial reporting controls; the library is silent on that process's KPA."
+    }
+  ],
+  "ranked_summary": {
+    "likely_coverage_gaps": [
+      {
+        "focal_entity_id": "AE-12",
+        "confidence": "high",
+        "summary": "Foreign Exchange hands off a risk slice that the receiver does not fully cover.",
+        "specific_risk_ids": [
+          "SR-816",
+          "SR-671"
+        ]
+      },
+      {
+        "focal_entity_id": "AE-20",
+        "confidence": "high",
+        "summary": "Customer Onboarding hands off a risk slice that the receiver does not fully cover.",
+        "specific_risk_ids": [
+          "SR-786",
+          "SR-158"
+        ]
+      }
+    ],
+    "systemic_documentation_issues": [
+      {
+        "pattern": "Handoff described in prose but not reflected in residual ratings",
+        "affected_entity_count": 5,
+        "summary": "Ratings applied without acknowledging partial retention after a handoff."
+      }
+    ],
+    "manual_gaps_exposed": [
+      {
+        "area": "Attribute-level handoff documentation",
+        "summary": "Manual does not require the exact risk slice / embedded touchpoint to be named."
+      }
+    ]
+  }
+}

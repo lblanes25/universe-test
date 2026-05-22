@@ -1,0 +1,115 @@
+{
+  "findings": [
+    {
+      "task": 5,
+      "manual_requirement": "Make audit-entity risk ownership explicit",
+      "focal_entity_id": "AE-10",
+      "focal_entity_name": "Mortgage Servicing",
+      "cross_entity_partner_id": "AE-6",
+      "risk_category": "Financial Reporting",
+      "specific_risk_ids": [
+        "SR-100",
+        "SR-249"
+      ],
+      "kpa_ids": [
+        "KPA-778"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cFinancial Reporting risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "ACH Processing's controls cover the financial reporting risk Mortgage Servicing handed off."
+    },
+    {
+      "task": 3,
+      "manual_requirement": "Explicitly address the coarse-handoff failure mode",
+      "focal_entity_id": "AE-10",
+      "focal_entity_name": "Mortgage Servicing",
+      "cross_entity_partner_id": null,
+      "risk_category": "Reputational",
+      "specific_risk_ids": [
+        "SR-427",
+        "SR-888"
+      ],
+      "kpa_ids": [
+        "KPA-122"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cReputational risk is monitored at the program level.\u201d",
+      "classification": "conforms",
+      "reasoning": "Mortgage Servicing's embedded reputational controls align with the program-level handoff."
+    },
+    {
+      "task": 1,
+      "manual_requirement": "Create a single coverage view / assurance map",
+      "focal_entity_id": "AE-10",
+      "focal_entity_name": "Mortgage Servicing",
+      "cross_entity_partner_id": null,
+      "risk_category": "Model",
+      "specific_risk_ids": [
+        "SR-798",
+        "SR-196"
+      ],
+      "kpa_ids": [
+        "KPA-297"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cModel risk is monitored at the program level.\u201d",
+      "classification": "conforms",
+      "reasoning": "Manual requires explicit ownership; Mortgage Servicing documents the handoff in prose but does not state which register carries model risk."
+    },
+    {
+      "task": 2,
+      "manual_requirement": "Explicitly address the coarse-handoff failure mode",
+      "focal_entity_id": "AE-10",
+      "focal_entity_name": "Mortgage Servicing",
+      "cross_entity_partner_id": null,
+      "risk_category": "Reputational",
+      "specific_risk_ids": [
+        "SR-778",
+        "SR-922"
+      ],
+      "kpa_ids": [
+        "KPA-724"
+      ],
+      "evidence_layer": "category_summary",
+      "evidence_quote": "\u201cReputational risk is monitored at the program level.\u201d",
+      "classification": "conforms",
+      "reasoning": "Mortgage Servicing describes a reputational handoff, but the residual rating is still applied with no acknowledgment of partial retention."
+    },
+    {
+      "task": 4,
+      "manual_requirement": "Explicitly address the coarse-handoff failure mode",
+      "focal_entity_id": "AE-10",
+      "focal_entity_name": "Mortgage Servicing",
+      "cross_entity_partner_id": null,
+      "risk_category": "Country",
+      "specific_risk_ids": [
+        "SR-919",
+        "SR-519"
+      ],
+      "kpa_ids": [
+        "KPA-924"
+      ],
+      "evidence_layer": "entity_prose",
+      "evidence_quote": "\u201cCountry risk is monitored at the program level.\u201d",
+      "classification": "conforms",
+      "reasoning": "Mortgage Servicing's overview describes activity that should generate country controls; the library is silent on that process's KPA."
+    }
+  ],
+  "ranked_summary": {
+    "likely_coverage_gaps": [],
+    "systemic_documentation_issues": [
+      {
+        "pattern": "Handoff described in prose but not reflected in residual ratings",
+        "affected_entity_count": 1,
+        "summary": "Ratings applied without acknowledging partial retention after a handoff."
+      }
+    ],
+    "manual_gaps_exposed": [
+      {
+        "area": "Attribute-level handoff documentation",
+        "summary": "Manual does not require the exact risk slice / embedded touchpoint to be named."
+      }
+    ]
+  }
+}

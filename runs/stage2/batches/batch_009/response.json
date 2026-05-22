@@ -1,0 +1,423 @@
+{
+  "findings": [
+    {
+      "task": 5,
+      "manual_requirement": "Make audit-entity risk ownership explicit",
+      "focal_entity_id": "AE-17",
+      "focal_entity_name": "Digital Banking",
+      "cross_entity_partner_id": "AE-32",
+      "risk_category": "Credit",
+      "specific_risk_ids": [
+        "SR-446",
+        "SR-614"
+      ],
+      "kpa_ids": [
+        "KPA-574"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cCredit risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Cybersecurity's controls cover the credit risk Digital Banking handed off."
+    },
+    {
+      "task": 3,
+      "manual_requirement": "Create a single coverage view / assurance map",
+      "focal_entity_id": "AE-17",
+      "focal_entity_name": "Digital Banking",
+      "cross_entity_partner_id": null,
+      "risk_category": "Model",
+      "specific_risk_ids": [
+        "SR-816",
+        "SR-141"
+      ],
+      "kpa_ids": [
+        "KPA-845"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cModel risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Digital Banking's embedded model controls align with the program-level handoff."
+    },
+    {
+      "task": 1,
+      "manual_requirement": "Strengthen handoff hygiene to match reliance sufficiency",
+      "focal_entity_id": "AE-17",
+      "focal_entity_name": "Digital Banking",
+      "cross_entity_partner_id": null,
+      "risk_category": "Reputational",
+      "specific_risk_ids": [
+        "SR-260",
+        "SR-272"
+      ],
+      "kpa_ids": [
+        "KPA-343"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cReputational risk is monitored at the program level.\u201d",
+      "classification": "conforms",
+      "reasoning": "Manual requires explicit ownership; Digital Banking documents the handoff in prose but does not state which register carries reputational risk."
+    },
+    {
+      "task": 2,
+      "manual_requirement": "Create a single coverage view / assurance map",
+      "focal_entity_id": "AE-17",
+      "focal_entity_name": "Digital Banking",
+      "cross_entity_partner_id": null,
+      "risk_category": "Credit",
+      "specific_risk_ids": [
+        "SR-992",
+        "SR-704"
+      ],
+      "kpa_ids": [
+        "KPA-164"
+      ],
+      "evidence_layer": "category_summary",
+      "evidence_quote": "\u201cCredit risk is monitored at the program level.\u201d",
+      "classification": "likely coverage gap",
+      "reasoning": "Digital Banking describes a credit handoff, but the residual rating is still applied with no acknowledgment of partial retention."
+    },
+    {
+      "task": 4,
+      "manual_requirement": "Require attribute-level handoff documentation",
+      "focal_entity_id": "AE-17",
+      "focal_entity_name": "Digital Banking",
+      "cross_entity_partner_id": null,
+      "risk_category": "Financial Reporting",
+      "specific_risk_ids": [
+        "SR-790",
+        "SR-329"
+      ],
+      "kpa_ids": [
+        "KPA-843"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cFinancial Reporting risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Digital Banking's overview describes activity that should generate financial reporting controls; the library is silent on that process's KPA."
+    },
+    {
+      "task": 5,
+      "manual_requirement": "Strengthen handoff hygiene to match reliance sufficiency",
+      "focal_entity_id": "AE-19",
+      "focal_entity_name": "Branch Operations",
+      "cross_entity_partner_id": "AE-42",
+      "risk_category": "External Fraud",
+      "specific_risk_ids": [
+        "SR-387",
+        "SR-449"
+      ],
+      "kpa_ids": [
+        "KPA-928"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cExternal Fraud risk is monitored at the program level.\u201d",
+      "classification": "conforms",
+      "reasoning": "Internal Controls's controls cover the external fraud risk Branch Operations handed off."
+    },
+    {
+      "task": 3,
+      "manual_requirement": "Make audit-entity risk ownership explicit",
+      "focal_entity_id": "AE-19",
+      "focal_entity_name": "Branch Operations",
+      "cross_entity_partner_id": null,
+      "risk_category": "Reputational",
+      "specific_risk_ids": [
+        "SR-521",
+        "SR-156"
+      ],
+      "kpa_ids": [
+        "KPA-487"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cReputational risk is monitored at the program level.\u201d",
+      "classification": "likely coverage gap",
+      "reasoning": "Branch Operations hands off reputational at the program level; the receiving controls are framework/oversight only, not the embedded-process control."
+    },
+    {
+      "task": 1,
+      "manual_requirement": "Make audit-entity risk ownership explicit",
+      "focal_entity_id": "AE-19",
+      "focal_entity_name": "Branch Operations",
+      "cross_entity_partner_id": null,
+      "risk_category": "Information Technology",
+      "specific_risk_ids": [
+        "SR-711",
+        "SR-103"
+      ],
+      "kpa_ids": [
+        "KPA-224"
+      ],
+      "evidence_layer": "entity_prose",
+      "evidence_quote": "\u201cInformation Technology risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Manual requires explicit ownership; Branch Operations documents the handoff in prose but does not state which register carries information technology risk."
+    },
+    {
+      "task": 2,
+      "manual_requirement": "Require attribute-level handoff documentation",
+      "focal_entity_id": "AE-19",
+      "focal_entity_name": "Branch Operations",
+      "cross_entity_partner_id": null,
+      "risk_category": "Third Party",
+      "specific_risk_ids": [
+        "SR-438",
+        "SR-108"
+      ],
+      "kpa_ids": [
+        "KPA-185"
+      ],
+      "evidence_layer": "category_summary",
+      "evidence_quote": "\u201cThird Party risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Branch Operations describes a third party handoff, but the residual rating is still applied with no acknowledgment of partial retention."
+    },
+    {
+      "task": 4,
+      "manual_requirement": "Make audit-entity risk ownership explicit",
+      "focal_entity_id": "AE-19",
+      "focal_entity_name": "Branch Operations",
+      "cross_entity_partner_id": null,
+      "risk_category": "Model",
+      "specific_risk_ids": [
+        "SR-686",
+        "SR-608"
+      ],
+      "kpa_ids": [
+        "KPA-650"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cModel risk is monitored at the program level.\u201d",
+      "classification": "likely coverage gap",
+      "reasoning": "Branch Operations's overview describes activity that should generate model controls; the library is silent on that process's KPA."
+    },
+    {
+      "task": 5,
+      "manual_requirement": "Require attribute-level handoff documentation",
+      "focal_entity_id": "AE-42",
+      "focal_entity_name": "Internal Controls",
+      "cross_entity_partner_id": "AE-30",
+      "risk_category": "Information Technology",
+      "specific_risk_ids": [
+        "SR-754",
+        "SR-883"
+      ],
+      "kpa_ids": [
+        "KPA-195"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cInformation Technology risk is monitored at the program level.\u201d",
+      "classification": "likely coverage gap",
+      "reasoning": "Internal Controls transfers the information technology slice to Regulatory Reporting; Regulatory Reporting's control library covers the category but not the specific risk statement, leaving it without an owner."
+    },
+    {
+      "task": 3,
+      "manual_requirement": "Make audit-entity risk ownership explicit",
+      "focal_entity_id": "AE-42",
+      "focal_entity_name": "Internal Controls",
+      "cross_entity_partner_id": null,
+      "risk_category": "Market",
+      "specific_risk_ids": [
+        "SR-155",
+        "SR-376"
+      ],
+      "kpa_ids": [
+        "KPA-668"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cMarket risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Internal Controls's embedded market controls align with the program-level handoff."
+    },
+    {
+      "task": 1,
+      "manual_requirement": "Create a single coverage view / assurance map",
+      "focal_entity_id": "AE-42",
+      "focal_entity_name": "Internal Controls",
+      "cross_entity_partner_id": null,
+      "risk_category": "Reputational",
+      "specific_risk_ids": [
+        "SR-135",
+        "SR-224"
+      ],
+      "kpa_ids": [
+        "KPA-989"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cReputational risk is monitored at the program level.\u201d",
+      "classification": "conforms",
+      "reasoning": "Manual requires explicit ownership; Internal Controls documents the handoff in prose but does not state which register carries reputational risk."
+    },
+    {
+      "task": 2,
+      "manual_requirement": "Require attribute-level handoff documentation",
+      "focal_entity_id": "AE-42",
+      "focal_entity_name": "Internal Controls",
+      "cross_entity_partner_id": null,
+      "risk_category": "External Fraud",
+      "specific_risk_ids": [
+        "SR-725",
+        "SR-617"
+      ],
+      "kpa_ids": [
+        "KPA-144"
+      ],
+      "evidence_layer": "category_summary",
+      "evidence_quote": "\u201cExternal Fraud risk is monitored at the program level.\u201d",
+      "classification": "conforms",
+      "reasoning": "Internal Controls describes a external fraud handoff, but the residual rating is still applied with no acknowledgment of partial retention."
+    },
+    {
+      "task": 4,
+      "manual_requirement": "Explicitly address the coarse-handoff failure mode",
+      "focal_entity_id": "AE-42",
+      "focal_entity_name": "Internal Controls",
+      "cross_entity_partner_id": null,
+      "risk_category": "Third Party",
+      "specific_risk_ids": [
+        "SR-212",
+        "SR-984"
+      ],
+      "kpa_ids": [
+        "KPA-698"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cThird Party risk is monitored at the program level.\u201d",
+      "classification": "conforms",
+      "reasoning": "Internal Controls's overview describes activity that should generate third party controls; the library is silent on that process's KPA."
+    },
+    {
+      "task": 5,
+      "manual_requirement": "Make audit-entity risk ownership explicit",
+      "focal_entity_id": "AE-45",
+      "focal_entity_name": "Facilities Management",
+      "cross_entity_partner_id": "AE-11",
+      "risk_category": "Market",
+      "specific_risk_ids": [
+        "SR-488",
+        "SR-918"
+      ],
+      "kpa_ids": [
+        "KPA-722"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cMarket risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Trade Finance's controls cover the market risk Facilities Management handed off."
+    },
+    {
+      "task": 3,
+      "manual_requirement": "Make audit-entity risk ownership explicit",
+      "focal_entity_id": "AE-45",
+      "focal_entity_name": "Facilities Management",
+      "cross_entity_partner_id": null,
+      "risk_category": "Information Technology",
+      "specific_risk_ids": [
+        "SR-318",
+        "SR-327"
+      ],
+      "kpa_ids": [
+        "KPA-554"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cInformation Technology risk is monitored at the program level.\u201d",
+      "classification": "likely coverage gap",
+      "reasoning": "Facilities Management hands off information technology at the program level; the receiving controls are framework/oversight only, not the embedded-process control."
+    },
+    {
+      "task": 1,
+      "manual_requirement": "Explicitly address the coarse-handoff failure mode",
+      "focal_entity_id": "AE-45",
+      "focal_entity_name": "Facilities Management",
+      "cross_entity_partner_id": null,
+      "risk_category": "Operational",
+      "specific_risk_ids": [
+        "SR-205",
+        "SR-629"
+      ],
+      "kpa_ids": [
+        "KPA-902"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cOperational risk is monitored at the program level.\u201d",
+      "classification": "conforms",
+      "reasoning": "Manual requires explicit ownership; Facilities Management documents the handoff in prose but does not state which register carries operational risk."
+    },
+    {
+      "task": 2,
+      "manual_requirement": "Create a single coverage view / assurance map",
+      "focal_entity_id": "AE-45",
+      "focal_entity_name": "Facilities Management",
+      "cross_entity_partner_id": null,
+      "risk_category": "Information Technology",
+      "specific_risk_ids": [
+        "SR-926",
+        "SR-538"
+      ],
+      "kpa_ids": [
+        "KPA-609"
+      ],
+      "evidence_layer": "category_summary",
+      "evidence_quote": "\u201cInformation Technology risk is monitored at the program level.\u201d",
+      "classification": "likely coverage gap",
+      "reasoning": "Facilities Management describes a information technology handoff, but the residual rating is still applied with no acknowledgment of partial retention."
+    },
+    {
+      "task": 4,
+      "manual_requirement": "Require attribute-level handoff documentation",
+      "focal_entity_id": "AE-45",
+      "focal_entity_name": "Facilities Management",
+      "cross_entity_partner_id": null,
+      "risk_category": "Information Technology",
+      "specific_risk_ids": [
+        "SR-198",
+        "SR-878"
+      ],
+      "kpa_ids": [
+        "KPA-510"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cInformation Technology risk is monitored at the program level.\u201d",
+      "classification": "conforms",
+      "reasoning": "Facilities Management's overview describes activity that should generate information technology controls; the library is silent on that process's KPA."
+    }
+  ],
+  "ranked_summary": {
+    "likely_coverage_gaps": [
+      {
+        "focal_entity_id": "AE-19",
+        "confidence": "medium",
+        "summary": "Branch Operations hands off a risk slice that the receiver does not fully cover.",
+        "specific_risk_ids": [
+          "SR-980",
+          "SR-673"
+        ]
+      },
+      {
+        "focal_entity_id": "AE-42",
+        "confidence": "medium",
+        "summary": "Internal Controls hands off a risk slice that the receiver does not fully cover.",
+        "specific_risk_ids": [
+          "SR-242",
+          "SR-783"
+        ]
+      },
+      {
+        "focal_entity_id": "AE-45",
+        "confidence": "medium",
+        "summary": "Facilities Management hands off a risk slice that the receiver does not fully cover.",
+        "specific_risk_ids": [
+          "SR-275",
+          "SR-809"
+        ]
+      }
+    ],
+    "systemic_documentation_issues": [
+      {
+        "pattern": "Handoff described in prose but not reflected in residual ratings",
+        "affected_entity_count": 4,
+        "summary": "Ratings applied without acknowledging partial retention after a handoff."
+      }
+    ],
+    "manual_gaps_exposed": []
+  }
+}

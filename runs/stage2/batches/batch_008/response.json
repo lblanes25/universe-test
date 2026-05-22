@@ -1,0 +1,428 @@
+{
+  "findings": [
+    {
+      "task": 5,
+      "manual_requirement": "Require attribute-level handoff documentation",
+      "focal_entity_id": "AE-11",
+      "focal_entity_name": "Trade Finance",
+      "cross_entity_partner_id": "AE-31",
+      "risk_category": "Information Technology",
+      "specific_risk_ids": [
+        "SR-297",
+        "SR-821"
+      ],
+      "kpa_ids": [
+        "KPA-144"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cInformation Technology risk is monitored at the program level.\u201d",
+      "classification": "likely coverage gap",
+      "reasoning": "Trade Finance transfers the information technology slice to IT Infrastructure; IT Infrastructure's control library covers the category but not the specific risk statement, leaving it without an owner."
+    },
+    {
+      "task": 3,
+      "manual_requirement": "Create a single coverage view / assurance map",
+      "focal_entity_id": "AE-11",
+      "focal_entity_name": "Trade Finance",
+      "cross_entity_partner_id": null,
+      "risk_category": "External Fraud",
+      "specific_risk_ids": [
+        "SR-314",
+        "SR-510"
+      ],
+      "kpa_ids": [
+        "KPA-757"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cExternal Fraud risk is monitored at the program level.\u201d",
+      "classification": "likely coverage gap",
+      "reasoning": "Trade Finance hands off external fraud at the program level; the receiving controls are framework/oversight only, not the embedded-process control."
+    },
+    {
+      "task": 1,
+      "manual_requirement": "Strengthen handoff hygiene to match reliance sufficiency",
+      "focal_entity_id": "AE-11",
+      "focal_entity_name": "Trade Finance",
+      "cross_entity_partner_id": null,
+      "risk_category": "Information Security",
+      "specific_risk_ids": [
+        "SR-606",
+        "SR-686"
+      ],
+      "kpa_ids": [
+        "KPA-296"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cInformation Security risk is monitored at the program level.\u201d",
+      "classification": "likely coverage gap",
+      "reasoning": "Manual requires explicit ownership; Trade Finance documents the handoff in prose but does not state which register carries information security risk."
+    },
+    {
+      "task": 2,
+      "manual_requirement": "Require attribute-level handoff documentation",
+      "focal_entity_id": "AE-11",
+      "focal_entity_name": "Trade Finance",
+      "cross_entity_partner_id": null,
+      "risk_category": "Information Security",
+      "specific_risk_ids": [
+        "SR-877",
+        "SR-120"
+      ],
+      "kpa_ids": [
+        "KPA-817"
+      ],
+      "evidence_layer": "category_summary",
+      "evidence_quote": "\u201cInformation Security risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Trade Finance describes a information security handoff, but the residual rating is still applied with no acknowledgment of partial retention."
+    },
+    {
+      "task": 4,
+      "manual_requirement": "Make audit-entity risk ownership explicit",
+      "focal_entity_id": "AE-11",
+      "focal_entity_name": "Trade Finance",
+      "cross_entity_partner_id": null,
+      "risk_category": "Reputational",
+      "specific_risk_ids": [
+        "SR-778",
+        "SR-364"
+      ],
+      "kpa_ids": [
+        "KPA-199"
+      ],
+      "evidence_layer": "entity_prose",
+      "evidence_quote": "\u201cReputational risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Trade Finance's overview describes activity that should generate reputational controls; the library is silent on that process's KPA."
+    },
+    {
+      "task": 5,
+      "manual_requirement": "Strengthen handoff hygiene to match reliance sufficiency",
+      "focal_entity_id": "AE-23",
+      "focal_entity_name": "Sanctions Screening",
+      "cross_entity_partner_id": "AE-15",
+      "risk_category": "Third Party",
+      "specific_risk_ids": [
+        "SR-210",
+        "SR-776"
+      ],
+      "kpa_ids": [
+        "KPA-159"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cThird Party risk is monitored at the program level.\u201d",
+      "classification": "likely coverage gap",
+      "reasoning": "Sanctions Screening transfers the third party slice to Asset Management; Asset Management's control library covers the category but not the specific risk statement, leaving it without an owner."
+    },
+    {
+      "task": 3,
+      "manual_requirement": "Make audit-entity risk ownership explicit",
+      "focal_entity_id": "AE-23",
+      "focal_entity_name": "Sanctions Screening",
+      "cross_entity_partner_id": null,
+      "risk_category": "Reputational",
+      "specific_risk_ids": [
+        "SR-609",
+        "SR-765"
+      ],
+      "kpa_ids": [
+        "KPA-629"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cReputational risk is monitored at the program level.\u201d",
+      "classification": "likely coverage gap",
+      "reasoning": "Sanctions Screening hands off reputational at the program level; the receiving controls are framework/oversight only, not the embedded-process control."
+    },
+    {
+      "task": 1,
+      "manual_requirement": "Make audit-entity risk ownership explicit",
+      "focal_entity_id": "AE-23",
+      "focal_entity_name": "Sanctions Screening",
+      "cross_entity_partner_id": null,
+      "risk_category": "Market",
+      "specific_risk_ids": [
+        "SR-652",
+        "SR-138"
+      ],
+      "kpa_ids": [
+        "KPA-600"
+      ],
+      "evidence_layer": "entity_prose",
+      "evidence_quote": "\u201cMarket risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Manual requires explicit ownership; Sanctions Screening documents the handoff in prose but does not state which register carries market risk."
+    },
+    {
+      "task": 2,
+      "manual_requirement": "Create a single coverage view / assurance map",
+      "focal_entity_id": "AE-23",
+      "focal_entity_name": "Sanctions Screening",
+      "cross_entity_partner_id": null,
+      "risk_category": "Third Party",
+      "specific_risk_ids": [
+        "SR-567",
+        "SR-846"
+      ],
+      "kpa_ids": [
+        "KPA-698"
+      ],
+      "evidence_layer": "category_summary",
+      "evidence_quote": "\u201cThird Party risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Sanctions Screening describes a third party handoff, but the residual rating is still applied with no acknowledgment of partial retention."
+    },
+    {
+      "task": 4,
+      "manual_requirement": "Strengthen handoff hygiene to match reliance sufficiency",
+      "focal_entity_id": "AE-23",
+      "focal_entity_name": "Sanctions Screening",
+      "cross_entity_partner_id": null,
+      "risk_category": "Third Party",
+      "specific_risk_ids": [
+        "SR-238",
+        "SR-262"
+      ],
+      "kpa_ids": [
+        "KPA-882"
+      ],
+      "evidence_layer": "entity_prose",
+      "evidence_quote": "\u201cThird Party risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Sanctions Screening's overview describes activity that should generate third party controls; the library is silent on that process's KPA."
+    },
+    {
+      "task": 5,
+      "manual_requirement": "Strengthen handoff hygiene to match reliance sufficiency",
+      "focal_entity_id": "AE-32",
+      "focal_entity_name": "Cybersecurity",
+      "cross_entity_partner_id": "AE-15",
+      "risk_category": "Funding & Liquidity",
+      "specific_risk_ids": [
+        "SR-615",
+        "SR-738"
+      ],
+      "kpa_ids": [
+        "KPA-302"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cFunding & Liquidity risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Asset Management's controls cover the funding & liquidity risk Cybersecurity handed off."
+    },
+    {
+      "task": 3,
+      "manual_requirement": "Create a single coverage view / assurance map",
+      "focal_entity_id": "AE-32",
+      "focal_entity_name": "Cybersecurity",
+      "cross_entity_partner_id": null,
+      "risk_category": "Funding & Liquidity",
+      "specific_risk_ids": [
+        "SR-391",
+        "SR-622"
+      ],
+      "kpa_ids": [
+        "KPA-772"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cFunding & Liquidity risk is monitored at the program level.\u201d",
+      "classification": "likely coverage gap",
+      "reasoning": "Cybersecurity hands off funding & liquidity at the program level; the receiving controls are framework/oversight only, not the embedded-process control."
+    },
+    {
+      "task": 1,
+      "manual_requirement": "Require attribute-level handoff documentation",
+      "focal_entity_id": "AE-32",
+      "focal_entity_name": "Cybersecurity",
+      "cross_entity_partner_id": null,
+      "risk_category": "Funding & Liquidity",
+      "specific_risk_ids": [
+        "SR-112",
+        "SR-402"
+      ],
+      "kpa_ids": [
+        "KPA-451"
+      ],
+      "evidence_layer": "entity_prose",
+      "evidence_quote": "\u201cFunding & Liquidity risk is monitored at the program level.\u201d",
+      "classification": "likely coverage gap",
+      "reasoning": "Manual requires explicit ownership; Cybersecurity documents the handoff in prose but does not state which register carries funding & liquidity risk."
+    },
+    {
+      "task": 2,
+      "manual_requirement": "Strengthen handoff hygiene to match reliance sufficiency",
+      "focal_entity_id": "AE-32",
+      "focal_entity_name": "Cybersecurity",
+      "cross_entity_partner_id": null,
+      "risk_category": "Financial Reporting",
+      "specific_risk_ids": [
+        "SR-405",
+        "SR-954"
+      ],
+      "kpa_ids": [
+        "KPA-822"
+      ],
+      "evidence_layer": "category_summary",
+      "evidence_quote": "\u201cFinancial Reporting risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Cybersecurity describes a financial reporting handoff, but the residual rating is still applied with no acknowledgment of partial retention."
+    },
+    {
+      "task": 4,
+      "manual_requirement": "Require attribute-level handoff documentation",
+      "focal_entity_id": "AE-32",
+      "focal_entity_name": "Cybersecurity",
+      "cross_entity_partner_id": null,
+      "risk_category": "Country",
+      "specific_risk_ids": [
+        "SR-779",
+        "SR-972"
+      ],
+      "kpa_ids": [
+        "KPA-126"
+      ],
+      "evidence_layer": "entity_prose",
+      "evidence_quote": "\u201cCountry risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Cybersecurity's overview describes activity that should generate country controls; the library is silent on that process's KPA."
+    },
+    {
+      "task": 5,
+      "manual_requirement": "Make audit-entity risk ownership explicit",
+      "focal_entity_id": "AE-35",
+      "focal_entity_name": "Application Development",
+      "cross_entity_partner_id": "AE-1",
+      "risk_category": "Country",
+      "specific_risk_ids": [
+        "SR-915",
+        "SR-882"
+      ],
+      "kpa_ids": [
+        "KPA-489"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cCountry risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Consumer Lending's controls cover the country risk Application Development handed off."
+    },
+    {
+      "task": 3,
+      "manual_requirement": "Create a single coverage view / assurance map",
+      "focal_entity_id": "AE-35",
+      "focal_entity_name": "Application Development",
+      "cross_entity_partner_id": null,
+      "risk_category": "Credit",
+      "specific_risk_ids": [
+        "SR-546",
+        "SR-337"
+      ],
+      "kpa_ids": [
+        "KPA-242"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cCredit risk is monitored at the program level.\u201d",
+      "classification": "likely coverage gap",
+      "reasoning": "Application Development hands off credit at the program level; the receiving controls are framework/oversight only, not the embedded-process control."
+    },
+    {
+      "task": 1,
+      "manual_requirement": "Create a single coverage view / assurance map",
+      "focal_entity_id": "AE-35",
+      "focal_entity_name": "Application Development",
+      "cross_entity_partner_id": null,
+      "risk_category": "Country",
+      "specific_risk_ids": [
+        "SR-171",
+        "SR-395"
+      ],
+      "kpa_ids": [
+        "KPA-834"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cCountry risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Manual requires explicit ownership; Application Development documents the handoff in prose but does not state which register carries country risk."
+    },
+    {
+      "task": 2,
+      "manual_requirement": "Make audit-entity risk ownership explicit",
+      "focal_entity_id": "AE-35",
+      "focal_entity_name": "Application Development",
+      "cross_entity_partner_id": null,
+      "risk_category": "Country",
+      "specific_risk_ids": [
+        "SR-882",
+        "SR-633"
+      ],
+      "kpa_ids": [
+        "KPA-639"
+      ],
+      "evidence_layer": "category_summary",
+      "evidence_quote": "\u201cCountry risk is monitored at the program level.\u201d",
+      "classification": "likely coverage gap",
+      "reasoning": "Application Development describes a country handoff, but the residual rating is still applied with no acknowledgment of partial retention."
+    },
+    {
+      "task": 4,
+      "manual_requirement": "Require attribute-level handoff documentation",
+      "focal_entity_id": "AE-35",
+      "focal_entity_name": "Application Development",
+      "cross_entity_partner_id": null,
+      "risk_category": "Reputational",
+      "specific_risk_ids": [
+        "SR-718",
+        "SR-164"
+      ],
+      "kpa_ids": [
+        "KPA-294"
+      ],
+      "evidence_layer": "entity_prose",
+      "evidence_quote": "\u201cReputational risk is monitored at the program level.\u201d",
+      "classification": "conforms",
+      "reasoning": "Application Development's overview describes activity that should generate reputational controls; the library is silent on that process's KPA."
+    }
+  ],
+  "ranked_summary": {
+    "likely_coverage_gaps": [
+      {
+        "focal_entity_id": "AE-11",
+        "confidence": "high",
+        "summary": "Trade Finance hands off a risk slice that the receiver does not fully cover.",
+        "specific_risk_ids": [
+          "SR-243",
+          "SR-448"
+        ]
+      },
+      {
+        "focal_entity_id": "AE-11",
+        "confidence": "medium",
+        "summary": "Trade Finance hands off a risk slice that the receiver does not fully cover.",
+        "specific_risk_ids": [
+          "SR-774",
+          "SR-687"
+        ]
+      },
+      {
+        "focal_entity_id": "AE-23",
+        "confidence": "high",
+        "summary": "Sanctions Screening hands off a risk slice that the receiver does not fully cover.",
+        "specific_risk_ids": [
+          "SR-861",
+          "SR-406"
+        ]
+      }
+    ],
+    "systemic_documentation_issues": [
+      {
+        "pattern": "Handoff described in prose but not reflected in residual ratings",
+        "affected_entity_count": 4,
+        "summary": "Ratings applied without acknowledging partial retention after a handoff."
+      }
+    ],
+    "manual_gaps_exposed": [
+      {
+        "area": "Attribute-level handoff documentation",
+        "summary": "Manual does not require the exact risk slice / embedded touchpoint to be named."
+      }
+    ]
+  }
+}

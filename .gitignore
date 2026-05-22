@@ -23,6 +23,8 @@ data/output/*.html
 
 # Stage 2 handoff review artifacts tracked so batches can be run from any clone.
 # This repo uses dummy data only; real data stays on local machines.
+# Derived aggregation outputs are regenerable (aggregate + summarize) — not tracked.
+runs/stage2/aggregated/
 
 # Local env
 .env

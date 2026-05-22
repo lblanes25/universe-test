@@ -1,0 +1,319 @@
+{
+  "findings": [
+    {
+      "task": 5,
+      "manual_requirement": "Make audit-entity risk ownership explicit",
+      "focal_entity_id": "AE-21",
+      "focal_entity_name": "KYC/CDD",
+      "cross_entity_partner_id": "AE-19",
+      "risk_category": "Market",
+      "specific_risk_ids": [
+        "SR-311",
+        "SR-573"
+      ],
+      "kpa_ids": [
+        "KPA-932"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cMarket risk is monitored at the program level.\u201d",
+      "classification": "likely coverage gap",
+      "reasoning": "KYC/CDD transfers the market slice to Branch Operations; Branch Operations's control library covers the category but not the specific risk statement, leaving it without an owner."
+    },
+    {
+      "task": 3,
+      "manual_requirement": "Require attribute-level handoff documentation",
+      "focal_entity_id": "AE-21",
+      "focal_entity_name": "KYC/CDD",
+      "cross_entity_partner_id": null,
+      "risk_category": "Strategic & Business",
+      "specific_risk_ids": [
+        "SR-135",
+        "SR-633"
+      ],
+      "kpa_ids": [
+        "KPA-601"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cStrategic & Business risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "KYC/CDD's embedded strategic & business controls align with the program-level handoff."
+    },
+    {
+      "task": 1,
+      "manual_requirement": "Strengthen handoff hygiene to match reliance sufficiency",
+      "focal_entity_id": "AE-21",
+      "focal_entity_name": "KYC/CDD",
+      "cross_entity_partner_id": null,
+      "risk_category": "Compliance",
+      "specific_risk_ids": [
+        "SR-980",
+        "SR-242"
+      ],
+      "kpa_ids": [
+        "KPA-717"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cCompliance risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Manual requires explicit ownership; KYC/CDD documents the handoff in prose but does not state which register carries compliance risk."
+    },
+    {
+      "task": 2,
+      "manual_requirement": "Explicitly address the coarse-handoff failure mode",
+      "focal_entity_id": "AE-21",
+      "focal_entity_name": "KYC/CDD",
+      "cross_entity_partner_id": null,
+      "risk_category": "Third Party",
+      "specific_risk_ids": [
+        "SR-567",
+        "SR-278"
+      ],
+      "kpa_ids": [
+        "KPA-802"
+      ],
+      "evidence_layer": "category_summary",
+      "evidence_quote": "\u201cThird Party risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "KYC/CDD describes a third party handoff, but the residual rating is still applied with no acknowledgment of partial retention."
+    },
+    {
+      "task": 4,
+      "manual_requirement": "Require attribute-level handoff documentation",
+      "focal_entity_id": "AE-21",
+      "focal_entity_name": "KYC/CDD",
+      "cross_entity_partner_id": null,
+      "risk_category": "Strategic & Business",
+      "specific_risk_ids": [
+        "SR-550",
+        "SR-728"
+      ],
+      "kpa_ids": [
+        "KPA-484"
+      ],
+      "evidence_layer": "entity_prose",
+      "evidence_quote": "\u201cStrategic & Business risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "KYC/CDD's overview describes activity that should generate strategic & business controls; the library is silent on that process's KPA."
+    },
+    {
+      "task": 5,
+      "manual_requirement": "Explicitly address the coarse-handoff failure mode",
+      "focal_entity_id": "AE-24",
+      "focal_entity_name": "Fraud Detection",
+      "cross_entity_partner_id": "AE-11",
+      "risk_category": "External Fraud",
+      "specific_risk_ids": [
+        "SR-649",
+        "SR-474"
+      ],
+      "kpa_ids": [
+        "KPA-890"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cExternal Fraud risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Trade Finance's controls cover the external fraud risk Fraud Detection handed off."
+    },
+    {
+      "task": 3,
+      "manual_requirement": "Strengthen handoff hygiene to match reliance sufficiency",
+      "focal_entity_id": "AE-24",
+      "focal_entity_name": "Fraud Detection",
+      "cross_entity_partner_id": null,
+      "risk_category": "Model",
+      "specific_risk_ids": [
+        "SR-546",
+        "SR-581"
+      ],
+      "kpa_ids": [
+        "KPA-166"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cModel risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Fraud Detection's embedded model controls align with the program-level handoff."
+    },
+    {
+      "task": 1,
+      "manual_requirement": "Require attribute-level handoff documentation",
+      "focal_entity_id": "AE-24",
+      "focal_entity_name": "Fraud Detection",
+      "cross_entity_partner_id": null,
+      "risk_category": "Third Party",
+      "specific_risk_ids": [
+        "SR-522",
+        "SR-344"
+      ],
+      "kpa_ids": [
+        "KPA-137"
+      ],
+      "evidence_layer": "entity_prose",
+      "evidence_quote": "\u201cThird Party risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Manual requires explicit ownership; Fraud Detection documents the handoff in prose but does not state which register carries third party risk."
+    },
+    {
+      "task": 2,
+      "manual_requirement": "Create a single coverage view / assurance map",
+      "focal_entity_id": "AE-24",
+      "focal_entity_name": "Fraud Detection",
+      "cross_entity_partner_id": null,
+      "risk_category": "Financial Reporting",
+      "specific_risk_ids": [
+        "SR-773",
+        "SR-173"
+      ],
+      "kpa_ids": [
+        "KPA-646"
+      ],
+      "evidence_layer": "category_summary",
+      "evidence_quote": "\u201cFinancial Reporting risk is monitored at the program level.\u201d",
+      "classification": "likely coverage gap",
+      "reasoning": "Fraud Detection describes a financial reporting handoff, but the residual rating is still applied with no acknowledgment of partial retention."
+    },
+    {
+      "task": 4,
+      "manual_requirement": "Explicitly address the coarse-handoff failure mode",
+      "focal_entity_id": "AE-24",
+      "focal_entity_name": "Fraud Detection",
+      "cross_entity_partner_id": null,
+      "risk_category": "Market",
+      "specific_risk_ids": [
+        "SR-715",
+        "SR-253"
+      ],
+      "kpa_ids": [
+        "KPA-215"
+      ],
+      "evidence_layer": "entity_prose",
+      "evidence_quote": "\u201cMarket risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Fraud Detection's overview describes activity that should generate market controls; the library is silent on that process's KPA."
+    },
+    {
+      "task": 5,
+      "manual_requirement": "Require attribute-level handoff documentation",
+      "focal_entity_id": "AE-29",
+      "focal_entity_name": "Financial Reporting",
+      "cross_entity_partner_id": "AE-13",
+      "risk_category": "Strategic & Business",
+      "specific_risk_ids": [
+        "SR-457",
+        "SR-543"
+      ],
+      "kpa_ids": [
+        "KPA-524"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cStrategic & Business risk is monitored at the program level.\u201d",
+      "classification": "likely coverage gap",
+      "reasoning": "Financial Reporting transfers the strategic & business slice to Capital Markets; Capital Markets's control library covers the category but not the specific risk statement, leaving it without an owner."
+    },
+    {
+      "task": 3,
+      "manual_requirement": "Create a single coverage view / assurance map",
+      "focal_entity_id": "AE-29",
+      "focal_entity_name": "Financial Reporting",
+      "cross_entity_partner_id": null,
+      "risk_category": "Credit",
+      "specific_risk_ids": [
+        "SR-634",
+        "SR-282"
+      ],
+      "kpa_ids": [
+        "KPA-985"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cCredit risk is monitored at the program level.\u201d",
+      "classification": "conforms",
+      "reasoning": "Financial Reporting's embedded credit controls align with the program-level handoff."
+    },
+    {
+      "task": 1,
+      "manual_requirement": "Require attribute-level handoff documentation",
+      "focal_entity_id": "AE-29",
+      "focal_entity_name": "Financial Reporting",
+      "cross_entity_partner_id": null,
+      "risk_category": "Operational",
+      "specific_risk_ids": [
+        "SR-896",
+        "SR-280"
+      ],
+      "kpa_ids": [
+        "KPA-591"
+      ],
+      "evidence_layer": "entity_prose",
+      "evidence_quote": "\u201cOperational risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Manual requires explicit ownership; Financial Reporting documents the handoff in prose but does not state which register carries operational risk."
+    },
+    {
+      "task": 2,
+      "manual_requirement": "Make audit-entity risk ownership explicit",
+      "focal_entity_id": "AE-29",
+      "focal_entity_name": "Financial Reporting",
+      "cross_entity_partner_id": null,
+      "risk_category": "External Fraud",
+      "specific_risk_ids": [
+        "SR-657",
+        "SR-829"
+      ],
+      "kpa_ids": [
+        "KPA-144"
+      ],
+      "evidence_layer": "category_summary",
+      "evidence_quote": "\u201cExternal Fraud risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Financial Reporting describes a external fraud handoff, but the residual rating is still applied with no acknowledgment of partial retention."
+    },
+    {
+      "task": 4,
+      "manual_requirement": "Strengthen handoff hygiene to match reliance sufficiency",
+      "focal_entity_id": "AE-29",
+      "focal_entity_name": "Financial Reporting",
+      "cross_entity_partner_id": null,
+      "risk_category": "Financial Reporting",
+      "specific_risk_ids": [
+        "SR-514",
+        "SR-696"
+      ],
+      "kpa_ids": [
+        "KPA-262"
+      ],
+      "evidence_layer": "control",
+      "evidence_quote": "\u201cFinancial Reporting risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "Financial Reporting's overview describes activity that should generate financial reporting controls; the library is silent on that process's KPA."
+    }
+  ],
+  "ranked_summary": {
+    "likely_coverage_gaps": [
+      {
+        "focal_entity_id": "AE-21",
+        "confidence": "medium",
+        "summary": "KYC/CDD hands off a risk slice that the receiver does not fully cover.",
+        "specific_risk_ids": [
+          "SR-990",
+          "SR-607"
+        ]
+      },
+      {
+        "focal_entity_id": "AE-29",
+        "confidence": "high",
+        "summary": "Financial Reporting hands off a risk slice that the receiver does not fully cover.",
+        "specific_risk_ids": [
+          "SR-853",
+          "SR-637"
+        ]
+      }
+    ],
+    "systemic_documentation_issues": [
+      {
+        "pattern": "Handoff described in prose but not reflected in residual ratings",
+        "affected_entity_count": 3,
+        "summary": "Ratings applied without acknowledging partial retention after a handoff."
+      }
+    ],
+    "manual_gaps_exposed": []
+  }
+}
