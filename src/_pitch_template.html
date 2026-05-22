@@ -64,6 +64,11 @@ select:focus, input:focus { outline: none; border-color: #58a6ff; }
 #node-detail .nd-prose summary:hover { color: #79c0ff; }
 #node-detail .nd-prose div { margin-top: 3px; font-size: 10.5px; color: #c9d1d9; line-height: 1.45; max-height: 150px; overflow-y: auto; background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 6px; white-space: pre-wrap; }
 body.light #node-detail .nd-prose div { background: #f6f8fa; border-color: #d0d7de; color: #1f2328; }
+#node-detail .gap-item { margin-top: 5px; padding: 5px 6px; border-left: 2px solid #f85149; background: rgba(248,81,73,0.06); border-radius: 0 4px 4px 0; }
+#node-detail .gap-item-n { font-size: 9px; color: #8b949e; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 2px; }
+#node-detail .gap-reason { font-size: 10.5px; color: #c9d1d9; line-height: 1.45; }
+#node-detail .gap-quote { font-size: 10px; color: #8b949e; font-style: italic; margin-top: 3px; }
+#node-detail .gap-rollup { font-size: 10px; color: #58a6ff; margin-top: 6px; }
 body.light { background: #ffffff; color: #1f2328; }
 body.light #sidebar { background: #f6f8fa; border-right-color: #d0d7de; }
 body.light .panel { background: #ffffff; border-color: #d0d7de; }
@@ -200,9 +205,10 @@ body.light .cat-tag { background: #eaeef2; color: #1f2328; }
 </div>
 
 <div class="two-col">
-  <button class="btn btn-primary" id="btn-reset">Reset View</button>
-  <button class="btn" id="btn-export-png">PNG</button>
-  <button class="btn" id="btn-export-csv">CSV</button>
+  <button class="btn btn-primary" id="btn-reset">Reset</button>
+  <button class="btn" id="btn-export-gaps" title="Export the likely gaps in the current view as a worklist CSV">Gaps</button>
+  <button class="btn" id="btn-export-png" title="Export the map as a PNG image">PNG</button>
+  <button class="btn" id="btn-export-csv" title="Export visible entities as CSV">CSV</button>
   <button class="btn" id="btn-theme" title="Toggle dark/light mode">&#9788;</button>
 </div>
 
@@ -267,16 +273,33 @@ if(!HAS_GAPS){const gp=document.getElementById('gap-panel'); if(gp) gp.style.dis
 // True when a gap should currently render (respects the failed-gate toggle).
 function gapVisible(g){return g && showGaps && (g.countPassed>0 || showFailedGaps);}
 function gapDashed(g){return g.countPassed===0;}
+// Plain-English gap labels for audit leaders (no internal task jargon).
+const GAP_LABELS = {5:'Receiving entity may not cover this risk', 3:'Embedded control may have no owner'};
 function _esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 // Shared gap section for tooltips/detail panel. cls is 'tt' or 'nd'.
 function gapHtml(g, cls){
   if(!gapVisible(g)) return '';
   cls = cls || 'tt';
-  const role = g.task===5 ? 'cross-entity (Task 5)' : 'coarse-handoff (Task 3)';
+  const role = GAP_LABELS[g.task] || 'Likely coverage gap';
   let h='<div class="'+cls+'-row"><span class="'+cls+'-label" style="color:#f85149;font-weight:600;">&#9888; Likely gaps</span><span class="'+cls+'-val" style="color:#f85149;font-weight:600;">'+g.count+'</span></div>';
   h+='<div class="'+cls+'-row"><span class="'+cls+'-label">Finding type</span><span class="'+cls+'-val">'+role+'</span></div>';
-  if(g.srIds&&g.srIds.length){h+='<div style="margin-top:3px;">'+g.srIds.slice(0,12).map(s=>'<span class="cat-tag">'+_esc(s)+'</span>').join('')+(g.srIds.length>12?' <span style="font-size:9px;color:#8b949e;">+'+(g.srIds.length-12)+'</span>':'')+'</div>';}
-  if(g.example)h+='<div class="'+cls+'-risks">'+_esc(g.example)+'</div>';
+  if(cls==='nd' && g.items && g.items.length){
+    // Selected-entity panel: show each underlying finding in full.
+    g.items.forEach((it,i)=>{
+      h+='<div class="gap-item">';
+      if(g.items.length>1) h+='<div class="gap-item-n">Finding '+(i+1)+' of '+g.items.length+'</div>';
+      if(it.reasoning) h+='<div class="gap-reason">'+_esc(it.reasoning)+'</div>';
+      const tags=[].concat(it.srIds||[], it.kpaIds||[]);
+      if(tags.length) h+='<div style="margin-top:3px;">'+tags.map(t=>'<span class="cat-tag">'+_esc(t)+'</span>').join('')+'</div>';
+      if(it.quote) h+='<div class="gap-quote">&ldquo;'+_esc(it.quote)+'&rdquo;</div>';
+      h+='</div>';
+    });
+    h+='<div class="gap-rollup">Adjudicate in <b>findings_rollup.xlsx</b> &rarr; Gaps by Entity</div>';
+  } else {
+    // Hover tooltip: compact summary only.
+    if(g.srIds&&g.srIds.length){h+='<div style="margin-top:3px;">'+g.srIds.slice(0,12).map(s=>'<span class="cat-tag">'+_esc(s)+'</span>').join('')+(g.srIds.length>12?' <span style="font-size:9px;color:#8b949e;">+'+(g.srIds.length-12)+'</span>':'')+'</div>';}
+    if(g.example)h+='<div class="'+cls+'-risks">'+_esc(g.example)+'</div>';
+  }
   return h;
 }
 const edgesByType = {handoff_to:[],handoff_from:[],shared_app:[],shared_vendor:[],shared_prsa:[]};
@@ -837,6 +860,23 @@ document.getElementById('btn-export-csv').addEventListener('click',()=>{
     csv+='"'+n.id+'","'+n.name+'","'+n.auditLeader+'","'+n.businessUnit+'","'+n.riskRating+'","'+n.inScope+'","'+n.overdue+'",'+n.connectivityTotal+',"'+n.horizontalFlag+'",'+n.handoffTo+','+n.handoffFrom+',"'+n.hcRisks+'"\n';
   });
   const b=new Blob([csv],{type:'text/csv'}),l=document.createElement('a');l.download='audit_network_'+new Date().toISOString().slice(0,10)+'.csv';l.href=URL.createObjectURL(b);l.click();
+});
+// Gap worklist: one row per likely-gap finding currently in view — the triage list to hand a team.
+document.getElementById('btn-export-gaps').addEventListener('click',()=>{
+  const esc=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+  const rows=[];
+  visibleEdges.forEach(e=>{
+    if(!((e.edgeType==='handoff_to'||e.edgeType==='handoff_from')&&gapVisible(e.gap)))return;
+    const a=nodeById[e.source],b=nodeById[e.target];
+    (e.gap.items||[]).forEach(it=>rows.push([a?a.auditLeader:'',GAP_LABELS[e.gap.task]||'Likely coverage gap',e.source,a?a.name:'',a?(a.handoffDesc||''):'',e.target,b?b.name:'',b?(b.handoffDesc||''):'',(it.srIds||[]).join('; '),(it.kpaIds||[]).join('; '),it.reasoning||'']));
+  });
+  visibleNodes.forEach(id=>{const n=nodeById[id];if(!(n&&gapVisible(n.gap)))return;
+    (n.gap.items||[]).forEach(it=>rows.push([n.auditLeader,GAP_LABELS[n.gap.task]||'Likely coverage gap',n.id,n.name,n.handoffDesc||'','','','',(it.srIds||[]).join('; '),(it.kpaIds||[]).join('; '),it.reasoning||'']));
+  });
+  if(!rows.length){alert('No likely gaps in the current view. Pick a leader or clear filters, then export.');return;}
+  let csv=['Audit Leader','Finding Type','Entity A ID','Entity A Name','Entity A Hand-off Desc','Entity B ID','Entity B Name','Entity B Hand-off Desc','Specific Risks','KPA IDs','Reasoning'].join(',')+'\n';
+  rows.forEach(r=>{csv+=r.map(esc).join(',')+'\n';});
+  const b=new Blob([csv],{type:'text/csv'}),l=document.createElement('a');l.download='gap_worklist_'+new Date().toISOString().slice(0,10)+'.csv';l.href=URL.createObjectURL(b);l.click();
 });
 
 function fitAll(){const v=[...visibleNodes].map(id=>nodeById[id]).filter(Boolean);if(!v.length)v.push(...nodes);

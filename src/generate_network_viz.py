@@ -158,21 +158,32 @@ def _attach_gap_findings(node_list, edge_list, findings):
 
     def _merge(target, row, task):
         g = target.setdefault("gap", dict(count=0, countPassed=0, countFailed=0,
-                                          srIds=[], example="", task=task))
+                                          srIds=[], example="", items=[], task=task))
         g["count"] += 1
         if _gate_passed(row):
             g["countPassed"] += 1
         else:
             g["countFailed"] += 1
+        srs = _split_ids(row.get("specific_risk_ids"))
         seen = set(g["srIds"])
-        for sr in _split_ids(row.get("specific_risk_ids")):
+        for sr in srs:
             if sr not in seen:
                 seen.add(sr)
                 g["srIds"].append(sr)
-        if not g["example"]:
-            r = row.get("reasoning")
-            if isinstance(r, str) and r.strip():
-                g["example"] = r.strip()[:400]
+        reasoning = row.get("reasoning")
+        reasoning = reasoning.strip() if isinstance(reasoning, str) else ""
+        if not g["example"] and reasoning:
+            g["example"] = reasoning[:400]
+        # Per-finding detail for the detail panel + worklist export (cap to bound size).
+        if len(g["items"]) < 12:
+            quote = row.get("evidence_quote")
+            quote = quote.strip() if isinstance(quote, str) else ""
+            g["items"].append(dict(
+                srIds=srs,
+                kpaIds=_split_ids(row.get("kpa_ids")),
+                reasoning=reasoning[:600],
+                quote=quote[:300],
+            ))
 
     cls = findings["classification"].astype(str).str.lower()
     task_num = pd.to_numeric(findings["task"], errors="coerce")
