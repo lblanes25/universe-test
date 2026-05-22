@@ -54,13 +54,35 @@ def _find_findings_rollup(input_dir):
     return None
 
 
-def read_pipeline(input_dir):
+def _find_source_csv(input_dir, explicit=None):
+    """Locate the source universe CSV — used for entity prose (Hand-off
+    Description, Audit Entity Overview) that the pipeline doesn't carry into
+    the Nodes table. Returns None when not found; the prose is then omitted.
+    """
+    cands = []
+    if explicit:
+        cands.append(explicit)
+    cands += sorted(glob.glob(os.path.join(input_dir, "*.csv")))
+    cands += sorted(glob.glob(os.path.join(_TPL_DIR, "..", "data", "input", "*.csv")))
+    for c in cands:
+        if c and os.path.isfile(c):
+            try:
+                head = pd.read_csv(c, nrows=0)
+            except Exception:
+                continue
+            if "Audit Entity ID" in head.columns and "Hand-off Description" in head.columns:
+                return os.path.abspath(c)
+    return None
+
+
+def read_pipeline(input_dir, source_csv=None):
     """Read all pipeline files and return raw DataFrames."""
     l1 = _find_latest(input_dir, "layer1_output")
     ed = _find_latest(input_dir, "edge_derivation_output")
     l2 = _find_latest(input_dir, "layer2_coverage_matrix")
     hc = os.path.join(input_dir, "handoff_categories.csv")
     fr = _find_findings_rollup(input_dir)
+    sc = _find_source_csv(input_dir, source_csv)
     for name, p in [("layer1_output", l1), ("edge_derivation_output", ed), ("layer2_coverage_matrix", l2)]:
         if p is None:
             sys.exit(f"ERROR: Missing file: {name}*.xlsx in {input_dir}")
@@ -92,6 +114,14 @@ def read_pipeline(input_dir):
     else:
         print(f"  No findings_rollup.xlsx — gap overlay disabled (viz unchanged)")
         dfs["findings"] = None
+    if sc is not None:
+        try:
+            dfs["source"] = pd.read_csv(sc)
+            print(f"  Found source CSV — hand-off description / overview available in detail panel")
+        except Exception:
+            dfs["source"] = None
+    else:
+        dfs["source"] = None
     return dfs
 
 
@@ -256,6 +286,25 @@ def build_network_data(dfs):
         pv, eid = str(r["PRSA Value"]), str(r["Audit Entity ID"])
         prsa_map.setdefault(pv, []).append(eid)
     prsa_list = [dict(value=k, entityIds=v) for k,v in sorted(prsa_map.items(), key=lambda x: -len(x[1]))]
+
+    # Entity prose (hand-off description / overview) from the source CSV, keyed by entity id.
+    src = dfs.get("source")
+    if src is not None and "Audit Entity ID" in src.columns:
+        hd_col = "Hand-off Description" if "Hand-off Description" in src.columns else None
+        ov_col = "Audit Entity Overview" if "Audit Entity Overview" in src.columns else None
+        pmap = {}
+        for _, r in src.iterrows():
+            eid = str(r["Audit Entity ID"])
+            pmap[eid] = (
+                str(r[hd_col]).strip() if hd_col and pd.notna(r[hd_col]) else "",
+                str(r[ov_col]).strip() if ov_col and pd.notna(r[ov_col]) else "",
+            )
+        for n in node_list:
+            hd, ov = pmap.get(n["id"], ("", ""))
+            if hd:
+                n["handoffDesc"] = hd
+            if ov:
+                n["overview"] = ov
 
     result = dict(nodes=node_list, edges=edge_list, assets=asset_list, entityApps=ea_list,
                   entityVendors=ev_list, concRisk=conc_list, prsaClusters=prsa_list, handoffCategories=all_cats)
@@ -448,9 +497,9 @@ def nodeTotal_py(node):
     return sum(nodeTotal_py(c) for c in node["children"])
 
 
-def generate(input_dir, output_dir):
+def generate(input_dir, output_dir, source_csv=None):
     print(f"Reading pipeline files from: {input_dir}")
-    dfs = read_pipeline(input_dir)
+    dfs = read_pipeline(input_dir, source_csv)
     date_stamp = datetime.now().strftime("%Y%m%d")
 
     # === Network Visualization ===
@@ -471,6 +520,15 @@ def generate(input_dir, output_dir):
     net_path = os.path.join(output_dir, f"network_visualization_{date_stamp}.html")
     with open(net_path, "w", encoding="utf-8") as f: f.write(net_html)
     print(f"  -> {net_path} ({len(net_html):,} bytes)")
+
+    # Pitch build — same data, simplified controls (separate template, optional).
+    pitch_tpl = os.path.join(_TPL_DIR, "_pitch_template.html")
+    if os.path.isfile(pitch_tpl):
+        with open(pitch_tpl, "r", encoding="utf-8") as f:
+            pitch_html = f.read().replace("%%DATA_INJECTION%%", "const DATA = " + net_json + ";")
+        pitch_path = os.path.join(output_dir, f"network_pitch_{date_stamp}.html")
+        with open(pitch_path, "w", encoding="utf-8") as f: f.write(pitch_html)
+        print(f"  -> {pitch_path} ({len(pitch_html):,} bytes)")
 
     # === PGA Chord + Sankey ===
     chord_data = build_chord_data(dfs)
@@ -511,6 +569,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate Audit Universe Visualizations (v3)")
     parser.add_argument("--input-dir", default=".", help="Directory containing pipeline outputs")
     parser.add_argument("--output-dir", default=".", help="Directory for output HTML files")
+    parser.add_argument("--source", default=None,
+                        help="Source universe CSV for entity prose (hand-off description / overview); auto-detected if omitted")
     args = parser.parse_args()
     os.makedirs(args.output_dir, exist_ok=True)
-    generate(args.input_dir, args.output_dir)
+    generate(args.input_dir, args.output_dir, args.source)
