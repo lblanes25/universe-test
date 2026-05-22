@@ -13,6 +13,7 @@ if str(ROOT) not in sys.path:
 
 from src.pipeline import DEFAULT_INPUT, DEFAULT_PLAN, OUTPUT_DIR, run
 from src.stage6_edges import build_master_edges
+from src.stage2_handoff_review.summarize_findings import _by_manual_requirement
 from src.utils.standardization import normalize_policy_id, split_multi
 
 
@@ -105,6 +106,47 @@ class CoverageTests(unittest.TestCase):
             "layer2_coverage_matrix.xlsx",
         ):
             self.assertTrue((OUTPUT_DIR / name).exists(), f"missing {name}")
+
+
+class ManualRequirementRollupTests(unittest.TestCase):
+    GAP = "likely coverage gap"
+
+    def _frame(self) -> pd.DataFrame:
+        return pd.DataFrame(
+            [
+                {"manual_requirement": "Make ownership explicit",
+                 "classification": "likely coverage gap", "focal_entity_id": "AE-1", "reasoning": "r1"},
+                {"manual_requirement": "Make ownership explicit",
+                 "classification": "conforms", "focal_entity_id": "AE-2", "reasoning": "r2"},
+                {"manual_requirement": "  ",
+                 "classification": "likely coverage gap", "focal_entity_id": "AE-3", "reasoning": "r3"},
+                {"manual_requirement": "Attribute-level documentation",
+                 "classification": "documentation issue", "focal_entity_id": "AE-1", "reasoning": "r4"},
+            ]
+        )
+
+    def test_groups_and_counts(self) -> None:
+        out = _by_manual_requirement(self._frame(), self.GAP)
+        self.assertEqual(len(out), 3)
+        row = out[out["manual_requirement"] == "Make ownership explicit"].iloc[0]
+        self.assertEqual(int(row["finding_count"]), 2)
+        self.assertEqual(int(row["gap_count"]), 1)
+        self.assertEqual(int(row["entity_count"]), 2)
+
+    def test_blank_rolls_into_none(self) -> None:
+        out = _by_manual_requirement(self._frame(), self.GAP)
+        self.assertIn("(none)", set(out["manual_requirement"]))
+        self.assertNotIn("", set(out["manual_requirement"]))
+
+    def test_sorted_by_gap_then_finding_count(self) -> None:
+        out = _by_manual_requirement(self._frame(), self.GAP)
+        # Highest gap_count first; ties broken by finding_count desc.
+        self.assertEqual(out.iloc[0]["manual_requirement"], "Make ownership explicit")
+
+    def test_empty_input_returns_typed_columns(self) -> None:
+        out = _by_manual_requirement(pd.DataFrame(), self.GAP)
+        self.assertEqual(len(out), 0)
+        self.assertIn("gap_count", out.columns)
 
 
 if __name__ == "__main__":
