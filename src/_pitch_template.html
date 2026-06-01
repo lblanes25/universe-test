@@ -127,7 +127,7 @@ body.light .cat-tag { background: #eaeef2; color: #1f2328; }
   <label><input type="checkbox" id="tog-vendor"><span class="edge-color" style="background:#e67e22"></span> Shared Vendors</label>
   <label><input type="checkbox" id="tog-prsa"><span class="edge-color" style="background:#9b59b6"></span> Shared PRSAs</label>
   <label><input type="checkbox" id="tog-crossonly"><span style="color:#58a6ff;font-size:10px;">&#10697;</span> Cross-portfolio only</label>
-  <label><input type="checkbox" id="tog-edge-tip"><span style="color:#8b949e;font-size:10px;">&#9432;</span> Edge tooltips</label>
+  <label><input type="checkbox" id="tog-edge-tip" checked><span style="color:#8b949e;font-size:10px;">&#9432;</span> Edge tooltips</label>
 </div>
 
 <div class="panel" id="gap-panel">
@@ -252,7 +252,7 @@ const ctx = canvas.getContext('2d');
 const tooltip = document.getElementById('tooltip');
 let W, H, dpr, transform = {x:0,y:0,k:1};
 let nodes = DATA.nodes, visibleNodes = new Set(), visibleEdges = [];
-let hoveredNode = null, selectedSearch = null, selectedNode = null;
+let hoveredNode = null, hoveredEdge = null, selectedSearch = null, selectedNode = null;
 let showHandoffs=true, showApps=false, showVendors=false, showPrsas=false, crossOnly=false, showEdgeTooltips=true;
 let showGaps=true, showFailedGaps=false;
 let activeFilter='all', activeRisk='all', activeAsset='', activePrsa='', hzMode='off';
@@ -612,21 +612,40 @@ function draw(){
         const label=g.length>35?g.substring(0,33)+'…':g;ctx.fillText(label,sx,sy-sh/2+Math.max(14,16*transform.k));}
     });}
 
-  visibleEdges.forEach(e=>{const a=nodeById[e.source],b=nodeById[e.target];if(!a||!b)return;
+  function drawEdgeStroke(e){
+    const a=nodeById[e.source],b=nodeById[e.target];if(!a||!b)return;
     const pa=screenPos(a),pb=screenPos(b);
     if(Math.max(pa.x,pb.x)<-50||Math.min(pa.x,pb.x)>W+50||Math.max(pa.y,pb.y)<-50||Math.min(pa.y,pb.y)>H+50)return;
     const st=EDGE_STYLES[e.edgeType];let dim=false;
     if(sA&&!((e.source===selectedSearch||e.target===selectedSearch)&&(e.edgeType==='handoff_to'||e.edgeType==='handoff_from')))dim=true;
     const isGapEdge=gapVisible(e.gap);
-    ctx.globalAlpha=dim?0.04:(isGapEdge?0.95:(st.alpha||0.7));ctx.strokeStyle=isGapEdge?'#f85149':st.color;
-    let ew=(bidirectional.has(e.source+'-'+e.target)?st.width*2:st.width);if(isGapEdge)ew=Math.max(ew,2.2);
+    const isHover=(hoveredEdge===e);
+    ctx.globalAlpha=isHover?1:(dim?0.04:(isGapEdge?0.95:(st.alpha||0.7)));
+    ctx.strokeStyle=isGapEdge?'#f85149':st.color;
+    let ew=st.width;if(isGapEdge)ew=Math.max(ew,2.2);if(isHover)ew=ew*1.7;
     ctx.lineWidth=ew*Math.min(transform.k,1.5);
-    ctx.setLineDash(isGapEdge&&gapDashed(e.gap)?[5,4]:st.dash);ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);ctx.stroke();
-    if(impactMode&&(e.edgeType==='handoff_to'||e.edgeType==='handoff_from')&&!dim){
+    ctx.setLineDash(isGapEdge&&gapDashed(e.gap)?[5,4]:st.dash);
+    ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);ctx.stroke();
+    if((e.edgeType==='handoff_to'||e.edgeType==='handoff_from')&&!dim){
       const dx=pb.x-pa.x,dy=pb.y-pa.y,len=Math.sqrt(dx*dx+dy*dy);
-      if(len>10){const nr=nodeRadius(b)*transform.k,ax=pb.x-dx/len*nr,ay=pb.y-dy/len*nr,ang=Math.atan2(dy,dx),aS=6*Math.min(transform.k,1.5);
-        ctx.fillStyle=isGapEdge?'#f85149':st.color;ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(ax-aS*Math.cos(ang-0.4),ay-aS*Math.sin(ang-0.4));ctx.lineTo(ax-aS*Math.cos(ang+0.4),ay-aS*Math.sin(ang+0.4));ctx.closePath();ctx.fill();}}
-  });ctx.setLineDash([]);ctx.globalAlpha=1;
+      if(len>10){
+        const ang=Math.atan2(dy,dx),aS=Math.max(8,9*Math.min(transform.k,1.6));
+        // Arrowhead at full opacity so it reads against the partially-transparent edge stroke.
+        ctx.globalAlpha=1;
+        ctx.fillStyle=isGapEdge?'#f85149':'#e6edf3';
+        const nrB=nodeRadius(b)*transform.k,ax=pb.x-dx/len*nrB,ay=pb.y-dy/len*nrB;
+        ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(ax-aS*Math.cos(ang-0.4),ay-aS*Math.sin(ang-0.4));ctx.lineTo(ax-aS*Math.cos(ang+0.4),ay-aS*Math.sin(ang+0.4));ctx.closePath();ctx.fill();
+        if(bidirectional.has(e.source+'-'+e.target)){
+          const nrA=nodeRadius(a)*transform.k,bx=pa.x+dx/len*nrA,by=pa.y+dy/len*nrA,ang2=ang+Math.PI;
+          ctx.beginPath();ctx.moveTo(bx,by);ctx.lineTo(bx-aS*Math.cos(ang2-0.4),by-aS*Math.sin(ang2-0.4));ctx.lineTo(bx-aS*Math.cos(ang2+0.4),by-aS*Math.sin(ang2+0.4));ctx.closePath();ctx.fill();
+        }
+      }
+    }
+  }
+  visibleEdges.forEach(e=>{if(!gapVisible(e.gap))drawEdgeStroke(e);});
+  // Gap edges in a second pass so they're never occluded by later non-gap strokes.
+  visibleEdges.forEach(e=>{if(gapVisible(e.gap))drawEdgeStroke(e);});
+  ctx.setLineDash([]);ctx.globalAlpha=1;
 
   nodes.forEach(n=>{if(!visibleNodes.has(n.id))return;let dim=false;if(sA&&n.id!==selectedSearch&&!sN.has(n.id))dim=true;if(selActive&&n.id!==selectedNode&&!selNeighbors.has(n.id))dim=true;drawNode(n,dim);});
   // Search highlight ring
@@ -640,80 +659,108 @@ function draw(){
 // === Interaction ===
 let isDragging=false,dragStart={x:0,y:0},dragTransStart={x:0,y:0},dragMoved=false;
 canvas.addEventListener('mousedown',e=>{isDragging=true;dragMoved=false;dragStart={x:e.clientX,y:e.clientY};dragTransStart={x:transform.x,y:transform.y};});
+function showEdgeTooltip(edge, e){
+  const eName={handoff_to:'Handoff →',handoff_from:'Handoff ←',shared_app:'Shared App',shared_vendor:'Shared Vendor',shared_prsa:'Shared PRSA'};
+  const sn=nodeById[edge.source],tn=nodeById[edge.target];
+  let h='<div class="tt-title">'+(eName[edge.edgeType]||edge.edgeType)+'</div>';
+  h+='<div class="tt-row"><span class="tt-label">From</span><span class="tt-val">'+edge.source+(sn?' — '+sn.name:'')+'</span></div>';
+  h+='<div class="tt-row"><span class="tt-label">To</span><span class="tt-val">'+edge.target+(tn?' — '+tn.name:'')+'</span></div>';
+  if(edge.detail)h+='<div class="tt-row"><span class="tt-label">Detail</span><span class="tt-val">'+edge.detail+'</span></div>';
+  if(edge.category&&edge.category!=='UNKNOWN'&&edge.category!=='')h+='<div class="tt-row"><span class="tt-label">Category</span><span class="tt-val"><span class="cat-tag">'+edge.category+'</span></span></div>';
+  if(edge.synthetic)h+='<div class="tt-row"><span class="tt-label">Note</span><span class="tt-val">structural / undocumented handoff</span></div>';
+  h+=gapHtml(edge.gap,'tt');
+  tooltip.innerHTML=h;tooltip.style.display='block';
+  let tx=e.clientX-330+12,ty=e.clientY+12;if(tx+340>W)tx=e.clientX-330-350;if(ty+180>H)ty=e.clientY-180;
+  tooltip.style.left=tx+'px';tooltip.style.top=ty+'px';
+}
 canvas.addEventListener('mousemove',e=>{
   if(isDragging){const dx=e.clientX-dragStart.x,dy=e.clientY-dragStart.y;if(Math.abs(dx)>3||Math.abs(dy)>3)dragMoved=true;
     transform.x=dragTransStart.x+dx;transform.y=dragTransStart.y+dy;draw();return;}
-  const rect=canvas.getBoundingClientRect(),mx=e.clientX-rect.left,my=e.clientY-rect.top;hoveredNode=null;
-  for(const n of nodes){if(!visibleNodes.has(n.id))continue;const p=screenPos(n),r=nodeRadius(n)*transform.k+4;
-    if(Math.abs(mx-p.x)<r&&Math.abs(my-p.y)<r){hoveredNode=n;break;}}
-  if(hoveredNode){const n=hoveredNode;
-    let h='<div class="tt-id">'+n.id+'</div><div class="tt-title">'+n.name+'</div>';
-    h+='<div class="tt-row"><span class="tt-label">Audit Leader</span><span class="tt-val">'+n.auditLeader+'</span></div>';
-    h+='<div class="tt-row"><span class="tt-label">Business Unit</span><span class="tt-val">'+n.businessUnit+'</span></div>';
-    h+='<div class="tt-row"><span class="tt-label">Risk</span><span class="tt-val" style="color:'+(RISK_COLORS[n.riskRating]||'#95a5a6')+'">'+n.riskRating+'</span></div>';
-    h+='<div class="tt-row"><span class="tt-label">Connectivity</span><span class="tt-val">'+n.connectivityTotal+'</span></div>';
-    h+='<div class="tt-row"><span class="tt-label">In Scope</span><span class="tt-val">'+n.inScope+'</span></div>';
-    h+='<div class="tt-row"><span class="tt-label">Handoff To / From</span><span class="tt-val">'+n.handoffTo+' / '+n.handoffFrom+'</span></div>';
-    h+=gapHtml(n.gap,'tt');
-    if(n.hcRisks)h+='<div class="tt-risks">'+n.hcRisks+'</div>';
-    tooltip.innerHTML=h;tooltip.style.display='block';
-    let tx=e.clientX-330+12,ty=e.clientY+12;if(tx+340>W)tx=e.clientX-330-350;if(ty+220>H)ty=e.clientY-220;
-    tooltip.style.left=tx+'px';tooltip.style.top=ty+'px';
+  const rect=canvas.getBoundingClientRect(),mx=e.clientX-rect.left,my=e.clientY-rect.top;
+  const prevHoveredEdge=hoveredEdge;
+  hoveredNode=null;hoveredEdge=null;
+
+  // Priority pass: gap edges first, generous 25px hitbox. They jump ahead of nodes
+  // and clusters so a gap edge running between adjacent nodes is still hoverable.
+  if(showEdgeTooltips){
+    let minDist=25;
+    visibleEdges.forEach(ed=>{
+      if(!gapVisible(ed.gap))return;
+      const a=nodeById[ed.source],b=nodeById[ed.target];if(!a||!b)return;
+      const pa=screenPos(a),pb=screenPos(b);
+      const dx=pb.x-pa.x,dy=pb.y-pa.y,len2=dx*dx+dy*dy;
+      if(len2===0)return;
+      let t=((mx-pa.x)*dx+(my-pa.y)*dy)/len2;t=Math.max(0,Math.min(1,t));
+      const px=pa.x+t*dx,py=pa.y+t*dy;
+      const dist=Math.sqrt((mx-px)*(mx-px)+(my-py)*(my-py));
+      if(dist<minDist){minDist=dist;hoveredEdge=ed;}
+    });
+  }
+
+  if(hoveredEdge){
+    showEdgeTooltip(hoveredEdge,e);
   } else {
-    // Check if hovering over a cluster background
-    let hoveredCluster=null;
-    if(!activeAsset&&!activePrsa){
-      const gk=groupBy==='leader'?'auditLeader':'businessUnit',groups=groupBy==='leader'?leaders:bus;
-      groups.forEach((g,gi)=>{
-        const cn=nodes.filter(n=>n[gk]===g&&visibleNodes.has(n.id));if(!cn.length||hoveredCluster)return;
-        const f=cn[0],sx=f.cx*transform.k+transform.x,sy=f.cy*transform.k+transform.y,sw=f.clusterW*transform.k/2,sh=f.clusterH*transform.k/2;
-        if(mx>=sx-sw&&mx<=sx+sw&&my>=sy-sh&&my<=sy+sh){
-          const nodeCount=cn.length,inSc=cn.filter(n=>n.inScope==='Yes').length,crit=cn.filter(n=>n.riskRating==='Critical').length,hi=cn.filter(n=>n.riskRating==='High').length;
-          let h='<div class="tt-title">'+g+'</div>';
-          h+='<div class="tt-row"><span class="tt-label">Entities</span><span class="tt-val">'+nodeCount+'</span></div>';
-          h+='<div class="tt-row"><span class="tt-label">In Scope</span><span class="tt-val">'+inSc+' / '+nodeCount+'</span></div>';
-          h+='<div class="tt-row"><span class="tt-label">Critical</span><span class="tt-val" style="color:#c0392b">'+crit+'</span></div>';
-          h+='<div class="tt-row"><span class="tt-label">High</span><span class="tt-val" style="color:#e67e22">'+hi+'</span></div>';
-          hoveredCluster=g;tooltip.innerHTML=h;tooltip.style.display='block';
-          let tx=e.clientX-330+12,ty=e.clientY+12;if(tx+340>W)tx=e.clientX-330-350;if(ty+200>H)ty=e.clientY-200;
-          tooltip.style.left=tx+'px';tooltip.style.top=ty+'px';
-        }
-      });
-    }
-    if(!hoveredCluster) {
-      // Check edge hover if edge tooltips enabled
-      let hoveredEdge=null;
+    for(const n of nodes){if(!visibleNodes.has(n.id))continue;const p=screenPos(n),r=nodeRadius(n)*transform.k+4;
+      if(Math.abs(mx-p.x)<r&&Math.abs(my-p.y)<r){hoveredNode=n;break;}}
+    if(hoveredNode){const n=hoveredNode;
+      let h='<div class="tt-id">'+n.id+'</div><div class="tt-title">'+n.name+'</div>';
+      h+='<div class="tt-row"><span class="tt-label">Audit Leader</span><span class="tt-val">'+n.auditLeader+'</span></div>';
+      h+='<div class="tt-row"><span class="tt-label">Business Unit</span><span class="tt-val">'+n.businessUnit+'</span></div>';
+      h+='<div class="tt-row"><span class="tt-label">Risk</span><span class="tt-val" style="color:'+(RISK_COLORS[n.riskRating]||'#95a5a6')+'">'+n.riskRating+'</span></div>';
+      h+='<div class="tt-row"><span class="tt-label">Connectivity</span><span class="tt-val">'+n.connectivityTotal+'</span></div>';
+      h+='<div class="tt-row"><span class="tt-label">In Scope</span><span class="tt-val">'+n.inScope+'</span></div>';
+      h+='<div class="tt-row"><span class="tt-label">Handoff To / From</span><span class="tt-val">'+n.handoffTo+' / '+n.handoffFrom+'</span></div>';
+      h+=gapHtml(n.gap,'tt');
+      if(n.hcRisks)h+='<div class="tt-risks">'+n.hcRisks+'</div>';
+      tooltip.innerHTML=h;tooltip.style.display='block';
+      let tx=e.clientX-330+12,ty=e.clientY+12;if(tx+340>W)tx=e.clientX-330-350;if(ty+220>H)ty=e.clientY-220;
+      tooltip.style.left=tx+'px';tooltip.style.top=ty+'px';
+    } else {
+      // Non-gap edge check ahead of cluster bbox — otherwise edges running through
+      // a cluster get masked by the cluster tooltip and become un-hoverable.
       if(showEdgeTooltips){
         let minDist=12;
-        visibleEdges.forEach(e=>{
-          const a=nodeById[e.source],b=nodeById[e.target];if(!a||!b)return;
+        visibleEdges.forEach(ed=>{
+          if(gapVisible(ed.gap))return;
+          const a=nodeById[ed.source],b=nodeById[ed.target];if(!a||!b)return;
           const pa=screenPos(a),pb=screenPos(b);
-          // Point-to-line-segment distance
           const dx=pb.x-pa.x,dy=pb.y-pa.y,len2=dx*dx+dy*dy;
           if(len2===0)return;
-          let t=((mx-pa.x)*dx+(my-pa.y)*dy)/len2;
-          t=Math.max(0,Math.min(1,t));
+          let t=((mx-pa.x)*dx+(my-pa.y)*dy)/len2;t=Math.max(0,Math.min(1,t));
           const px=pa.x+t*dx,py=pa.y+t*dy;
           const dist=Math.sqrt((mx-px)*(mx-px)+(my-py)*(my-py));
-          if(dist<minDist){minDist=dist;hoveredEdge=e;}
+          if(dist<minDist){minDist=dist;hoveredEdge=ed;}
         });
       }
       if(hoveredEdge){
-        const eName={handoff_to:'Handoff →',handoff_from:'Handoff ←',shared_app:'Shared App',shared_vendor:'Shared Vendor',shared_prsa:'Shared PRSA'};
-        const sn=nodeById[hoveredEdge.source],tn=nodeById[hoveredEdge.target];
-        let h='<div class="tt-title">'+(eName[hoveredEdge.edgeType]||hoveredEdge.edgeType)+'</div>';
-        h+='<div class="tt-row"><span class="tt-label">From</span><span class="tt-val">'+hoveredEdge.source+(sn?' — '+sn.name:'')+'</span></div>';
-        h+='<div class="tt-row"><span class="tt-label">To</span><span class="tt-val">'+hoveredEdge.target+(tn?' — '+tn.name:'')+'</span></div>';
-        if(hoveredEdge.detail)h+='<div class="tt-row"><span class="tt-label">Detail</span><span class="tt-val">'+hoveredEdge.detail+'</span></div>';
-        if(hoveredEdge.category&&hoveredEdge.category!=='UNKNOWN'&&hoveredEdge.category!=='')h+='<div class="tt-row"><span class="tt-label">Category</span><span class="tt-val"><span class="cat-tag">'+hoveredEdge.category+'</span></span></div>';
-        if(hoveredEdge.synthetic)h+='<div class="tt-row"><span class="tt-label">Note</span><span class="tt-val">structural / undocumented handoff</span></div>';
-        h+=gapHtml(hoveredEdge.gap,'tt');
-        tooltip.innerHTML=h;tooltip.style.display='block';
-        let tx=e.clientX-330+12,ty=e.clientY+12;if(tx+340>W)tx=e.clientX-330-350;if(ty+180>H)ty=e.clientY-180;
-        tooltip.style.left=tx+'px';tooltip.style.top=ty+'px';
-      } else { tooltip.style.display='none'; }
+        showEdgeTooltip(hoveredEdge,e);
+      } else {
+        let hoveredCluster=null;
+        if(!activeAsset&&!activePrsa){
+          const gk=groupBy==='leader'?'auditLeader':'businessUnit',groups=groupBy==='leader'?leaders:bus;
+          groups.forEach((g,gi)=>{
+            const cn=nodes.filter(n=>n[gk]===g&&visibleNodes.has(n.id));if(!cn.length||hoveredCluster)return;
+            const f=cn[0],sx=f.cx*transform.k+transform.x,sy=f.cy*transform.k+transform.y,sw=f.clusterW*transform.k/2,sh=f.clusterH*transform.k/2;
+            if(mx>=sx-sw&&mx<=sx+sw&&my>=sy-sh&&my<=sy+sh){
+              const nodeCount=cn.length,inSc=cn.filter(n=>n.inScope==='Yes').length,crit=cn.filter(n=>n.riskRating==='Critical').length,hi=cn.filter(n=>n.riskRating==='High').length;
+              let h='<div class="tt-title">'+g+'</div>';
+              h+='<div class="tt-row"><span class="tt-label">Entities</span><span class="tt-val">'+nodeCount+'</span></div>';
+              h+='<div class="tt-row"><span class="tt-label">In Scope</span><span class="tt-val">'+inSc+' / '+nodeCount+'</span></div>';
+              h+='<div class="tt-row"><span class="tt-label">Critical</span><span class="tt-val" style="color:#c0392b">'+crit+'</span></div>';
+              h+='<div class="tt-row"><span class="tt-label">High</span><span class="tt-val" style="color:#e67e22">'+hi+'</span></div>';
+              hoveredCluster=g;tooltip.innerHTML=h;tooltip.style.display='block';
+              let tx=e.clientX-330+12,ty=e.clientY+12;if(tx+340>W)tx=e.clientX-330-350;if(ty+200>H)ty=e.clientY-200;
+              tooltip.style.left=tx+'px';tooltip.style.top=ty+'px';
+            }
+          });
+        }
+        if(!hoveredCluster) tooltip.style.display='none';
+      }
     }
   }
+
+  // Redraw once per hover-edge change so the highlight tracks the cursor without thrashing.
+  if(hoveredEdge!==prevHoveredEdge) draw();
 });
 canvas.addEventListener('mouseup',e=>{
   if(!dragMoved){const rect=canvas.getBoundingClientRect(),mx=e.clientX-rect.left,my=e.clientY-rect.top;let clicked=null;
@@ -833,14 +880,14 @@ prsaSelect.addEventListener('change',function(){activePrsa=this.value;activeAsse
     transform.x=W/2-(Math.min(...xs)+Math.max(...xs))/2*transform.k;transform.y=H/2-(Math.min(...ys)+Math.max(...ys))/2*transform.k;}}else fitAll();draw();});
 document.getElementById('search-input').addEventListener('input',function(){const q=this.value.toLowerCase().trim();if(!q){selectedSearch=null;draw();return;}
   const f=nodes.find(n=>n.id.toLowerCase()===q||n.name.toLowerCase().includes(q));selectedSearch=f?f.id:null;
-  if(f){const{x,y}=screenPos(f);if(x<0||x>W||y<0||y>H){transform.x=W/2-f.x*transform.k;transform.y=H/2-f.y*transform.k;}}draw();});
+  if(f){if(transform.k<1.5)transform.k=1.5;transform.x=W/2-f.x*transform.k;transform.y=H/2-f.y*transform.k;}draw();});
 
 document.getElementById('btn-reset').addEventListener('click',()=>{
   activeFilter='all';activeRisk='all';activeAsset='';activePrsa='';selectedSearch=null;selectedNode=null;egoMode='off';egoCenter=null;hzMode='off';crossOnly=false;
-  showHandoffs=true;showApps=false;showVendors=false;showPrsas=false;showEdgeTooltips=false;groupBy='leader';lastZoomedCluster=null;
+  showHandoffs=true;showApps=false;showVendors=false;showPrsas=false;showEdgeTooltips=true;groupBy='leader';lastZoomedCluster=null;
   showGaps=true;showFailedGaps=false;
   document.getElementById('tog-handoff').checked=true;document.getElementById('tog-app').checked=false;
-  document.getElementById('tog-vendor').checked=false;document.getElementById('tog-prsa').checked=false;document.getElementById('tog-crossonly').checked=false;document.getElementById('tog-edge-tip').checked=false;
+  document.getElementById('tog-vendor').checked=false;document.getElementById('tog-prsa').checked=false;document.getElementById('tog-crossonly').checked=false;document.getElementById('tog-edge-tip').checked=true;
   {const tg=document.getElementById('tog-gaps');if(tg)tg.checked=true;const tf=document.getElementById('tog-gaps-failed');if(tf)tf.checked=false;}
   document.getElementById('node-detail-panel').style.display='none';
   document.querySelectorAll('.leader-cb').forEach(cb=>{cb.checked=true;});

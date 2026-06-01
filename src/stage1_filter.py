@@ -41,9 +41,8 @@ def filter_entities(df: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
     id_col = col("entity_id")
     name_col = col("entity_name")
 
-    type_mask = df[type_col].isin(SPECIAL_REVIEW_TYPES) | (
-        df[type_col].str.lower() != "audit"
-    )
+    type_series = df[type_col].fillna("")
+    type_mask = ~type_series.isin(STAGE2_FOCAL_TYPES)
     status_mask = df[status_col] != "Active"
 
     removed_type = df[type_mask & ~status_mask]
@@ -55,7 +54,7 @@ def filter_entities(df: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
     log_rows = []
     for _, row in removed.iterrows():
         reasons = []
-        if row[type_col] != "Audit":
+        if row[type_col] not in STAGE2_FOCAL_TYPES:
             reasons.append(f"type={row[type_col]}")
         if row[status_col] != "Active":
             reasons.append(f"status={row[status_col]}")

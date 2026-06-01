@@ -24,12 +24,12 @@ class FilterTests(unittest.TestCase):
 
     def test_filter_counts(self) -> None:
         stats = self.result["filter_stats"]
-        self.assertEqual(stats["remaining"], 45)
-        self.assertEqual(stats["removed_type_only"], 3)
+        self.assertEqual(stats["remaining"], 48)
+        self.assertEqual(stats["removed_type_only"], 0)
         self.assertEqual(stats["removed_status_only"], 2)
 
     def test_nodes_match_active(self) -> None:
-        self.assertEqual(len(self.result["nodes"]), 45)
+        self.assertEqual(len(self.result["nodes"]), 48)
 
     def test_active_statuses_only(self) -> None:
         self.assertTrue((self.result["nodes"]["Audit Entity Status"] == "Active").all())
