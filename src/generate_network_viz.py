@@ -60,6 +60,18 @@ def _find_findings_rollup(input_dir):
     return None
 
 
+def _find_findings_csv(input_dir):
+    """Locate the Stage 2 findings CSV when the reviewer workbook is absent."""
+    candidates = [
+        os.path.join(input_dir, "findings.csv"),
+        os.path.join(_TPL_DIR, "..", "runs", "stage2", "aggregated", "findings.csv"),
+    ]
+    for c in candidates:
+        if os.path.isfile(c):
+            return os.path.abspath(c)
+    return None
+
+
 def _find_source_csv(input_dir, explicit=None):
     """Locate the source universe CSV — used for entity prose (Hand-off
     Description, Audit Entity Overview) that the pipeline doesn't carry into
@@ -88,6 +100,7 @@ def read_pipeline(input_dir, source_csv=None):
     l2 = _find_latest(input_dir, "layer2_coverage_matrix")
     hc = os.path.join(input_dir, "handoff_categories.csv")
     fr = _find_findings_rollup(input_dir)
+    fc = _find_findings_csv(input_dir)
     sc = _find_source_csv(input_dir, source_csv)
     for name, p in [("layer1_output", l1), ("edge_derivation_output", ed), ("layer2_coverage_matrix", l2)]:
         if p is None:
@@ -117,8 +130,15 @@ def read_pipeline(input_dir, source_csv=None):
         except Exception:
             print(f"  findings_rollup.xlsx present but unreadable — gap overlay disabled")
             dfs["findings"] = None
+    elif fc is not None:
+        try:
+            dfs["findings"] = pd.read_csv(fc)
+            print(f"  Found findings.csv — enabling likely-gap overlay")
+        except Exception:
+            print(f"  findings.csv present but unreadable — gap overlay disabled")
+            dfs["findings"] = None
     else:
-        print(f"  No findings_rollup.xlsx — gap overlay disabled (viz unchanged)")
+        print(f"  No findings_rollup.xlsx/findings.csv — gap overlay disabled (viz unchanged)")
         dfs["findings"] = None
     if sc is not None:
         try:
@@ -330,6 +350,209 @@ def build_network_data(dfs):
         result["gapEdgesUnplaced"] = unplaced
         result["gapNodesUnmatched"] = unmatched
     return result
+
+
+def _clean_value(value, default=""):
+    """Return a JSON-safe string without pandas/nan placeholders."""
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return default
+    try:
+        if pd.isna(value):
+            return default
+    except (TypeError, ValueError):
+        pass
+    text = str(value).strip()
+    if text.lower() in ("nan", "nat", "none"):
+        return default
+    return text
+
+
+def _int_value(value, default=0):
+    try:
+        if pd.isna(value):
+            return default
+        return int(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def _bool_value(value, default=True):
+    if value is None:
+        return default
+    try:
+        if pd.isna(value):
+            return default
+    except (TypeError, ValueError):
+        pass
+    if isinstance(value, bool):
+        return value
+    text = str(value).strip().lower()
+    if text in ("true", "yes", "y", "1", "pass", "passed"):
+        return True
+    if text in ("false", "no", "n", "0", "fail", "failed"):
+        return False
+    return default
+
+
+def _title_case_label(value):
+    text = _clean_value(value)
+    return text[:1].upper() + text[1:] if text else ""
+
+
+def build_pitch2_data(dfs):
+    """Build JSON data for the proof-first assurance caseboard."""
+    cov_idx = dfs["coverage"].set_index("Audit Entity ID") if not dfs["coverage"].empty else pd.DataFrame()
+    dep_idx = dfs["dep_profile"].set_index("Audit Entity ID") if not dfs["dep_profile"].empty else pd.DataFrame()
+
+    prose = {}
+    src = dfs.get("source")
+    if src is not None and "Audit Entity ID" in src.columns:
+        hd_col = "Hand-off Description" if "Hand-off Description" in src.columns else None
+        ov_col = "Audit Entity Overview" if "Audit Entity Overview" in src.columns else None
+        for _, r in src.iterrows():
+            eid = _clean_value(r.get("Audit Entity ID"))
+            if not eid:
+                continue
+            prose[eid] = dict(
+                handoffDesc=_clean_value(r.get(hd_col)) if hd_col else "",
+                overview=_clean_value(r.get(ov_col)) if ov_col else "",
+            )
+
+    entities = {}
+    for _, row in dfs["nodes"].iterrows():
+        eid = _clean_value(row.get("Audit Entity ID"))
+        if not eid:
+            continue
+        c = cov_idx.loc[eid] if eid in cov_idx.index else None
+        d = dep_idx.loc[eid] if eid in dep_idx.index else None
+        risk = _clean_value(c.get("Overall Residual Risk") if isinstance(c, pd.Series) else "", "N/A")
+        if risk == "N/A":
+            risk = _clean_value(row.get("Overall Residual Risk Rating"), "N/A")
+        p = prose.get(eid, {})
+        entities[eid] = dict(
+            id=eid,
+            name=_clean_value(row.get("Audit Entity Name"), eid),
+            auditLeader=_clean_value(row.get("Audit Leader"), "Unknown"),
+            businessUnit=_clean_value(row.get("Business Unit"), "Unknown"),
+            lineOfDefense=_clean_value(row.get("Line of Defense"), ""),
+            pga=_clean_value(row.get("PGA/ASL"), ""),
+            horizontalFlag=_clean_value(row.get("Horizontal Flag"), ""),
+            risk=risk,
+            inScope=_clean_value(c.get("In Scope") if isinstance(c, pd.Series) else "", "No"),
+            overdue=_clean_value(c.get("Overdue Flag") if isinstance(c, pd.Series) else "", "No"),
+            effectiveFrequency=_clean_value(c.get("Effective Frequency") if isinstance(c, pd.Series) else ""),
+            connectivityTotal=_int_value(c.get("Connectivity Total") if isinstance(c, pd.Series) else 0),
+            modelExposure=_int_value(c.get("Model Exposure") if isinstance(c, pd.Series) else 0),
+            highCriticalRisks=_clean_value(c.get("High/Critical Risks") if isinstance(c, pd.Series) else ""),
+            handoffTo=_int_value(d.get("Handoff To Count") if isinstance(d, pd.Series) else 0),
+            handoffFrom=_int_value(d.get("Handoff From Count") if isinstance(d, pd.Series) else 0),
+            handoffPartners=_split_ids(d.get("Handoff Partner IDs") if isinstance(d, pd.Series) else ""),
+            handoffDesc=p.get("handoffDesc", ""),
+            overview=p.get("overview", ""),
+        )
+
+    handoff_edges = []
+    pair_lookup = {}
+    for _, row in dfs["edges"].iterrows():
+        etype = _clean_value(row.get("Edge Type"))
+        if etype not in ("handoff_to", "handoff_from"):
+            continue
+        edge = dict(
+            source=_clean_value(row.get("Entity A ID")),
+            target=_clean_value(row.get("Entity B ID")),
+            edgeType=etype,
+            detail=_clean_value(row.get("Detail")),
+        )
+        if not edge["source"] or not edge["target"]:
+            continue
+        handoff_edges.append(edge)
+        pair_lookup.setdefault(frozenset((edge["source"], edge["target"])), []).append(edge)
+
+    findings_df = dfs.get("findings")
+    findings = []
+    if findings_df is not None and not findings_df.empty:
+        for idx, row in findings_df.reset_index(drop=True).iterrows():
+            source_id = _clean_value(row.get("focal_entity_id"))
+            target_id = _clean_value(row.get("cross_entity_partner_id"))
+            task = _int_value(row.get("task"), 0)
+            classification = _clean_value(row.get("classification"), "unclassified").lower()
+            source_ent = entities.get(source_id, dict(
+                id=source_id, name=_clean_value(row.get("focal_entity_name"), source_id),
+                auditLeader="Unknown", businessUnit="Unknown", lineOfDefense="", pga="",
+                horizontalFlag="", risk="N/A", inScope="No", overdue="No",
+                effectiveFrequency="", connectivityTotal=0, modelExposure=0,
+                highCriticalRisks="", handoffTo=0, handoffFrom=0,
+                handoffPartners=[], handoffDesc="", overview="",
+            ))
+            target_ent = entities.get(target_id) if target_id else None
+            related = []
+            if target_id:
+                related = pair_lookup.get(frozenset((source_id, target_id)), [])
+            if not related and source_id:
+                related = [
+                    e for e in handoff_edges
+                    if e["source"] == source_id or e["target"] == source_id
+                ][:8]
+            findings.append(dict(
+                id=f"F-{idx + 1:04d}",
+                batchId=_int_value(row.get("batch_id"), 0),
+                task=task,
+                taskName=_clean_value(row.get("task_name"), f"Task {task}" if task else ""),
+                classification=classification,
+                classificationLabel=_title_case_label(classification),
+                sourceId=source_id,
+                sourceName=_clean_value(row.get("focal_entity_name"), source_ent.get("name", source_id)),
+                targetId=target_id,
+                targetName=target_ent.get("name", target_id) if target_ent else "",
+                riskCategory=_clean_value(row.get("risk_category"), "Unspecified"),
+                specificRiskIds=_split_ids(row.get("specific_risk_ids")),
+                kpaIds=_split_ids(row.get("kpa_ids")),
+                evidenceLayer=_clean_value(row.get("evidence_layer"), ""),
+                manualRequirement=_clean_value(row.get("manual_requirement"), ""),
+                evidenceQuote=_clean_value(row.get("evidence_quote"), ""),
+                reasoning=_clean_value(row.get("reasoning"), ""),
+                gatePassed=_bool_value(row.get("gate_passed"), True),
+                source=source_ent,
+                target=target_ent,
+                relatedEdges=related,
+            ))
+
+    rank = {"likely coverage gap": 0, "documentation issue": 1, "conforms": 2}
+    findings.sort(key=lambda f: (
+        rank.get(f["classification"], 9),
+        0 if f["gatePassed"] else 1,
+        0 if f["task"] == 5 else 1,
+        f["source"].get("auditLeader", ""),
+        f["riskCategory"],
+        f["id"],
+    ))
+
+    def _count_by(items, key_fn):
+        counts = {}
+        for item in items:
+            key = key_fn(item) or "Unspecified"
+            counts[key] = counts.get(key, 0) + 1
+        return counts
+
+    return dict(
+        generatedAt=datetime.now().isoformat(timespec="seconds"),
+        entities=entities,
+        findings=findings,
+        handoffEdges=handoff_edges,
+        filters=dict(
+            leaders=sorted(_count_by(findings, lambda f: f["source"].get("auditLeader")).keys()),
+            classifications=sorted(_count_by(findings, lambda f: f["classification"]).keys()),
+            riskCategories=sorted(_count_by(findings, lambda f: f["riskCategory"]).keys()),
+            tasks=sorted(set(f["task"] for f in findings if f["task"])),
+        ),
+        summary=dict(
+            totalFindings=len(findings),
+            classifications=_count_by(findings, lambda f: f["classification"]),
+            leaders=_count_by(findings, lambda f: f["source"].get("auditLeader")),
+            riskCategories=_count_by(findings, lambda f: f["riskCategory"]),
+            tasks=_count_by(findings, lambda f: f"Task {f['task']}" if f["task"] else "Unspecified"),
+        ),
+    )
 
 
 def build_chord_data(dfs):
@@ -546,6 +769,19 @@ def generate(input_dir, output_dir, source_csv=None):
         pitch_path = os.path.join(output_dir, f"network_pitch_{date_stamp}.html")
         with open(pitch_path, "w", encoding="utf-8") as f: f.write(pitch_html)
         print(f"  -> {pitch_path} ({len(pitch_html):,} bytes)")
+
+    # Pitch build 2 — proof-first assurance caseboard.
+    pitch2_tpl = os.path.join(_TPL_DIR, "_pitch_template2.html")
+    if os.path.isfile(pitch2_tpl):
+        pitch2_data = build_pitch2_data(dfs)
+        gap_count = pitch2_data["summary"]["classifications"].get("likely coverage gap", 0)
+        print(f"  Pitch2: {len(pitch2_data['findings'])} findings, {gap_count} likely gaps")
+        pitch2_json = json.dumps(pitch2_data, separators=(",",":"))
+        with open(pitch2_tpl, "r", encoding="utf-8") as f:
+            pitch2_html = f.read().replace("%%DATA_INJECTION%%", "const DATA = " + pitch2_json + ";")
+        pitch2_path = os.path.join(output_dir, f"network_pitch2_{date_stamp}.html")
+        with open(pitch2_path, "w", encoding="utf-8") as f: f.write(pitch2_html)
+        print(f"  -> {pitch2_path} ({len(pitch2_html):,} bytes)")
 
     # === PGA Chord + Sankey ===
     chord_data = build_chord_data(dfs)

@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audit Universe Assurance Caseboard</title>
+<style>
+:root {
+  --bg: #f5f7fb;
+  --surface: #ffffff;
+  --surface-soft: #eef3f8;
+  --ink: #1e293b;
+  --muted: #64748b;
+  --border: #d8e0ea;
+  --blue: #2563eb;
+  --blue-soft: #dbeafe;
+  --red: #b91c1c;
+  --red-soft: #fee2e2;
+  --amber: #a16207;
+  --amber-soft: #fef3c7;
+  --green: #15803d;
+  --green-soft: #dcfce7;
+  --violet: #6d28d9;
+  --violet-soft: #ede9fe;
+  --shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+}
+button, input, select { font: inherit; }
+button {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink);
+  border-radius: 7px;
+  padding: 7px 10px;
+  cursor: pointer;
+}
+button:hover { border-color: #94a3b8; background: #f8fafc; }
+button.primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+button.primary:hover { background: #1d4ed8; }
+button:disabled { opacity: 0.45; cursor: not-allowed; }
+select, input[type="text"] {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 7px 9px;
+  background: var(--surface);
+  color: var(--ink);
+}
+select:focus, input:focus { outline: 2px solid var(--blue-soft); border-color: var(--blue); }
+#app {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 14px 18px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.brand h1 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+.brand .sub {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(86px, 1fr));
+  gap: 8px;
+  min-width: 520px;
+}
+.kpi {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 9px;
+  background: #fbfdff;
+}
+.kpi .num { font-size: 18px; font-weight: 750; line-height: 1; }
+.kpi .label {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.board {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 360px minmax(520px, 1fr) 350px;
+  gap: 12px;
+  padding: 12px;
+}
+body.demo-mode .board { grid-template-columns: 300px minmax(560px, 1fr) 340px; }
+.pane {
+  min-height: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.left-pane, .right-pane { display: grid; grid-template-rows: auto minmax(0, 1fr); }
+.pane-head {
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+  background: #fbfdff;
+}
+.pane-title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 750;
+}
+.filters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+.filters .wide { grid-column: 1 / -1; }
+.filter-label {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--muted);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.action-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.action-row button { font-size: 12px; padding: 6px 9px; }
+.demo-state {
+  display: none;
+  margin-top: 8px;
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 700;
+}
+body.demo-mode .demo-state { display: block; }
+.finding-list {
+  min-height: 0;
+  overflow-y: auto;
+  padding: 8px;
+}
+.group-title {
+  position: sticky;
+  top: -8px;
+  z-index: 1;
+  padding: 8px 6px 5px;
+  background: rgba(245, 247, 251, 0.95);
+  color: var(--muted);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border);
+}
+body.demo-mode .group-title { display: none; }
+.finding-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 9px;
+  margin-bottom: 7px;
+  cursor: pointer;
+  background: var(--surface);
+}
+.finding-card:hover { border-color: #94a3b8; }
+.finding-card.active {
+  border-color: var(--blue);
+  box-shadow: inset 3px 0 0 var(--blue);
+  background: #f8fbff;
+}
+.finding-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: flex-start;
+}
+.finding-name {
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.25;
+}
+.finding-id {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 10.5px;
+  font-family: Consolas, "SFMono-Regular", monospace;
+}
+.badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 7px;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 19px;
+  border-radius: 999px;
+  padding: 2px 7px;
+  font-size: 10px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.badge.gap { color: var(--red); background: var(--red-soft); }
+.badge.doc { color: var(--amber); background: var(--amber-soft); }
+.badge.ok { color: var(--green); background: var(--green-soft); }
+.badge.info { color: var(--blue); background: var(--blue-soft); }
+.badge.risk { color: var(--violet); background: var(--violet-soft); }
+.badge.muted { color: var(--muted); background: var(--surface-soft); }
+.mini-reason {
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.35;
+  max-height: 45px;
+  overflow: hidden;
+}
+body.demo-mode .mini-reason { display: none; }
+.case-pane {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+}
+.case-head {
+  padding: 15px 16px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.case-eyebrow {
+  color: var(--muted);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.case-title {
+  margin: 4px 0 0;
+  font-size: 20px;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+.case-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 9px;
+}
+.flow {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, #ffffff, #f8fbff);
+}
+.test-title {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.test-strip {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 8px;
+}
+.test-step {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  padding: 8px;
+  min-width: 0;
+}
+.test-step.final {
+  border-color: #fecaca;
+  background: #fff7f7;
+}
+.test-label {
+  color: var(--muted);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.35px;
+}
+.test-main {
+  margin-top: 3px;
+  color: var(--ink);
+  font-weight: 750;
+  font-size: 11px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.test-sub {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 10.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.evidence-scroll {
+  min-height: 0;
+  overflow-y: auto;
+  padding: 14px 16px 18px;
+}
+.evidence-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.evidence-block {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 11px;
+  background: #fbfdff;
+  min-width: 0;
+}
+.evidence-block.wide { grid-column: 1 / -1; }
+.block-title {
+  margin: 0 0 7px;
+  color: var(--muted);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.45px;
+}
+.block-text {
+  margin: 0;
+  color: var(--ink);
+  font-size: 12px;
+  line-height: 1.48;
+  overflow-wrap: anywhere;
+}
+.quote {
+  border-left: 3px solid var(--blue);
+  padding-left: 9px;
+  color: #334155;
+  font-style: italic;
+}
+.reasoning {
+  font-size: 14px;
+  line-height: 1.55;
+}
+.empty {
+  padding: 28px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 13px;
+}
+.right-scroll {
+  min-height: 0;
+  overflow-y: auto;
+  padding: 10px;
+}
+.entity-box {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 9px;
+  background: #fbfdff;
+}
+.entity-box h3 {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.25;
+}
+.entity-box .entity-id {
+  color: var(--muted);
+  font-size: 10.5px;
+  font-family: Consolas, "SFMono-Regular", monospace;
+  margin-top: 2px;
+}
+.metric-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-top: 9px;
+}
+.metric {
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 7px;
+  background: #fff;
+}
+.metric .m-label {
+  color: var(--muted);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.35px;
+}
+.metric .m-val {
+  margin-top: 2px;
+  font-weight: 750;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.edge-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 7px;
+  margin-top: 6px;
+  font-size: 11px;
+  background: #fff;
+}
+.edge-row code {
+  color: var(--blue);
+  font-family: Consolas, "SFMono-Regular", monospace;
+  font-size: 10.5px;
+}
+.status-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 8px;
+}
+@media (max-width: 1150px) {
+  body { overflow: auto; height: auto; }
+  #app { height: auto; min-height: 100vh; }
+  .topbar { align-items: flex-start; flex-direction: column; }
+  .kpis { width: 100%; min-width: 0; grid-template-columns: repeat(2, 1fr); }
+  .board, body.demo-mode .board { grid-template-columns: 1fr; }
+  .pane { min-height: 360px; }
+  .left-pane, .right-pane, .case-pane { min-height: 520px; }
+  .evidence-grid { grid-template-columns: 1fr; }
+  .evidence-block.wide { grid-column: auto; }
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <div class="brand">
+      <h1>Audit Universe Assurance Caseboard</h1>
+      <div class="sub" id="generated-at"></div>
+    </div>
+    <div class="kpis" id="kpis"></div>
+  </header>
+
+  <main class="board">
+    <section class="pane left-pane" id="left-pane">
+      <div class="pane-head">
+        <h2 class="pane-title">Findings</h2>
+        <div class="filters">
+          <div>
+            <label class="filter-label" for="classification-filter">Classification</label>
+            <select id="classification-filter"></select>
+          </div>
+          <div>
+            <label class="filter-label" for="leader-filter">Audit Leader</label>
+            <select id="leader-filter"></select>
+          </div>
+          <div>
+            <label class="filter-label" for="task-filter">Review Type</label>
+            <select id="task-filter"></select>
+          </div>
+          <div>
+            <label class="filter-label" for="risk-filter">Risk</label>
+            <select id="risk-filter"></select>
+          </div>
+          <div class="wide">
+            <label class="filter-label" for="search-input">Entity ID</label>
+            <input type="text" id="search-input" placeholder="AE-22">
+          </div>
+        </div>
+        <div class="action-row">
+          <button class="primary" id="demo-toggle">Demo</button>
+          <button id="demo-prev">Prev</button>
+          <button id="demo-next">Next</button>
+          <button id="export-csv">CSV</button>
+          <button id="reset-view">Reset</button>
+        </div>
+        <div class="demo-state" id="demo-state"></div>
+      </div>
+      <div class="finding-list" id="finding-list"></div>
+    </section>
+
+    <section class="pane case-pane">
+      <div class="case-head" id="case-head"></div>
+      <div class="flow" id="flow"></div>
+      <div class="evidence-scroll" id="case-detail"></div>
+    </section>
+
+    <aside class="pane right-pane">
+      <div class="pane-head">
+        <h2 class="pane-title">Portfolio Impact</h2>
+      </div>
+      <div class="right-scroll" id="impact-panel"></div>
+    </aside>
+  </main>
+</div>
+
+<script>
+%%DATA_INJECTION%%
+
+const findings = DATA.findings || [];
+const defaultClassification = (DATA.summary && DATA.summary.classifications && DATA.summary.classifications['likely coverage gap']) ? 'likely coverage gap' : 'all';
+const state = {
+  classification: defaultClassification,
+  leader: 'all',
+  task: 'all',
+  risk: 'all',
+  query: '',
+  selectedId: null,
+  demo: false
+};
+
+const classificationFilter = document.getElementById('classification-filter');
+const leaderFilter = document.getElementById('leader-filter');
+const taskFilter = document.getElementById('task-filter');
+const riskFilter = document.getElementById('risk-filter');
+const searchInput = document.getElementById('search-input');
+const REVIEW_TYPE_LABELS = {
+  1: 'Manual conformance',
+  2: 'Rating consistency',
+  3: 'Embedded-control check',
+  4: 'Entity alignment',
+  5: 'Receiver coverage'
+};
+
+function esc(value) {
+  return String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[ch]));
+}
+
+function label(value) {
+  const text = String(value || '').trim();
+  return text ? text.charAt(0).toUpperCase() + text.slice(1) : '';
+}
+
+function reviewTypeLabel(task) {
+  return REVIEW_TYPE_LABELS[Number(task)] || 'Review';
+}
+
+function classKind(value) {
+  const v = String(value || '').toLowerCase();
+  if (v.includes('coverage gap')) return 'gap';
+  if (v.includes('documentation')) return 'doc';
+  if (v.includes('conforms')) return 'ok';
+  return 'muted';
+}
+
+function riskKind(value) {
+  const v = String(value || '').toLowerCase();
+  if (v === 'critical' || v === 'high') return 'gap';
+  if (v === 'medium') return 'doc';
+  if (v === 'low') return 'ok';
+  return 'muted';
+}
+
+function optionHtml(value, text) {
+  return `<option value="${esc(value)}">${esc(text)}</option>`;
+}
+
+function populateSelect(el, values, allLabel, current, formatter) {
+  const opts = [optionHtml('all', allLabel)];
+  values.forEach(v => opts.push(optionHtml(v, formatter ? formatter(v) : v)));
+  el.innerHTML = opts.join('');
+  el.value = current;
+}
+
+function initControls() {
+  const classes = DATA.filters.classifications || [];
+  populateSelect(classificationFilter, classes, 'All', state.classification, label);
+  populateSelect(leaderFilter, DATA.filters.leaders || [], 'All', state.leader);
+  populateSelect(taskFilter, (DATA.filters.tasks || []).map(String), 'All', state.task, reviewTypeLabel);
+  populateSelect(riskFilter, DATA.filters.riskCategories || [], 'All', state.risk);
+  classificationFilter.addEventListener('change', () => { state.classification = classificationFilter.value; renderAll(); });
+  leaderFilter.addEventListener('change', () => { state.leader = leaderFilter.value; renderAll(); });
+  taskFilter.addEventListener('change', () => { state.task = taskFilter.value; renderAll(); });
+  riskFilter.addEventListener('change', () => { state.risk = riskFilter.value; renderAll(); });
+  searchInput.addEventListener('input', () => { state.query = searchInput.value.trim().toLowerCase(); renderAll(); });
+}
+
+function findingHaystack(f) {
+  return [f.sourceId, f.targetId].join(' ').toLowerCase();
+}
+
+function filteredFindings() {
+  return findings.filter(f => {
+    if (state.classification !== 'all' && f.classification !== state.classification) return false;
+    if (state.leader !== 'all' && (f.source || {}).auditLeader !== state.leader) return false;
+    if (state.task !== 'all' && String(f.task) !== state.task) return false;
+    if (state.risk !== 'all' && f.riskCategory !== state.risk) return false;
+    if (state.query && !findingHaystack(f).includes(state.query)) return false;
+    return true;
+  });
+}
+
+function selectedFinding(list) {
+  if (!list.length) {
+    state.selectedId = null;
+    return null;
+  }
+  let current = list.find(f => f.id === state.selectedId);
+  if (!current) {
+    current = list[0];
+    state.selectedId = current.id;
+  }
+  return current;
+}
+
+function renderKpis(list) {
+  const total = list.length;
+  const gaps = list.filter(f => f.classification === 'likely coverage gap').length;
+  const docs = list.filter(f => f.classification === 'documentation issue').length;
+  const conforms = list.filter(f => f.classification === 'conforms').length;
+  const task5 = list.filter(f => f.task === 5).length;
+  const items = [
+    ['Visible', total],
+    ['Likely gaps', gaps],
+    ['Doc issues', docs],
+    ['Conforms', conforms],
+    ['Task 5', task5]
+  ];
+  document.getElementById('kpis').innerHTML = items.map(([name, val]) =>
+    `<div class="kpi"><div class="num">${val}</div><div class="label">${esc(name)}</div></div>`
+  ).join('');
+}
+
+function renderList(list) {
+  const root = document.getElementById('finding-list');
+  if (!list.length) {
+    root.innerHTML = '<div class="empty">No findings match the current filters.</div>';
+    return;
+  }
+  if (state.demo) {
+    const active = list.find(f => f.id === state.selectedId) || list[0];
+    root.innerHTML = renderFindingCard(active);
+    bindFindingCards();
+    return;
+  }
+  const groups = new Map();
+  list.forEach(f => {
+    const leader = (f.source && f.source.auditLeader) || 'Unknown';
+    if (!groups.has(leader)) groups.set(leader, []);
+    groups.get(leader).push(f);
+  });
+  let html = '';
+  [...groups.keys()].sort().forEach(leader => {
+    const rows = groups.get(leader);
+    html += `<div class="group-title">${esc(leader)} (${rows.length})</div>`;
+    html += rows.map(renderFindingCard).join('');
+  });
+  root.innerHTML = html;
+  bindFindingCards();
+}
+
+function renderFindingCard(f) {
+  const active = f.id === state.selectedId ? ' active' : '';
+  const target = f.targetId ? `${f.targetId} ${f.targetName || ''}` : 'Entity-local';
+  return `
+    <div class="finding-card${active}" data-id="${esc(f.id)}">
+      <div class="finding-top">
+        <div>
+          <div class="finding-name">${esc(f.sourceName || f.sourceId)}</div>
+          <div class="finding-id">${esc(f.sourceId)} -> ${esc(target)}</div>
+        </div>
+        <span class="badge ${classKind(f.classification)}">${esc(label(f.classification))}</span>
+      </div>
+      <div class="badge-row">
+        <span class="badge info">Task ${esc(f.task || '')}</span>
+        <span class="badge risk">${esc(f.riskCategory || 'Unspecified')}</span>
+        <span class="badge muted">Batch ${esc(f.batchId || '')}</span>
+        ${f.gatePassed ? '' : '<span class="badge doc">Gate</span>'}
+      </div>
+      <div class="mini-reason">${esc(f.reasoning || '')}</div>
+    </div>
+  `;
+}
+
+function bindFindingCards() {
+  document.querySelectorAll('.finding-card').forEach(card => {
+    card.addEventListener('click', () => {
+      state.selectedId = card.dataset.id;
+      renderAll();
+    });
+  });
+}
+
+function chipHtml(text, kind) {
+  return text ? `<span class="badge ${kind || 'muted'}">${esc(text)}</span>` : '';
+}
+
+function renderCaseHead(f) {
+  const title = f ? `${f.sourceId} ${f.sourceName}` : 'No finding selected';
+  const target = f && f.targetId ? `${f.targetId} ${f.targetName}` : 'Entity-local review';
+  document.getElementById('case-head').innerHTML = f ? `
+    <div class="case-eyebrow">${esc(f.id)} | ${esc(f.taskName || ('Task ' + f.task))}</div>
+    <h2 class="case-title">${esc(title)}</h2>
+    <div class="case-meta">
+      ${chipHtml(label(f.classification), classKind(f.classification))}
+      ${chipHtml(f.riskCategory, 'risk')}
+      ${chipHtml(target, 'info')}
+      ${chipHtml(f.evidenceLayer ? 'Evidence: ' + f.evidenceLayer : '', 'muted')}
+    </div>
+  ` : '<div class="empty">No finding selected.</div>';
+}
+
+function renderFlow(f) {
+  if (!f) {
+    document.getElementById('flow').innerHTML = '';
+    return;
+  }
+  const source = f.source || {};
+  const targetLabel = f.targetId ? `${f.targetId} ${f.targetName || ''}` : 'Entity-local evidence';
+  const verdict = label(f.classification);
+  document.getElementById('flow').innerHTML = `
+    <svg viewBox="0 0 860 76" role="img" aria-label="Evidence chain">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"></path>
+        </marker>
+      </defs>
+      <line x1="74" y1="38" x2="786" y2="38" stroke="#bfd0e5" stroke-width="3"></line>
+      <line x1="74" y1="38" x2="786" y2="38" stroke="#2563eb" stroke-width="3" marker-end="url(#arrow)"></line>
+      <circle cx="74" cy="38" r="16" fill="#dbeafe" stroke="#2563eb" stroke-width="2"></circle>
+      <circle cx="312" cy="38" r="16" fill="#ede9fe" stroke="#6d28d9" stroke-width="2"></circle>
+      <circle cx="548" cy="38" r="16" fill="#fef3c7" stroke="#a16207" stroke-width="2"></circle>
+      <circle cx="786" cy="38" r="16" fill="${classKind(f.classification) === 'gap' ? '#fee2e2' : classKind(f.classification) === 'doc' ? '#fef3c7' : '#dcfce7'}" stroke="${classKind(f.classification) === 'gap' ? '#b91c1c' : classKind(f.classification) === 'doc' ? '#a16207' : '#15803d'}" stroke-width="2"></circle>
+    </svg>
+    <div class="flow-labels">
+      <div class="flow-label"><strong>${esc(f.sourceId)}</strong><span>${esc(source.auditLeader || '')}</span></div>
+      <div class="flow-label"><strong>${esc(f.riskCategory)}</strong><span>${esc((f.specificRiskIds || []).join('; ') || 'No SR IDs')}</span></div>
+      <div class="flow-label"><strong>${esc(targetLabel)}</strong><span>${esc(f.evidenceLayer || 'Evidence')}</span></div>
+      <div class="flow-label"><strong>${esc(verdict)}</strong><span>${esc(f.gatePassed ? 'Gate passed' : 'Gate flagged')}</span></div>
+    </div>
+  `;
+}
+
+function textBlock(title, text, cls) {
+  const body = text ? esc(text) : 'Not provided.';
+  return `<div class="evidence-block ${cls || ''}"><h3 class="block-title">${esc(title)}</h3><p class="block-text">${body}</p></div>`;
+}
+
+function renderCaseDetail(f) {
+  const root = document.getElementById('case-detail');
+  if (!f) {
+    root.innerHTML = '<div class="empty">No findings match the current filters.</div>';
+    return;
+  }
+  const source = f.source || {};
+  const target = f.target || null;
+  const sourceClaim = source.handoffDesc || source.overview || '';
+  const receiverText = target ? (target.handoffDesc || target.overview || '') : '';
+  const sr = (f.specificRiskIds || []).join('; ') || 'Not provided';
+  const kpa = (f.kpaIds || []).join('; ') || 'Not provided';
+  root.innerHTML = `
+    <div class="evidence-grid">
+      ${textBlock('Handoff Claim / Entity Context', sourceClaim)}
+      ${textBlock(target ? 'Receiving Entity Context' : 'Entity-Local Context', receiverText)}
+      <div class="evidence-block">
+        <h3 class="block-title">Risk Slice</h3>
+        <p class="block-text"><strong>${esc(f.riskCategory)}</strong><br>SR: ${esc(sr)}<br>KPA: ${esc(kpa)}</p>
+      </div>
+      <div class="evidence-block">
+        <h3 class="block-title">Manual Requirement</h3>
+        <p class="block-text">${esc(f.manualRequirement || 'Not provided.')}</p>
+      </div>
+      <div class="evidence-block wide">
+        <h3 class="block-title">Evidence Quote</h3>
+        <p class="block-text quote">${esc(f.evidenceQuote || 'Not provided.')}</p>
+      </div>
+      <div class="evidence-block wide">
+        <h3 class="block-title">Verdict Reasoning</h3>
+        <p class="block-text reasoning">${esc(f.reasoning || 'Not provided.')}</p>
+      </div>
+    </div>
+  `;
+}
+
+function entityBox(ent, title) {
+  if (!ent) return '';
+  const risk = ent.risk || 'N/A';
+  return `
+    <div class="entity-box">
+      <h3>${esc(title)}: ${esc(ent.name || ent.id)}</h3>
+      <div class="entity-id">${esc(ent.id || '')}</div>
+      <div class="status-line">
+        ${chipHtml(risk, riskKind(risk))}
+        ${chipHtml('Scope: ' + (ent.inScope || 'No'), ent.inScope === 'Yes' ? 'ok' : 'muted')}
+        ${chipHtml('Overdue: ' + (ent.overdue || 'No'), ent.overdue === 'Yes' ? 'gap' : 'muted')}
+      </div>
+      <div class="metric-grid">
+        <div class="metric"><div class="m-label">Leader</div><div class="m-val">${esc(ent.auditLeader || '')}</div></div>
+        <div class="metric"><div class="m-label">Business Unit</div><div class="m-val">${esc(ent.businessUnit || '')}</div></div>
+        <div class="metric"><div class="m-label">Connectivity</div><div class="m-val">${esc(ent.connectivityTotal || 0)}</div></div>
+        <div class="metric"><div class="m-label">Handoffs</div><div class="m-val">${esc(ent.handoffTo || 0)} to / ${esc(ent.handoffFrom || 0)} from</div></div>
+      </div>
+    </div>
+  `;
+}
+
+function renderImpact(f) {
+  const root = document.getElementById('impact-panel');
+  if (!f) {
+    root.innerHTML = '<div class="empty">No impact context available.</div>';
+    return;
+  }
+  let edges = '';
+  (f.relatedEdges || []).forEach(e => {
+    edges += `<div class="edge-row"><code>${esc(e.source)} -> ${esc(e.target)}</code><span>${esc(e.edgeType)}</span></div>`;
+  });
+  if (!edges) edges = '<div class="empty">No matching handoff edge in the master edge list.</div>';
+  root.innerHTML = `
+    ${entityBox(f.source, 'Focal')}
+    ${entityBox(f.target, 'Partner')}
+    <div class="entity-box">
+      <h3>Related Handoffs</h3>
+      ${edges}
+    </div>
+    <div class="entity-box">
+      <h3>Export Context</h3>
+      <div class="metric-grid">
+        <div class="metric"><div class="m-label">Finding</div><div class="m-val">${esc(f.id)}</div></div>
+        <div class="metric"><div class="m-label">Batch</div><div class="m-val">${esc(f.batchId || '')}</div></div>
+        <div class="metric"><div class="m-label">Task</div><div class="m-val">${esc(f.task || '')}</div></div>
+        <div class="metric"><div class="m-label">Gate</div><div class="m-val">${esc(f.gatePassed ? 'Passed' : 'Flagged')}</div></div>
+      </div>
+    </div>
+  `;
+}
+
+function renderGenerated() {
+  const gen = DATA.generatedAt ? new Date(DATA.generatedAt).toLocaleString() : '';
+  document.getElementById('generated-at').textContent = gen ? `Generated ${gen}` : '';
+}
+
+function demoPosition(list) {
+  const idx = list.findIndex(f => f.id === state.selectedId);
+  return idx >= 0 ? idx + 1 : 0;
+}
+
+function updateDemoState(list) {
+  document.body.classList.toggle('demo-mode', state.demo);
+  document.getElementById('demo-toggle').textContent = state.demo ? 'Exit demo' : 'Demo';
+  document.getElementById('demo-prev').disabled = !state.demo || list.length < 2;
+  document.getElementById('demo-next').disabled = !state.demo || list.length < 2;
+  document.getElementById('demo-state').textContent = state.demo ? `Demo ${demoPosition(list)} of ${list.length}` : '';
+}
+
+function renderAll() {
+  const list = filteredFindings();
+  const current = selectedFinding(list);
+  renderKpis(list);
+  renderList(list);
+  renderCaseHead(current);
+  renderFlow(current);
+  renderCaseDetail(current);
+  renderImpact(current);
+  updateDemoState(list);
+}
+
+function moveDemo(delta) {
+  const list = filteredFindings();
+  if (!list.length) return;
+  const idx = Math.max(0, list.findIndex(f => f.id === state.selectedId));
+  const next = (idx + delta + list.length) % list.length;
+  state.selectedId = list[next].id;
+  renderAll();
+}
+
+function csvEscape(value) {
+  return '"' + String(value == null ? '' : value).replace(/"/g, '""') + '"';
+}
+
+function exportCsv() {
+  const list = filteredFindings();
+  const headers = [
+    'Finding ID','Classification','Task','Batch','Audit Leader','Source ID','Source Name',
+    'Target ID','Target Name','Risk Category','Specific Risks','KPA IDs','Evidence Layer',
+    'Manual Requirement','Evidence Quote','Reasoning','Gate Passed'
+  ];
+  let csv = headers.map(csvEscape).join(',') + '\n';
+  list.forEach(f => {
+    csv += [
+      f.id, f.classification, f.task, f.batchId, (f.source || {}).auditLeader,
+      f.sourceId, f.sourceName, f.targetId, f.targetName, f.riskCategory,
+      (f.specificRiskIds || []).join('; '), (f.kpaIds || []).join('; '),
+      f.evidenceLayer, f.manualRequirement, f.evidenceQuote, f.reasoning,
+      f.gatePassed ? 'Yes' : 'No'
+    ].map(csvEscape).join(',') + '\n';
+  });
+  const blob = new Blob([csv], {type: 'text/csv'});
+  const link = document.createElement('a');
+  link.download = 'assurance_caseboard_' + new Date().toISOString().slice(0, 10) + '.csv';
+  link.href = URL.createObjectURL(blob);
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+
+document.getElementById('demo-toggle').addEventListener('click', () => {
+  state.demo = !state.demo;
+  const list = filteredFindings();
+  if (state.demo && list.length && !list.some(f => f.id === state.selectedId)) {
+    state.selectedId = list[0].id;
+  }
+  renderAll();
+});
+document.getElementById('demo-prev').addEventListener('click', () => moveDemo(-1));
+document.getElementById('demo-next').addEventListener('click', () => moveDemo(1));
+document.getElementById('export-csv').addEventListener('click', exportCsv);
+document.getElementById('reset-view').addEventListener('click', () => {
+  state.classification = defaultClassification;
+  state.leader = 'all';
+  state.task = 'all';
+  state.risk = 'all';
+  state.query = '';
+  state.demo = false;
+  state.selectedId = null;
+  classificationFilter.value = state.classification;
+  leaderFilter.value = state.leader;
+  taskFilter.value = state.task;
+  riskFilter.value = state.risk;
+  searchInput.value = '';
+  renderAll();
+});
+
+initControls();
+renderGenerated();
+renderAll();
+</script>
+</body>
+</html>
