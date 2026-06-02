@@ -33,7 +33,7 @@ body {
   color: var(--ink);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
 }
-button, input, select { font: inherit; }
+button, input, select, textarea { font: inherit; }
 button {
   border: 1px solid var(--border);
   background: var(--surface);
@@ -46,7 +46,7 @@ button:hover { border-color: #94a3b8; background: #f8fafc; }
 button.primary { background: var(--blue); border-color: var(--blue); color: #fff; }
 button.primary:hover { background: #1d4ed8; }
 button:disabled { opacity: 0.45; cursor: not-allowed; }
-select, input[type="text"] {
+select, input[type="text"], textarea {
   width: 100%;
   border: 1px solid var(--border);
   border-radius: 7px;
@@ -54,7 +54,7 @@ select, input[type="text"] {
   background: var(--surface);
   color: var(--ink);
 }
-select:focus, input:focus { outline: 2px solid var(--blue-soft); border-color: var(--blue); }
+select:focus, input:focus, textarea:focus { outline: 2px solid var(--blue-soft); border-color: var(--blue); }
 #app {
   height: 100vh;
   display: grid;
@@ -69,45 +69,19 @@ select:focus, input:focus { outline: 2px solid var(--blue-soft); border-color: v
   background: var(--surface);
   border-bottom: 1px solid var(--border);
 }
-.brand h1 {
-  margin: 0;
-  font-size: 18px;
-  line-height: 1.15;
-  letter-spacing: 0;
-}
-.brand .sub {
-  margin-top: 3px;
-  color: var(--muted);
-  font-size: 12px;
-}
-.kpis {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(86px, 1fr));
-  gap: 8px;
-  min-width: 520px;
-}
-.kpi {
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 7px 9px;
-  background: #fbfdff;
-}
-.kpi .num { font-size: 18px; font-weight: 750; line-height: 1; }
-.kpi .label {
-  margin-top: 3px;
-  color: var(--muted);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-}
+.brand h1 { margin: 0; font-size: 18px; line-height: 1.15; }
+.brand .sub { margin-top: 3px; color: var(--muted); font-size: 12px; }
+.counter { color: var(--muted); font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+.counter b { color: var(--ink); }
+.counter .gapn { color: var(--red); }
+
 .board {
   min-height: 0;
   display: grid;
-  grid-template-columns: 360px minmax(520px, 1fr) 350px;
+  grid-template-columns: 280px minmax(0, 1fr);
   gap: 12px;
   padding: 12px;
 }
-body.demo-mode .board { grid-template-columns: 300px minmax(560px, 1fr) 340px; }
 .pane {
   min-height: 0;
   background: var(--surface);
@@ -116,111 +90,37 @@ body.demo-mode .board { grid-template-columns: 300px minmax(560px, 1fr) 340px; }
   box-shadow: var(--shadow);
   overflow: hidden;
 }
-.left-pane, .right-pane { display: grid; grid-template-rows: auto minmax(0, 1fr); }
-.pane-head {
-  padding: 12px;
-  border-bottom: 1px solid var(--border);
-  background: #fbfdff;
-}
-.pane-title {
-  margin: 0;
-  font-size: 13px;
-  font-weight: 750;
-}
-.filters {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-top: 10px;
-}
-.filters .wide { grid-column: 1 / -1; }
+.nav-pane { display: grid; grid-template-rows: auto minmax(0, 1fr); }
+.pane-head { padding: 11px; border-bottom: 1px solid var(--border); background: #fbfdff; }
+.pane-title { margin: 0 0 9px; font-size: 13px; font-weight: 750; }
 .filter-label {
-  display: block;
-  margin-bottom: 4px;
-  color: var(--muted);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
+  display: block; margin-bottom: 4px; color: var(--muted);
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.4px;
 }
-.action-row {
-  display: flex;
-  gap: 6px;
-  margin-top: 10px;
-  flex-wrap: wrap;
+.nav-row-controls { margin-top: 9px; display: flex; align-items: center; gap: 6px; }
+.nav-row-controls .pos { color: var(--muted); font-size: 11px; font-weight: 700; flex: 1; text-align: center; }
+.nav-row-controls button { padding: 6px 9px; font-size: 12px; }
+.action-row { display: flex; gap: 6px; margin-top: 8px; }
+.action-row button { flex: 1; font-size: 12px; padding: 6px 8px; }
+
+.case-list { min-height: 0; overflow-y: auto; padding: 8px; }
+.case-row {
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 9px; margin-bottom: 7px; cursor: pointer; background: var(--surface);
 }
-.action-row button { font-size: 12px; padding: 6px 9px; }
-.demo-state {
-  display: none;
-  margin-top: 8px;
-  color: var(--blue);
-  font-size: 11px;
-  font-weight: 700;
-}
-body.demo-mode .demo-state { display: block; }
-.finding-list {
-  min-height: 0;
-  overflow-y: auto;
-  padding: 8px;
-}
-.group-title {
-  position: sticky;
-  top: -8px;
-  z-index: 1;
-  padding: 8px 6px 5px;
-  background: rgba(245, 247, 251, 0.95);
-  color: var(--muted);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border-bottom: 1px solid var(--border);
-}
-body.demo-mode .group-title { display: none; }
-.finding-card {
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 9px;
-  margin-bottom: 7px;
-  cursor: pointer;
-  background: var(--surface);
-}
-.finding-card:hover { border-color: #94a3b8; }
-.finding-card.active {
-  border-color: var(--blue);
-  box-shadow: inset 3px 0 0 var(--blue);
-  background: #f8fbff;
-}
-.finding-top {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  align-items: flex-start;
-}
-.finding-name {
-  font-size: 12px;
-  font-weight: 750;
-  line-height: 1.25;
-}
-.finding-id {
-  margin-top: 2px;
-  color: var(--muted);
-  font-size: 10.5px;
-  font-family: Consolas, "SFMono-Regular", monospace;
-}
-.badge-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin-top: 7px;
-}
+.case-row:hover { border-color: #94a3b8; }
+.case-row.active { border-color: var(--blue); box-shadow: inset 3px 0 0 var(--blue); background: #f8fbff; }
+.case-row-top { display: flex; justify-content: space-between; gap: 8px; align-items: flex-start; }
+.case-row-name { font-size: 12px; font-weight: 750; line-height: 1.25; }
+.case-row-path { margin-top: 2px; color: var(--muted); font-size: 10.5px; font-family: Consolas, "SFMono-Regular", monospace; }
+.dot { width: 9px; height: 9px; border-radius: 999px; flex: none; margin-top: 4px; border: 1.5px solid var(--border); background: transparent; }
+.dot.real { background: var(--green); border-color: var(--green); }
+.dot.noise { background: #94a3b8; border-color: #94a3b8; }
+.dot.needs-info { background: var(--amber); border-color: var(--amber); }
+.badge-row { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 7px; }
 .badge {
-  display: inline-flex;
-  align-items: center;
-  min-height: 19px;
-  border-radius: 999px;
-  padding: 2px 7px;
-  font-size: 10px;
-  font-weight: 700;
-  white-space: nowrap;
+  display: inline-flex; align-items: center; min-height: 19px; border-radius: 999px;
+  padding: 2px 7px; font-size: 10px; font-weight: 700; white-space: nowrap;
 }
 .badge.gap { color: var(--red); background: var(--red-soft); }
 .badge.doc { color: var(--amber); background: var(--amber-soft); }
@@ -228,221 +128,84 @@ body.demo-mode .group-title { display: none; }
 .badge.info { color: var(--blue); background: var(--blue-soft); }
 .badge.risk { color: var(--violet); background: var(--violet-soft); }
 .badge.muted { color: var(--muted); background: var(--surface-soft); }
-.mini-reason {
-  margin-top: 7px;
-  color: var(--muted);
-  font-size: 11px;
-  line-height: 1.35;
-  max-height: 45px;
-  overflow: hidden;
+
+.case-pane { min-height: 0; overflow-y: auto; }
+.case-head { padding: 16px 18px 13px; border-bottom: 1px solid var(--border); }
+.case-eyebrow { color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+.case-title { margin: 5px 0 0; font-size: 21px; line-height: 1.25; font-weight: 760; }
+.case-title b { color: var(--blue); }
+.case-meta { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 10px; }
+
+.story { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 14px 18px; }
+.story-col { border: 1px solid var(--border); border-radius: 9px; padding: 12px; background: #fbfdff; min-width: 0; }
+.story-col.orphaned { border-color: #fecaca; background: #fff7f7; }
+.story-col h3 {
+  margin: 0 0 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;
 }
-body.demo-mode .mini-reason { display: none; }
-.case-pane {
-  min-height: 0;
-  display: grid;
-  grid-template-rows: auto auto minmax(0, 1fr);
-}
-.case-head {
-  padding: 15px 16px 12px;
-  border-bottom: 1px solid var(--border);
-}
-.case-eyebrow {
-  color: var(--muted);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-.case-title {
-  margin: 4px 0 0;
-  font-size: 20px;
-  line-height: 1.2;
-  letter-spacing: 0;
-}
-.case-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  margin-top: 9px;
-}
-.flow {
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--border);
-  background: linear-gradient(180deg, #ffffff, #f8fbff);
-}
-.test-title {
-  margin: 0 0 8px;
-  color: var(--muted);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-.test-strip {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  gap: 8px;
-}
-.test-step {
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: #fff;
-  padding: 8px;
-  min-width: 0;
-}
-.test-step.final {
-  border-color: #fecaca;
-  background: #fff7f7;
-}
-.test-label {
-  color: var(--muted);
-  font-size: 9.5px;
-  text-transform: uppercase;
-  letter-spacing: 0.35px;
-}
-.test-main {
-  margin-top: 3px;
-  color: var(--ink);
-  font-weight: 750;
-  font-size: 11px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.test-sub {
-  margin-top: 2px;
-  color: var(--muted);
-  font-size: 10.5px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.evidence-scroll {
-  min-height: 0;
-  overflow-y: auto;
-  padding: 14px 16px 18px;
-}
-.evidence-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-.evidence-block {
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 11px;
-  background: #fbfdff;
-  min-width: 0;
-}
-.evidence-block.wide { grid-column: 1 / -1; }
-.block-title {
-  margin: 0 0 7px;
-  color: var(--muted);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.45px;
-}
-.block-text {
-  margin: 0;
-  color: var(--ink);
-  font-size: 12px;
-  line-height: 1.48;
-  overflow-wrap: anywhere;
-}
-.quote {
-  border-left: 3px solid var(--blue);
-  padding-left: 9px;
-  color: #334155;
-  font-style: italic;
-}
-.reasoning {
-  font-size: 14px;
-  line-height: 1.55;
-}
-.empty {
-  padding: 28px;
-  color: var(--muted);
-  text-align: center;
-  font-size: 13px;
-}
-.right-scroll {
-  min-height: 0;
-  overflow-y: auto;
-  padding: 10px;
-}
-.entity-box {
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 10px;
-  margin-bottom: 9px;
-  background: #fbfdff;
-}
-.entity-box h3 {
-  margin: 0;
-  font-size: 12px;
-  line-height: 1.25;
-}
-.entity-box .entity-id {
-  color: var(--muted);
-  font-size: 10.5px;
-  font-family: Consolas, "SFMono-Regular", monospace;
-  margin-top: 2px;
-}
-.metric-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
-  margin-top: 9px;
-}
-.metric {
-  border: 1px solid var(--border);
-  border-radius: 7px;
-  padding: 7px;
-  background: #fff;
-}
-.metric .m-label {
-  color: var(--muted);
-  font-size: 9.5px;
-  text-transform: uppercase;
-  letter-spacing: 0.35px;
-}
-.metric .m-val {
-  margin-top: 2px;
-  font-weight: 750;
-  font-size: 12px;
-  overflow-wrap: anywhere;
-}
-.edge-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  border: 1px solid var(--border);
-  border-radius: 7px;
-  padding: 7px;
-  margin-top: 6px;
-  font-size: 11px;
-  background: #fff;
-}
-.edge-row code {
-  color: var(--blue);
-  font-family: Consolas, "SFMono-Regular", monospace;
-  font-size: 10.5px;
-}
-.status-line {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  margin-top: 8px;
-}
-@media (max-width: 1150px) {
+.story-col.transferred h3 { color: var(--blue); }
+.story-col.covered h3 { color: var(--amber); }
+.story-col.orphaned h3 { color: var(--red); }
+.story-col .sub { margin: 0 0 9px; color: var(--muted); font-size: 10px; }
+.story-prose { margin: 0 0 9px; font-size: 12px; line-height: 1.5; color: var(--ink); overflow-wrap: anywhere; }
+.story-prose.muted { color: var(--muted); font-style: italic; }
+.story-reason { font-size: 13.5px; line-height: 1.55; color: var(--ink); }
+.risk-line { font-size: 11.5px; line-height: 1.4; margin-bottom: 6px; overflow-wrap: anywhere; }
+.risk-line code { color: var(--violet); font-family: Consolas, "SFMono-Regular", monospace; font-size: 10.5px; }
+.control-item { border: 1px solid var(--border); border-radius: 7px; padding: 7px 8px; margin-bottom: 6px; background: #fff; }
+.control-item .ct-title { font-size: 11.5px; font-weight: 700; line-height: 1.3; }
+.control-item .ct-desc { margin-top: 3px; color: var(--muted); font-size: 10.5px; line-height: 1.4; }
+.control-item .ct-tags { margin-top: 4px; display: flex; flex-wrap: wrap; gap: 3px; }
+.tag { font-size: 9.5px; font-family: Consolas, monospace; color: var(--muted); background: var(--surface-soft); border-radius: 5px; padding: 1px 5px; }
+.more-note { color: var(--muted); font-size: 10.5px; margin-top: 4px; }
+
+.action-card { margin: 0 18px 14px; border: 1px solid var(--border); border-radius: 9px; padding: 13px 14px; background: var(--surface-soft); }
+.action-card .now-what { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); }
+.action-card .act-title { margin: 4px 0 0; font-size: 15px; font-weight: 750; }
+.action-card ul { margin: 8px 0 0; padding-left: 18px; }
+.action-card li { font-size: 12px; line-height: 1.5; color: #334155; margin-bottom: 3px; }
+.decision-row { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.seg { display: inline-flex; border: 1px solid var(--border); border-radius: 7px; overflow: hidden; }
+.seg button { border: none; border-right: 1px solid var(--border); border-radius: 0; padding: 6px 11px; font-size: 11.5px; background: var(--surface); }
+.seg button:last-child { border-right: none; }
+.seg button.on.real { background: var(--green-soft); color: var(--green); font-weight: 750; }
+.seg button.on.noise { background: var(--surface); color: var(--ink); font-weight: 750; box-shadow: inset 0 0 0 1px #94a3b8; }
+.seg button.on.needs { background: var(--amber-soft); color: var(--amber); font-weight: 750; }
+.decision-row .dec-field { flex: 1; min-width: 130px; }
+.decision-row .dec-field input { padding: 6px 8px; font-size: 12px; }
+.dec-saved { color: var(--green); font-size: 10.5px; }
+
+.detail-block { margin: 0 18px 16px; }
+details.evidence { border: 1px solid var(--border); border-radius: 9px; background: #fbfdff; }
+details.evidence > summary { cursor: pointer; padding: 11px 13px; font-size: 12px; font-weight: 700; color: var(--ink); list-style: none; }
+details.evidence > summary::-webkit-details-marker { display: none; }
+details.evidence > summary::before { content: "▸ "; color: var(--muted); }
+details.evidence[open] > summary::before { content: "▾ "; }
+.evidence-body { padding: 0 13px 13px; }
+.evidence-block { border: 1px solid var(--border); border-radius: 8px; padding: 11px; background: #fff; margin-top: 10px; min-width: 0; }
+.block-title { margin: 0 0 7px; color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: 0.45px; }
+.block-text { margin: 0; color: var(--ink); font-size: 12px; line-height: 1.48; overflow-wrap: anywhere; }
+.quote { border-left: 3px solid var(--blue); padding-left: 9px; color: #334155; font-style: italic; }
+.finding-mini { border: 1px solid var(--border); border-radius: 7px; padding: 8px; margin-top: 7px; background: #fff; }
+.finding-mini .fm-top { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.finding-mini .fm-reason { margin-top: 5px; color: var(--muted); font-size: 11px; line-height: 1.4; }
+.entity-box { border: 1px solid var(--border); border-radius: 8px; padding: 10px; margin-top: 10px; background: #fff; }
+.entity-box h3 { margin: 0; font-size: 12px; line-height: 1.25; }
+.entity-box .entity-id { color: var(--muted); font-size: 10.5px; font-family: Consolas, "SFMono-Regular", monospace; margin-top: 2px; }
+.status-line { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+.metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 9px; }
+.metric { border: 1px solid var(--border); border-radius: 7px; padding: 7px; background: #fbfdff; }
+.metric .m-label { color: var(--muted); font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.35px; }
+.metric .m-val { margin-top: 2px; font-weight: 750; font-size: 12px; overflow-wrap: anywhere; }
+.empty { padding: 28px; color: var(--muted); text-align: center; font-size: 13px; }
+
+@media (max-width: 1050px) {
   body { overflow: auto; height: auto; }
   #app { height: auto; min-height: 100vh; }
   .topbar { align-items: flex-start; flex-direction: column; }
-  .kpis { width: 100%; min-width: 0; grid-template-columns: repeat(2, 1fr); }
-  .board, body.demo-mode .board { grid-template-columns: 1fr; }
+  .board { grid-template-columns: 1fr; }
   .pane { min-height: 360px; }
-  .left-pane, .right-pane, .case-pane { min-height: 520px; }
-  .evidence-grid { grid-template-columns: 1fr; }
-  .evidence-block.wide { grid-column: auto; }
+  .nav-pane { min-height: 420px; }
+  .story { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -453,105 +216,89 @@ body.demo-mode .mini-reason { display: none; }
       <h1>Audit Universe Assurance Caseboard</h1>
       <div class="sub" id="generated-at"></div>
     </div>
-    <div class="kpis" id="kpis"></div>
+    <div class="counter" id="counter"></div>
   </header>
 
   <main class="board">
-    <section class="pane left-pane" id="left-pane">
+    <section class="pane nav-pane">
       <div class="pane-head">
-        <h2 class="pane-title">Findings</h2>
-        <div class="filters">
-          <div>
-            <label class="filter-label" for="classification-filter">Classification</label>
-            <select id="classification-filter"></select>
-          </div>
-          <div>
-            <label class="filter-label" for="leader-filter">Audit Leader</label>
-            <select id="leader-filter"></select>
-          </div>
-          <div>
-            <label class="filter-label" for="task-filter">Review Type</label>
-            <select id="task-filter"></select>
-          </div>
-          <div>
-            <label class="filter-label" for="risk-filter">Risk</label>
-            <select id="risk-filter"></select>
-          </div>
-          <div class="wide">
-            <label class="filter-label" for="search-input">Entity ID</label>
-            <input type="text" id="search-input" placeholder="AE-22">
-          </div>
+        <h2 class="pane-title">Cases</h2>
+        <div>
+          <label class="filter-label" for="classification-filter">Classification</label>
+          <select id="classification-filter"></select>
+        </div>
+        <div style="margin-top:9px;">
+          <label class="filter-label" for="search-input">Search entity / case</label>
+          <input type="text" id="search-input" placeholder="AE-22">
+        </div>
+        <div class="nav-row-controls">
+          <button id="nav-prev">Prev</button>
+          <span class="pos" id="nav-pos"></span>
+          <button id="nav-next">Next</button>
         </div>
         <div class="action-row">
-          <button class="primary" id="demo-toggle">Demo</button>
-          <button id="demo-prev">Prev</button>
-          <button id="demo-next">Next</button>
-          <button id="export-csv">CSV</button>
+          <button id="export-csv">Export CSV</button>
           <button id="reset-view">Reset</button>
         </div>
-        <div class="demo-state" id="demo-state"></div>
       </div>
-      <div class="finding-list" id="finding-list"></div>
+      <div class="case-list" id="case-list"></div>
     </section>
 
-    <section class="pane case-pane">
+    <section class="pane case-pane" id="case-pane">
       <div class="case-head" id="case-head"></div>
-      <div class="flow" id="flow"></div>
-      <div class="evidence-scroll" id="case-detail"></div>
+      <div id="case-story"></div>
+      <div id="case-action"></div>
+      <div class="detail-block" id="case-evidence"></div>
     </section>
-
-    <aside class="pane right-pane">
-      <div class="pane-head">
-        <h2 class="pane-title">Portfolio Impact</h2>
-      </div>
-      <div class="right-scroll" id="impact-panel"></div>
-    </aside>
   </main>
 </div>
 
 <script>
 %%DATA_INJECTION%%
 
-const findings = DATA.findings || [];
+const cases = DATA.cases || [];
+const findingsById = {};
+(DATA.findings || []).forEach(f => { findingsById[f.id] = f; });
+
 const defaultClassification = (DATA.summary && DATA.summary.classifications && DATA.summary.classifications['likely coverage gap']) ? 'likely coverage gap' : 'all';
 const state = {
   classification: defaultClassification,
-  leader: 'all',
-  task: 'all',
-  risk: 'all',
   query: '',
-  selectedId: null,
-  demo: false
+  selectedCaseKey: null
 };
+let externalLoad = false;   // a #case=... deep link on first load may relax the filter
 
 const classificationFilter = document.getElementById('classification-filter');
-const leaderFilter = document.getElementById('leader-filter');
-const taskFilter = document.getElementById('task-filter');
-const riskFilter = document.getElementById('risk-filter');
 const searchInput = document.getElementById('search-input');
-const REVIEW_TYPE_LABELS = {
-  1: 'Manual conformance',
-  2: 'Rating consistency',
-  3: 'Embedded-control check',
-  4: 'Entity alignment',
-  5: 'Receiver coverage'
-};
+
+const DECISION_KEY = 'caseboard.decisions.v1';
+function loadDecisions() { try { return JSON.parse(localStorage.getItem(DECISION_KEY)) || {}; } catch (e) { return {}; } }
+function saveDecision(k, patch) {
+  const all = loadDecisions();
+  all[k] = Object.assign({ status: '', owner: '', note: '', ts: '' }, all[k], patch, { ts: new Date().toISOString() });
+  try { localStorage.setItem(DECISION_KEY, JSON.stringify(all)); } catch (e) {}
+}
+function decisionFor(k) { return loadDecisions()[k] || { status: '', owner: '', note: '', ts: '' }; }
 
 function esc(value) {
   return String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   }[ch]));
 }
-
 function label(value) {
   const text = String(value || '').trim();
   return text ? text.charAt(0).toUpperCase() + text.slice(1) : '';
 }
-
-function reviewTypeLabel(task) {
-  return REVIEW_TYPE_LABELS[Number(task)] || 'Review';
+// Plain-language review kind — no "Task 3/5" jargon ever reaches the auditor.
+function reviewKind(task) {
+  const t = Number(task);
+  if (t === 5) return { label: 'Cross-entity handoff', blurb: 'Receiver may not cover this risk' };
+  if (t === 3) return { label: 'Embedded control', blurb: 'May have no named owner' };
+  if (t === 1) return { label: 'Documentation conformance', blurb: '' };
+  if (t === 2) return { label: 'Rating consistency', blurb: '' };
+  if (t === 4) return { label: 'Entity alignment', blurb: '' };
+  return { label: 'Review', blurb: '' };
 }
-
 function classKind(value) {
   const v = String(value || '').toLowerCase();
   if (v.includes('coverage gap')) return 'gap';
@@ -559,7 +306,6 @@ function classKind(value) {
   if (v.includes('conforms')) return 'ok';
   return 'muted';
 }
-
 function riskKind(value) {
   const v = String(value || '').toLowerCase();
   if (v === 'critical' || v === 'high') return 'gap';
@@ -567,226 +313,227 @@ function riskKind(value) {
   if (v === 'low') return 'ok';
   return 'muted';
 }
-
-function optionHtml(value, text) {
-  return `<option value="${esc(value)}">${esc(text)}</option>`;
-}
-
-function populateSelect(el, values, allLabel, current, formatter) {
-  const opts = [optionHtml('all', allLabel)];
-  values.forEach(v => opts.push(optionHtml(v, formatter ? formatter(v) : v)));
-  el.innerHTML = opts.join('');
-  el.value = current;
-}
-
-function initControls() {
-  const classes = DATA.filters.classifications || [];
-  populateSelect(classificationFilter, classes, 'All', state.classification, label);
-  populateSelect(leaderFilter, DATA.filters.leaders || [], 'All', state.leader);
-  populateSelect(taskFilter, (DATA.filters.tasks || []).map(String), 'All', state.task, reviewTypeLabel);
-  populateSelect(riskFilter, DATA.filters.riskCategories || [], 'All', state.risk);
-  classificationFilter.addEventListener('change', () => { state.classification = classificationFilter.value; renderAll(); });
-  leaderFilter.addEventListener('change', () => { state.leader = leaderFilter.value; renderAll(); });
-  taskFilter.addEventListener('change', () => { state.task = taskFilter.value; renderAll(); });
-  riskFilter.addEventListener('change', () => { state.risk = riskFilter.value; renderAll(); });
-  searchInput.addEventListener('input', () => { state.query = searchInput.value.trim().toLowerCase(); renderAll(); });
-}
-
-function findingHaystack(f) {
-  return [f.sourceId, f.targetId].join(' ').toLowerCase();
-}
-
-function filteredFindings() {
-  return findings.filter(f => {
-    if (state.classification !== 'all' && f.classification !== state.classification) return false;
-    if (state.leader !== 'all' && (f.source || {}).auditLeader !== state.leader) return false;
-    if (state.task !== 'all' && String(f.task) !== state.task) return false;
-    if (state.risk !== 'all' && f.riskCategory !== state.risk) return false;
-    if (state.query && !findingHaystack(f).includes(state.query)) return false;
-    return true;
-  });
-}
-
-function selectedFinding(list) {
-  if (!list.length) {
-    state.selectedId = null;
-    return null;
-  }
-  let current = list.find(f => f.id === state.selectedId);
-  if (!current) {
-    current = list[0];
-    state.selectedId = current.id;
-  }
-  return current;
-}
-
-function renderKpis(list) {
-  const total = list.length;
-  const gaps = list.filter(f => f.classification === 'likely coverage gap').length;
-  const docs = list.filter(f => f.classification === 'documentation issue').length;
-  const conforms = list.filter(f => f.classification === 'conforms').length;
-  const task5 = list.filter(f => f.task === 5).length;
-  const items = [
-    ['Visible', total],
-    ['Likely gaps', gaps],
-    ['Doc issues', docs],
-    ['Conforms', conforms],
-    ['Task 5', task5]
-  ];
-  document.getElementById('kpis').innerHTML = items.map(([name, val]) =>
-    `<div class="kpi"><div class="num">${val}</div><div class="label">${esc(name)}</div></div>`
-  ).join('');
-}
-
-function renderList(list) {
-  const root = document.getElementById('finding-list');
-  if (!list.length) {
-    root.innerHTML = '<div class="empty">No findings match the current filters.</div>';
-    return;
-  }
-  if (state.demo) {
-    const active = list.find(f => f.id === state.selectedId) || list[0];
-    root.innerHTML = renderFindingCard(active);
-    bindFindingCards();
-    return;
-  }
-  const groups = new Map();
-  list.forEach(f => {
-    const leader = (f.source && f.source.auditLeader) || 'Unknown';
-    if (!groups.has(leader)) groups.set(leader, []);
-    groups.get(leader).push(f);
-  });
-  let html = '';
-  [...groups.keys()].sort().forEach(leader => {
-    const rows = groups.get(leader);
-    html += `<div class="group-title">${esc(leader)} (${rows.length})</div>`;
-    html += rows.map(renderFindingCard).join('');
-  });
-  root.innerHTML = html;
-  bindFindingCards();
-}
-
-function renderFindingCard(f) {
-  const active = f.id === state.selectedId ? ' active' : '';
-  const target = f.targetId ? `${f.targetId} ${f.targetName || ''}` : 'Entity-local';
-  return `
-    <div class="finding-card${active}" data-id="${esc(f.id)}">
-      <div class="finding-top">
-        <div>
-          <div class="finding-name">${esc(f.sourceName || f.sourceId)}</div>
-          <div class="finding-id">${esc(f.sourceId)} -> ${esc(target)}</div>
-        </div>
-        <span class="badge ${classKind(f.classification)}">${esc(label(f.classification))}</span>
-      </div>
-      <div class="badge-row">
-        <span class="badge info">Task ${esc(f.task || '')}</span>
-        <span class="badge risk">${esc(f.riskCategory || 'Unspecified')}</span>
-        <span class="badge muted">Batch ${esc(f.batchId || '')}</span>
-        ${f.gatePassed ? '' : '<span class="badge doc">Gate</span>'}
-      </div>
-      <div class="mini-reason">${esc(f.reasoning || '')}</div>
-    </div>
-  `;
-}
-
-function bindFindingCards() {
-  document.querySelectorAll('.finding-card').forEach(card => {
-    card.addEventListener('click', () => {
-      state.selectedId = card.dataset.id;
-      renderAll();
-    });
-  });
-}
-
 function chipHtml(text, kind) {
   return text ? `<span class="badge ${kind || 'muted'}">${esc(text)}</span>` : '';
 }
+function optionHtml(value, text) { return `<option value="${esc(value)}">${esc(text)}</option>`; }
 
-function renderCaseHead(f) {
-  const title = f ? `${f.sourceId} ${f.sourceName}` : 'No finding selected';
-  const target = f && f.targetId ? `${f.targetId} ${f.targetName}` : 'Entity-local review';
-  document.getElementById('case-head').innerHTML = f ? `
-    <div class="case-eyebrow">${esc(f.id)} | ${esc(f.taskName || ('Task ' + f.task))}</div>
-    <h2 class="case-title">${esc(title)}</h2>
+function initControls() {
+  const classes = DATA.filters.classifications || [];
+  const opts = [optionHtml('all', 'All classifications')];
+  classes.forEach(v => opts.push(optionHtml(v, label(v))));
+  classificationFilter.innerHTML = opts.join('');
+  classificationFilter.value = state.classification;
+  classificationFilter.addEventListener('change', () => { state.classification = classificationFilter.value; renderAll(); });
+  searchInput.addEventListener('input', () => { state.query = searchInput.value.trim().toLowerCase(); renderAll(); });
+}
+
+function caseHaystack(c) {
+  return [c.caseKey, c.sourceId, c.sourceName, c.targetId, c.targetName].join(' ').toLowerCase();
+}
+function filteredCases() {
+  return cases.filter(c => {
+    if (state.classification !== 'all' && c.classification !== state.classification) return false;
+    if (state.query && !caseHaystack(c).includes(state.query)) return false;
+    return true;
+  });
+}
+function selectedCase(list) {
+  if (!list.length) { state.selectedCaseKey = null; return null; }
+  let current = list.find(c => c.caseKey === state.selectedCaseKey);
+  if (!current) { current = list[0]; state.selectedCaseKey = current.caseKey; }
+  return current;
+}
+
+function riskGist(c) {
+  const kr = (c.keyRisks || []).find(r => r.description && r.description !== r.id);
+  if (kr) return kr.description;
+  return c.riskCategory && c.riskCategory !== 'Unspecified' ? c.riskCategory : 'this risk';
+}
+
+function renderCounter(list) {
+  const gaps = cases.filter(c => c.classification === 'likely coverage gap').length;
+  const showing = list.length;
+  document.getElementById('counter').innerHTML =
+    `<b>${showing}</b> of ${cases.length} cases shown · <span class="gapn"><b>${gaps}</b> likely gaps</span>`;
+}
+
+function caseRowHtml(c) {
+  const active = c.caseKey === state.selectedCaseKey ? ' active' : '';
+  const target = c.targetId ? `${c.targetId} ${c.targetName || ''}` : 'Entity-local';
+  const dec = decisionFor(c.caseKey);
+  const dotCls = dec.status ? ' ' + dec.status.replace(' ', '-') : '';
+  const rk = reviewKind(c.task).label;
+  const n = c.findingCount > 1 ? ` <span class="badge muted">${c.findingCount} findings</span>` : '';
+  return `
+    <div class="case-row${active}" data-key="${esc(c.caseKey)}">
+      <div class="case-row-top">
+        <div>
+          <div class="case-row-name">${esc(c.sourceName || c.sourceId)}</div>
+          <div class="case-row-path">${esc(c.sourceId)} &rarr; ${esc(target)}</div>
+        </div>
+        <span class="dot${dotCls}" title="${esc(dec.status || 'no decision')}"></span>
+      </div>
+      <div class="badge-row">
+        <span class="badge ${classKind(c.classification)}">${esc(label(c.classification))}</span>
+        <span class="badge info">${esc(rk)}</span>
+        <span class="badge risk">${esc(c.riskCategory || 'Unspecified')}</span>${n}
+      </div>
+    </div>`;
+}
+
+function renderNav(list) {
+  const root = document.getElementById('case-list');
+  if (!list.length) { root.innerHTML = '<div class="empty">No cases match the current filters.</div>'; }
+  else { root.innerHTML = list.map(caseRowHtml).join(''); }
+  root.querySelectorAll('.case-row').forEach(row => {
+    row.addEventListener('click', () => { state.selectedCaseKey = row.dataset.key; renderAll(); });
+  });
+  const idx = list.findIndex(c => c.caseKey === state.selectedCaseKey);
+  document.getElementById('nav-pos').textContent = list.length ? `${idx >= 0 ? idx + 1 : 0} / ${list.length}` : '0 / 0';
+  document.getElementById('nav-prev').disabled = list.length < 2;
+  document.getElementById('nav-next').disabled = list.length < 2;
+}
+
+function caseHeadline(c) {
+  const head = document.getElementById('case-head');
+  if (!c) { head.innerHTML = '<div class="empty">No case selected.</div>'; return; }
+  const rk = reviewKind(c.task);
+  const src = `${esc(c.sourceId)} ${esc(c.sourceName || '')}`.trim();
+  let sentence;
+  if (c.task === 5) {
+    const tgt = c.targetId ? `${esc(c.targetId)} ${esc(c.targetName || '')}`.trim() : 'an unnamed downstream owner';
+    sentence = `${src} handed off <b>${esc(riskGist(c))}</b> to ${tgt}.`;
+  } else if (c.task === 3) {
+    const area = (c.riskCategory && c.riskCategory !== 'Unspecified') ? esc(c.riskCategory) : 'a control area';
+    sentence = `${src} relies on an embedded control for <b>${area}</b> with no named receiver.`;
+  } else {
+    const area = (c.riskCategory && c.riskCategory !== 'Unspecified') ? esc(c.riskCategory) : 'this area';
+    sentence = `${src} — ${esc(rk.label.toLowerCase())} for <b>${area}</b>.`;
+  }
+  const target = c.targetId ? `${c.targetId} ${c.targetName || ''}` : 'Entity-local review';
+  head.innerHTML = `
+    <div class="case-eyebrow">${esc(rk.label)}${rk.blurb ? ' · ' + esc(rk.blurb) : ''}</div>
+    <h2 class="case-title">${sentence}</h2>
     <div class="case-meta">
-      ${chipHtml(label(f.classification), classKind(f.classification))}
-      ${chipHtml(f.riskCategory, 'risk')}
+      ${chipHtml(label(c.classification), classKind(c.classification))}
+      ${chipHtml(c.riskCategory, 'risk')}
       ${chipHtml(target, 'info')}
-      ${chipHtml(f.evidenceLayer ? 'Evidence: ' + f.evidenceLayer : '', 'muted')}
-    </div>
-  ` : '<div class="empty">No finding selected.</div>';
+      ${c.findingCount > 1 ? chipHtml(c.findingCount + ' findings', 'muted') : ''}
+      ${c.gatePassed ? '' : chipHtml('Gate flagged', 'doc')}
+    </div>`;
 }
 
-function renderFlow(f) {
-  if (!f) {
-    document.getElementById('flow').innerHTML = '';
-    return;
+function renderStory(c) {
+  const root = document.getElementById('case-story');
+  if (!c) { root.innerHTML = ''; return; }
+  const source = c.source || {};
+  const target = c.target || null;
+
+  // TRANSFERRED — what A handed off
+  const srcProse = source.handoffDesc || source.overview || '';
+  let risks = (c.keyRisks || []).map(r =>
+    r.description && r.description !== r.id
+      ? `<div class="risk-line"><code>${esc(r.id)}</code> — ${esc(r.description)}</div>`
+      : `<div class="risk-line"><code>${esc(r.id)}</code></div>`
+  ).join('');
+  let kpas = (c.kpas || []).filter(k => k.description && k.description !== k.id)
+    .map(k => `<div class="risk-line"><code>${esc(k.id)}</code> — ${esc(k.description)}</div>`).join('');
+  const transferred = `
+    <div class="story-col transferred">
+      <h3>Transferred</h3>
+      <p class="sub">What ${esc(c.sourceId)} handed off</p>
+      <p class="story-prose${srcProse ? '' : ' muted'}">${esc(srcProse) || 'No hand-off description on file.'}</p>
+      ${risks || '<div class="risk-line" style="color:var(--muted);font-style:italic;">No specific risk IDs named.</div>'}
+      ${kpas}
+    </div>`;
+
+  // COVERED — what the receiver actually tests
+  const recvName = target ? `${target.id} ${target.name || ''}` : c.sourceId;
+  const recvProse = target ? (target.handoffDesc || target.overview || '') : (source.handoffDesc || source.overview || '');
+  let controls = (c.coveringControls || []).map(ct => `
+    <div class="control-item">
+      <div class="ct-title">${esc(ct.title || ct.controlId || 'Untitled control')}</div>
+      ${ct.description ? `<div class="ct-desc">${esc(ct.description)}</div>` : ''}
+      <div class="ct-tags">
+        ${ct.controlId ? `<span class="tag">${esc(ct.controlId)}</span>` : ''}
+        ${ct.srId ? `<span class="tag">${esc(ct.srId)}</span>` : ''}
+        ${ct.kpaId ? `<span class="tag">${esc(ct.kpaId)}</span>` : ''}
+      </div>
+    </div>`).join('');
+  let coveredBody;
+  if (controls) {
+    const more = (c.coveringControlsTotal || 0) > (c.coveringControls || []).length
+      ? `<div class="more-note">Showing ${(c.coveringControls || []).length} of ${c.coveringControlsTotal} matching controls.</div>` : '';
+    coveredBody = controls + more;
+  } else if (!target) {
+    coveredBody = '<p class="story-prose muted">No receiving-entity profile — embedded / entity-local control.</p>';
+  } else {
+    coveredBody = '<p class="story-prose muted">No control in the export touches this risk area.</p>';
   }
-  const source = f.source || {};
-  const targetLabel = f.targetId ? `${f.targetId} ${f.targetName || ''}` : 'Entity-local evidence';
-  const verdict = label(f.classification);
-  document.getElementById('flow').innerHTML = `
-    <svg viewBox="0 0 860 76" role="img" aria-label="Evidence chain">
-      <defs>
-        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-          <path d="M 0 0 L 10 5 L 0 10 z" fill="#2563eb"></path>
-        </marker>
-      </defs>
-      <line x1="74" y1="38" x2="786" y2="38" stroke="#bfd0e5" stroke-width="3"></line>
-      <line x1="74" y1="38" x2="786" y2="38" stroke="#2563eb" stroke-width="3" marker-end="url(#arrow)"></line>
-      <circle cx="74" cy="38" r="16" fill="#dbeafe" stroke="#2563eb" stroke-width="2"></circle>
-      <circle cx="312" cy="38" r="16" fill="#ede9fe" stroke="#6d28d9" stroke-width="2"></circle>
-      <circle cx="548" cy="38" r="16" fill="#fef3c7" stroke="#a16207" stroke-width="2"></circle>
-      <circle cx="786" cy="38" r="16" fill="${classKind(f.classification) === 'gap' ? '#fee2e2' : classKind(f.classification) === 'doc' ? '#fef3c7' : '#dcfce7'}" stroke="${classKind(f.classification) === 'gap' ? '#b91c1c' : classKind(f.classification) === 'doc' ? '#a16207' : '#15803d'}" stroke-width="2"></circle>
-    </svg>
-    <div class="flow-labels">
-      <div class="flow-label"><strong>${esc(f.sourceId)}</strong><span>${esc(source.auditLeader || '')}</span></div>
-      <div class="flow-label"><strong>${esc(f.riskCategory)}</strong><span>${esc((f.specificRiskIds || []).join('; ') || 'No SR IDs')}</span></div>
-      <div class="flow-label"><strong>${esc(targetLabel)}</strong><span>${esc(f.evidenceLayer || 'Evidence')}</span></div>
-      <div class="flow-label"><strong>${esc(verdict)}</strong><span>${esc(f.gatePassed ? 'Gate passed' : 'Gate flagged')}</span></div>
-    </div>
-  `;
+  const covered = `
+    <div class="story-col covered">
+      <h3>Covered</h3>
+      <p class="sub">What ${esc(recvName.trim())} actually tests</p>
+      ${recvProse ? `<p class="story-prose">${esc(recvProse)}</p>` : ''}
+      ${c.evidenceQuote ? `<p class="story-prose quote">${esc(c.evidenceQuote)}</p>` : ''}
+      ${coveredBody}
+    </div>`;
+
+  // ORPHANED — the verdict
+  const orphaned = `
+    <div class="story-col orphaned">
+      <h3>Orphaned</h3>
+      <p class="sub">The model's read</p>
+      <div style="margin-bottom:8px;">${chipHtml(label(c.classification), classKind(c.classification))}</div>
+      <div class="story-reason">${esc(c.reasoning || 'No reasoning recorded.')}</div>
+    </div>`;
+
+  root.innerHTML = `<div class="story">${transferred}${covered}${orphaned}</div>`;
 }
 
-function textBlock(title, text, cls) {
-  const body = text ? esc(text) : 'Not provided.';
-  return `<div class="evidence-block ${cls || ''}"><h3 class="block-title">${esc(title)}</h3><p class="block-text">${body}</p></div>`;
-}
-
-function renderCaseDetail(f) {
-  const root = document.getElementById('case-detail');
-  if (!f) {
-    root.innerHTML = '<div class="empty">No findings match the current filters.</div>';
-    return;
-  }
-  const source = f.source || {};
-  const target = f.target || null;
-  const sourceClaim = source.handoffDesc || source.overview || '';
-  const receiverText = target ? (target.handoffDesc || target.overview || '') : '';
-  const sr = (f.specificRiskIds || []).join('; ') || 'Not provided';
-  const kpa = (f.kpaIds || []).join('; ') || 'Not provided';
+function renderAction(c) {
+  const root = document.getElementById('case-action');
+  if (!c) { root.innerHTML = ''; return; }
+  const a = c.recommendedAction || { title: 'Review and triage', steps: [] };
+  const steps = (a.steps || []).map(s => `<li>${esc(s)}</li>`).join('');
+  const dec = decisionFor(c.caseKey);
+  const seg = (val, cls, text) =>
+    `<button data-status="${val}" class="${dec.status === val ? 'on ' + cls : ''}">${esc(text)}</button>`;
   root.innerHTML = `
-    <div class="evidence-grid">
-      ${textBlock('Handoff Claim / Entity Context', sourceClaim)}
-      ${textBlock(target ? 'Receiving Entity Context' : 'Entity-Local Context', receiverText)}
-      <div class="evidence-block">
-        <h3 class="block-title">Risk Slice</h3>
-        <p class="block-text"><strong>${esc(f.riskCategory)}</strong><br>SR: ${esc(sr)}<br>KPA: ${esc(kpa)}</p>
+    <div class="action-card">
+      <div class="now-what">Now what</div>
+      <p class="act-title">${esc(a.title)}</p>
+      ${steps ? `<ul>${steps}</ul>` : ''}
+      <div class="decision-row">
+        <div class="seg" id="dec-seg">
+          ${seg('real', 'real', 'Real gap')}
+          ${seg('noise', 'noise', 'Noise')}
+          ${seg('needs-info', 'needs', 'Needs info')}
+        </div>
+        <div class="dec-field"><input type="text" id="dec-owner" placeholder="Owner" value="${esc(dec.owner)}"></div>
+        <div class="dec-field"><input type="text" id="dec-note" placeholder="Note" value="${esc(dec.note)}"></div>
+        <span class="dec-saved" id="dec-saved">${dec.ts ? 'Saved' : ''}</span>
       </div>
-      <div class="evidence-block">
-        <h3 class="block-title">Manual Requirement</h3>
-        <p class="block-text">${esc(f.manualRequirement || 'Not provided.')}</p>
-      </div>
-      <div class="evidence-block wide">
-        <h3 class="block-title">Evidence Quote</h3>
-        <p class="block-text quote">${esc(f.evidenceQuote || 'Not provided.')}</p>
-      </div>
-      <div class="evidence-block wide">
-        <h3 class="block-title">Verdict Reasoning</h3>
-        <p class="block-text reasoning">${esc(f.reasoning || 'Not provided.')}</p>
-      </div>
-    </div>
-  `;
+    </div>`;
+  root.querySelectorAll('#dec-seg button').forEach(b => {
+    b.addEventListener('click', () => {
+      const cur = decisionFor(c.caseKey).status;
+      const next = cur === b.dataset.status ? '' : b.dataset.status;  // toggle off if re-clicked
+      saveDecision(c.caseKey, { status: next });
+      renderAction(c);
+      renderNav(filteredCases());   // repaint the nav dot
+    });
+  });
+  const persist = () => {
+    saveDecision(c.caseKey, {
+      owner: document.getElementById('dec-owner').value,
+      note: document.getElementById('dec-note').value
+    });
+    document.getElementById('dec-saved').textContent = 'Saved';
+  };
+  document.getElementById('dec-owner').addEventListener('change', persist);
+  document.getElementById('dec-note').addEventListener('change', persist);
 }
 
 function entityBox(ent, title) {
@@ -807,38 +554,48 @@ function entityBox(ent, title) {
         <div class="metric"><div class="m-label">Connectivity</div><div class="m-val">${esc(ent.connectivityTotal || 0)}</div></div>
         <div class="metric"><div class="m-label">Handoffs</div><div class="m-val">${esc(ent.handoffTo || 0)} to / ${esc(ent.handoffFrom || 0)} from</div></div>
       </div>
-    </div>
-  `;
+    </div>`;
 }
 
-function renderImpact(f) {
-  const root = document.getElementById('impact-panel');
-  if (!f) {
-    root.innerHTML = '<div class="empty">No impact context available.</div>';
-    return;
-  }
-  let edges = '';
-  (f.relatedEdges || []).forEach(e => {
-    edges += `<div class="edge-row"><code>${esc(e.source)} -> ${esc(e.target)}</code><span>${esc(e.edgeType)}</span></div>`;
-  });
-  if (!edges) edges = '<div class="empty">No matching handoff edge in the master edge list.</div>';
+function renderEvidence(c) {
+  const root = document.getElementById('case-evidence');
+  if (!c) { root.innerHTML = ''; return; }
+  const findingList = (c.findingIds || []).map(id => {
+    const f = findingsById[id];
+    if (!f) return '';
+    return `
+      <div class="finding-mini">
+        <div class="fm-top">
+          <span class="badge ${classKind(f.classification)}">${esc(label(f.classification))}</span>
+          <span class="badge info">${esc(reviewKind(f.task).label)}</span>
+          ${f.gatePassed ? '' : '<span class="badge doc">Gate flagged</span>'}
+          <span class="entity-id">${esc(f.id)}</span>
+        </div>
+        <div class="fm-reason">${esc(f.reasoning || '')}</div>
+      </div>`;
+  }).join('');
   root.innerHTML = `
-    ${entityBox(f.source, 'Focal')}
-    ${entityBox(f.target, 'Partner')}
-    <div class="entity-box">
-      <h3>Related Handoffs</h3>
-      ${edges}
-    </div>
-    <div class="entity-box">
-      <h3>Export Context</h3>
-      <div class="metric-grid">
-        <div class="metric"><div class="m-label">Finding</div><div class="m-val">${esc(f.id)}</div></div>
-        <div class="metric"><div class="m-label">Batch</div><div class="m-val">${esc(f.batchId || '')}</div></div>
-        <div class="metric"><div class="m-label">Task</div><div class="m-val">${esc(f.task || '')}</div></div>
-        <div class="metric"><div class="m-label">Gate</div><div class="m-val">${esc(f.gatePassed ? 'Passed' : 'Flagged')}</div></div>
+    <details class="evidence">
+      <summary>Evidence &amp; entity context (${(c.findingIds || []).length} finding${(c.findingIds || []).length === 1 ? '' : 's'})</summary>
+      <div class="evidence-body">
+        <div class="evidence-block">
+          <h3 class="block-title">Evidence Quote</h3>
+          <p class="block-text quote">${esc(c.evidenceQuote || 'Not provided.')}</p>
+        </div>
+        <div class="evidence-block">
+          <h3 class="block-title">Manual Requirement</h3>
+          <p class="block-text">${esc(c.manualRequirement || 'Not provided.')}</p>
+        </div>
+        ${(c.findingIds || []).length ? `<div class="evidence-block"><h3 class="block-title">Underlying findings</h3>${findingList}</div>` : ''}
+        ${entityBox(c.source, 'Focal')}
+        ${entityBox(c.target, 'Partner')}
       </div>
-    </div>
-  `;
+    </details>`;
+}
+
+function syncHash(c) {
+  if (!c) return;
+  try { history.replaceState(null, '', '#case=' + encodeURIComponent(c.caseKey)); } catch (e) {}
 }
 
 function renderGenerated() {
@@ -846,62 +603,67 @@ function renderGenerated() {
   document.getElementById('generated-at').textContent = gen ? `Generated ${gen}` : '';
 }
 
-function demoPosition(list) {
-  const idx = list.findIndex(f => f.id === state.selectedId);
-  return idx >= 0 ? idx + 1 : 0;
-}
-
-function updateDemoState(list) {
-  document.body.classList.toggle('demo-mode', state.demo);
-  document.getElementById('demo-toggle').textContent = state.demo ? 'Exit demo' : 'Demo';
-  document.getElementById('demo-prev').disabled = !state.demo || list.length < 2;
-  document.getElementById('demo-next').disabled = !state.demo || list.length < 2;
-  document.getElementById('demo-state').textContent = state.demo ? `Demo ${demoPosition(list)} of ${list.length}` : '';
-}
-
 function renderAll() {
-  const list = filteredFindings();
-  const current = selectedFinding(list);
-  renderKpis(list);
-  renderList(list);
-  renderCaseHead(current);
-  renderFlow(current);
-  renderCaseDetail(current);
-  renderImpact(current);
-  updateDemoState(list);
+  // An external #case= deep link may target a case hidden by the default filter.
+  if (externalLoad && state.selectedCaseKey) {
+    const c = cases.find(x => x.caseKey === state.selectedCaseKey);
+    if (c && state.classification !== 'all' && c.classification !== state.classification) {
+      state.classification = 'all';
+      classificationFilter.value = 'all';
+    }
+  }
+  const list = filteredCases();
+  const current = selectedCase(list);
+  externalLoad = false;
+  renderCounter(list);
+  renderNav(list);
+  caseHeadline(current);
+  renderStory(current);
+  renderAction(current);
+  renderEvidence(current);
+  syncHash(current);
 }
 
-function moveDemo(delta) {
-  const list = filteredFindings();
+function moveCase(delta) {
+  const list = filteredCases();
   if (!list.length) return;
-  const idx = Math.max(0, list.findIndex(f => f.id === state.selectedId));
+  const idx = Math.max(0, list.findIndex(c => c.caseKey === state.selectedCaseKey));
   const next = (idx + delta + list.length) % list.length;
-  state.selectedId = list[next].id;
+  state.selectedCaseKey = list[next].caseKey;
   renderAll();
 }
 
 function csvEscape(value) {
   return '"' + String(value == null ? '' : value).replace(/"/g, '""') + '"';
 }
-
 function exportCsv() {
-  const list = filteredFindings();
+  const list = filteredCases();
   const headers = [
-    'Finding ID','Classification','Task','Batch','Audit Leader','Source ID','Source Name',
-    'Target ID','Target Name','Risk Category','Specific Risks','KPA IDs','Evidence Layer',
-    'Manual Requirement','Evidence Quote','Reasoning','Gate Passed'
+    'Finding ID', 'Case Key', 'Review Kind', 'Classification', 'Source ID', 'Source Name',
+    'Target ID', 'Target Name', 'Risk Category', 'Key Risks', 'KPAs', 'Covering Controls',
+    'Recommended Action', 'Evidence Layer', 'Evidence Quote', 'Reasoning', 'Gate Passed',
+    'Decision Status', 'Decision Owner', 'Decision Note', 'Decision Timestamp'
   ];
   let csv = headers.map(csvEscape).join(',') + '\n';
-  list.forEach(f => {
-    csv += [
-      f.id, f.classification, f.task, f.batchId, (f.source || {}).auditLeader,
-      f.sourceId, f.sourceName, f.targetId, f.targetName, f.riskCategory,
-      (f.specificRiskIds || []).join('; '), (f.kpaIds || []).join('; '),
-      f.evidenceLayer, f.manualRequirement, f.evidenceQuote, f.reasoning,
-      f.gatePassed ? 'Yes' : 'No'
-    ].map(csvEscape).join(',') + '\n';
+  list.forEach(c => {
+    const dec = decisionFor(c.caseKey);
+    const keyRisks = (c.keyRisks || []).map(r => r.description && r.description !== r.id ? `${r.id} — ${r.description}` : r.id).join(' | ');
+    const kpas = (c.kpas || []).map(k => k.description && k.description !== k.id ? `${k.id} — ${k.description}` : k.id).join(' | ');
+    const controls = (c.coveringControls || []).map(ct => `${ct.controlId}: ${ct.title}`).join(' | ');
+    const action = (c.recommendedAction || {}).title || '';
+    const ids = (c.findingIds && c.findingIds.length) ? c.findingIds : [''];
+    ids.forEach(fid => {
+      const f = findingsById[fid] || {};
+      csv += [
+        fid, c.caseKey, reviewKind(c.task).label, c.classification, c.sourceId, c.sourceName,
+        c.targetId, c.targetName, c.riskCategory, keyRisks, kpas, controls,
+        action, f.evidenceLayer || c.evidenceLayer, f.evidenceQuote || c.evidenceQuote,
+        f.reasoning || c.reasoning, (f.gatePassed === false ? 'No' : 'Yes'),
+        dec.status, dec.owner, dec.note, dec.ts
+      ].map(csvEscape).join(',') + '\n';
+    });
   });
-  const blob = new Blob([csv], {type: 'text/csv'});
+  const blob = new Blob([csv], { type: 'text/csv' });
   const link = document.createElement('a');
   link.download = 'assurance_caseboard_' + new Date().toISOString().slice(0, 10) + '.csv';
   link.href = URL.createObjectURL(blob);
@@ -909,35 +671,37 @@ function exportCsv() {
   URL.revokeObjectURL(link.href);
 }
 
-document.getElementById('demo-toggle').addEventListener('click', () => {
-  state.demo = !state.demo;
-  const list = filteredFindings();
-  if (state.demo && list.length && !list.some(f => f.id === state.selectedId)) {
-    state.selectedId = list[0].id;
+function applyHashSelection(initial) {
+  const m = (location.hash || '').match(/case=([^&]+)/);
+  if (!m) return;
+  const key = decodeURIComponent(m[1]);
+  if (cases.some(c => c.caseKey === key)) {
+    state.selectedCaseKey = key;
+    if (initial) externalLoad = true;   // only an external load may relax the filter
   }
-  renderAll();
-});
-document.getElementById('demo-prev').addEventListener('click', () => moveDemo(-1));
-document.getElementById('demo-next').addEventListener('click', () => moveDemo(1));
+}
+
+document.getElementById('nav-prev').addEventListener('click', () => moveCase(-1));
+document.getElementById('nav-next').addEventListener('click', () => moveCase(1));
 document.getElementById('export-csv').addEventListener('click', exportCsv);
 document.getElementById('reset-view').addEventListener('click', () => {
   state.classification = defaultClassification;
-  state.leader = 'all';
-  state.task = 'all';
-  state.risk = 'all';
   state.query = '';
-  state.demo = false;
-  state.selectedId = null;
+  state.selectedCaseKey = null;
   classificationFilter.value = state.classification;
-  leaderFilter.value = state.leader;
-  taskFilter.value = state.task;
-  riskFilter.value = state.risk;
   searchInput.value = '';
+  try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
   renderAll();
+});
+window.addEventListener('hashchange', () => {
+  const prev = state.selectedCaseKey;
+  applyHashSelection(false);
+  if (state.selectedCaseKey !== prev) renderAll();
 });
 
 initControls();
 renderGenerated();
+applyHashSelection(true);
 renderAll();
 </script>
 </body>

@@ -93,7 +93,28 @@ def _find_source_csv(input_dir, explicit=None):
     return None
 
 
-def read_pipeline(input_dir, source_csv=None):
+def _find_controls_csv(input_dir, explicit=None):
+    """Locate the Archer controls export — resolves SR/KPA IDs to descriptions
+    and the receiver's covering controls for the caseboard. Detected by header
+    signature; returns None when absent (the join then degrades to bare IDs).
+    """
+    cands = []
+    if explicit:
+        cands.append(explicit)
+    cands += sorted(glob.glob(os.path.join(input_dir, "*.csv")))
+    cands += sorted(glob.glob(os.path.join(_TPL_DIR, "..", "data", "input", "*.csv")))
+    for c in cands:
+        if c and os.path.isfile(c):
+            try:
+                head = pd.read_csv(c, nrows=0)
+            except Exception:
+                continue
+            if "Control ID" in head.columns and "Key Risk Description" in head.columns:
+                return os.path.abspath(c)
+    return None
+
+
+def read_pipeline(input_dir, source_csv=None, controls_csv=None):
     """Read all pipeline files and return raw DataFrames."""
     l1 = _find_latest(input_dir, "layer1_output")
     ed = _find_latest(input_dir, "edge_derivation_output")
@@ -102,6 +123,7 @@ def read_pipeline(input_dir, source_csv=None):
     fr = _find_findings_rollup(input_dir)
     fc = _find_findings_csv(input_dir)
     sc = _find_source_csv(input_dir, source_csv)
+    cc = _find_controls_csv(input_dir, controls_csv)
     for name, p in [("layer1_output", l1), ("edge_derivation_output", ed), ("layer2_coverage_matrix", l2)]:
         if p is None:
             sys.exit(f"ERROR: Missing file: {name}*.xlsx in {input_dir}")
@@ -148,6 +170,16 @@ def read_pipeline(input_dir, source_csv=None):
             dfs["source"] = None
     else:
         dfs["source"] = None
+    if cc is not None:
+        try:
+            dfs["controls"] = pd.read_csv(cc)
+            print(f"  Found controls CSV — resolving SR/KPA names + receiver coverage in caseboard")
+        except Exception:
+            print(f"  controls CSV present but unreadable — caseboard falls back to bare IDs")
+            dfs["controls"] = None
+    else:
+        print(f"  No controls CSV — caseboard shows bare SR/KPA IDs, no covering-controls join")
+        dfs["controls"] = None
     return dfs
 
 
@@ -156,6 +188,21 @@ def _split_ids(val):
     if val is None or (isinstance(val, float) and pd.isna(val)):
         return []
     return [s.strip() for s in re.split(r"[;,]", str(val)) if s.strip()]
+
+
+def _case_key(focal_id, partner_id, task):
+    """Stable, directed key for one gap "case" — shared by the map (so a gap
+    edge/node can deep-link) and the caseboard (so it can be selected). Directed
+    on the finding's own focal/partner (a case is "what A handed to B"), even
+    though _attach_gap_findings matches master edges undirected.
+    """
+    focal = _clean_value(focal_id)
+    partner = _clean_value(partner_id)
+    try:
+        t = int(task or 0)
+    except (TypeError, ValueError):
+        t = 0
+    return f"{focal}>{partner}|t{t}" if partner else f"{focal}|t{t}"
 
 
 def _gate_passed(row):
@@ -185,6 +232,14 @@ def _attach_gap_findings(node_list, edge_list, findings):
     def _merge(target, row, task):
         g = target.setdefault("gap", dict(count=0, countPassed=0, countFailed=0,
                                           srIds=[], example="", items=[], task=task))
+        # Stash the case key(s) so the map can deep-link into the caseboard. A
+        # frozenset-matched edge can aggregate both orientations -> keep a primary
+        # plus the full collected set.
+        key = _case_key(row.get("focal_entity_id"), row.get("cross_entity_partner_id"), task)
+        g.setdefault("caseKey", key)
+        ks = g.setdefault("caseKeys", [])
+        if key not in ks:
+            ks.append(key)
         g["count"] += 1
         if _gate_passed(row):
             g["countPassed"] += 1
@@ -399,10 +454,80 @@ def _title_case_label(value):
     return text[:1].upper() + text[1:] if text else ""
 
 
+def _recommend_action(classification, task):
+    """Derive a plain-language "Now what" for a case from its classification and
+    task. Returns {title, steps[]}. Kept out of the auditor-facing labels so the
+    pitch never shows "Task 3/5" jargon — task only steers the wording here.
+    """
+    cls = (classification or "").lower()
+    if "coverage gap" in cls:
+        if task == 3:
+            return dict(
+                title="Assign an owner for this embedded control",
+                steps=[
+                    "Confirm whether coverage exists via external assurance (e.g. a SOC 1 report) before opening a finding.",
+                    "If not, name the entity that should own and test this embedded control.",
+                    "Add it to the plan or document the owner so it isn't orphaned next cycle.",
+                ],
+            )
+        return dict(
+            title="Tighten the handoff scope to the embedded layer",
+            steps=[
+                "Confirm what the receiving entity actually tests for this risk.",
+                "Re-scope the handoff so the embedded control layer is explicitly covered.",
+                "Record the control boundary between the two entities.",
+            ],
+        )
+    if "documentation" in cls:
+        return dict(
+            title="Sharpen the handoff documentation",
+            steps=[
+                "The handoff prose is too coarse to test cleanly — name the exact risk slice transferred.",
+                "Document who owns the risk after the handoff.",
+            ],
+        )
+    if "conform" in cls:
+        return dict(title="No action — coverage confirmed", steps=[])
+    return dict(title="Review and triage", steps=[])
+
+
+def _build_controls_lookup(controls_df):
+    """One pass over the Archer controls export -> (sr_names, kpa_names,
+    controls_by_entity). Risk/KPA id->description are globally 1:1, so flat maps
+    are safe; controls are indexed per entity for the receiver-coverage join.
+    Returns three empty dicts when the export is absent.
+    """
+    sr_names, kpa_names, by_entity = {}, {}, {}
+    if controls_df is None or controls_df.empty:
+        return sr_names, kpa_names, by_entity
+    ent_col = "Audit Entity (Audit Controls)"
+    for _, r in controls_df.iterrows():
+        sr_id = _clean_value(r.get("Key Risk ID"))
+        if sr_id and sr_id not in sr_names:
+            sr_names[sr_id] = _clean_value(r.get("Key Risk Description"))
+        kpa_id = _clean_value(r.get("KPA ID"))
+        if kpa_id and kpa_id not in kpa_names:
+            kpa_names[kpa_id] = _clean_value(r.get("KPA Description"))
+        eid = _clean_value(r.get(ent_col))
+        if not eid:
+            continue
+        by_entity.setdefault(eid, []).append(dict(
+            controlId=_clean_value(r.get("Control ID")),
+            title=_clean_value(r.get("Control Title")),
+            description=_clean_value(r.get("Control Description"))[:240],
+            kpaId=kpa_id,
+            srId=sr_id,
+        ))
+    return sr_names, kpa_names, by_entity
+
+
 def build_pitch2_data(dfs):
     """Build JSON data for the proof-first assurance caseboard."""
     cov_idx = dfs["coverage"].set_index("Audit Entity ID") if not dfs["coverage"].empty else pd.DataFrame()
     dep_idx = dfs["dep_profile"].set_index("Audit Entity ID") if not dfs["dep_profile"].empty else pd.DataFrame()
+    # Resolve SR/KPA IDs to plain descriptions and index the receiver's covering
+    # controls — so the caseboard reads like Archer without opening Archer.
+    sr_names, kpa_names, controls_by_entity = _build_controls_lookup(dfs.get("controls"))
 
     prose = {}
     src = dfs.get("source")
@@ -527,6 +652,83 @@ def build_pitch2_data(dfs):
         f["id"],
     ))
 
+    # === Group findings into cases (one gap unit) ===
+    # A case = a Task-5 A->B handoff pair, or a Task-3 focal entity (no partner).
+    # Aggregating here (in Python) means the map and caseboard share _case_key and
+    # never drift. A single A<->B gap can carry several orphaned risks.
+    def _resolve(ids, names):
+        return [dict(id=i, description=names.get(i, "") or i) for i in ids]
+
+    def _covering_controls(case_srs, case_kpas, receiver_id, cap=6):
+        controls = controls_by_entity.get(receiver_id, []) if receiver_id else []
+        sr_set, kpa_set = set(case_srs), set(case_kpas)
+        hits = [c for c in controls if (c["srId"] and c["srId"] in sr_set)
+                or (c["kpaId"] and c["kpaId"] in kpa_set)]
+        return hits[:cap], len(hits)
+
+    cases_by_key = {}
+    case_order = []
+    for f in findings:
+        key = _case_key(f["sourceId"], f["targetId"], f["task"])
+        f["caseKey"] = key
+        c = cases_by_key.get(key)
+        if c is None:
+            c = dict(
+                caseKey=key, task=f["task"],
+                sourceId=f["sourceId"], sourceName=f["sourceName"],
+                targetId=f["targetId"], targetName=f["targetName"],
+                classification=f["classification"], classificationLabel=f["classificationLabel"],
+                reasoning="", evidenceQuote="", manualRequirement="", evidenceLayer="",
+                riskCategory=f["riskCategory"],
+                specificRiskIds=[], kpaIds=[], riskCategories=[],
+                findingIds=[], findingCount=0, gatePassed=True,
+                source=f["source"], target=f["target"], relatedEdges=f["relatedEdges"],
+                handoffDesc=(f["source"] or {}).get("handoffDesc", ""),
+            )
+            cases_by_key[key] = c
+            case_order.append(key)
+        # Most-severe member drives the case classification (lowest rank wins).
+        if rank.get(f["classification"], 9) < rank.get(c["classification"], 9):
+            c["classification"] = f["classification"]
+            c["classificationLabel"] = f["classificationLabel"]
+        for sr in f["specificRiskIds"]:
+            if sr not in c["specificRiskIds"]:
+                c["specificRiskIds"].append(sr)
+        for kp in f["kpaIds"]:
+            if kp not in c["kpaIds"]:
+                c["kpaIds"].append(kp)
+        if f["riskCategory"] and f["riskCategory"] not in c["riskCategories"]:
+            c["riskCategories"].append(f["riskCategory"])
+        for fld in ("reasoning", "evidenceQuote", "manualRequirement", "evidenceLayer"):
+            if not c[fld] and f[fld]:
+                c[fld] = f[fld]
+        c["findingIds"].append(f["id"])
+        c["findingCount"] += 1
+        c["gatePassed"] = c["gatePassed"] and f["gatePassed"]
+
+    cases = []
+    for key in case_order:
+        c = cases_by_key[key]
+        # Receiver whose controls should cover the transferred slice: the partner
+        # for a cross-entity handoff (Task 5), else the focal entity (Task 3).
+        receiver_id = c["targetId"] if c["task"] == 5 and c["targetId"] else c["sourceId"]
+        covering, covering_total = _covering_controls(c["specificRiskIds"], c["kpaIds"], receiver_id)
+        c["keyRisks"] = _resolve(c["specificRiskIds"], sr_names)
+        c["kpas"] = _resolve(c["kpaIds"], kpa_names)
+        c["coveringControls"] = covering
+        c["coveringControlsTotal"] = covering_total
+        c["recommendedAction"] = _recommend_action(c["classification"], c["task"])
+        cases.append(c)
+
+    cases.sort(key=lambda c: (
+        rank.get(c["classification"], 9),
+        0 if c["gatePassed"] else 1,
+        0 if c["task"] == 5 else 1,
+        (c["source"] or {}).get("auditLeader", ""),
+        c["riskCategory"],
+        c["caseKey"],
+    ))
+
     def _count_by(items, key_fn):
         counts = {}
         for item in items:
@@ -538,16 +740,18 @@ def build_pitch2_data(dfs):
         generatedAt=datetime.now().isoformat(timespec="seconds"),
         entities=entities,
         findings=findings,
+        cases=cases,
         handoffEdges=handoff_edges,
         filters=dict(
             leaders=sorted(_count_by(findings, lambda f: f["source"].get("auditLeader")).keys()),
-            classifications=sorted(_count_by(findings, lambda f: f["classification"]).keys()),
+            classifications=sorted(_count_by(cases, lambda c: c["classification"]).keys()),
             riskCategories=sorted(_count_by(findings, lambda f: f["riskCategory"]).keys()),
             tasks=sorted(set(f["task"] for f in findings if f["task"])),
         ),
         summary=dict(
             totalFindings=len(findings),
-            classifications=_count_by(findings, lambda f: f["classification"]),
+            totalCases=len(cases),
+            classifications=_count_by(cases, lambda c: c["classification"]),
             leaders=_count_by(findings, lambda f: f["source"].get("auditLeader")),
             riskCategories=_count_by(findings, lambda f: f["riskCategory"]),
             tasks=_count_by(findings, lambda f: f"Task {f['task']}" if f["task"] else "Unspecified"),
@@ -737,13 +941,18 @@ def nodeTotal_py(node):
     return sum(nodeTotal_py(c) for c in node["children"])
 
 
-def generate(input_dir, output_dir, source_csv=None):
+def generate(input_dir, output_dir, source_csv=None, controls_csv=None):
     print(f"Reading pipeline files from: {input_dir}")
-    dfs = read_pipeline(input_dir, source_csv)
+    dfs = read_pipeline(input_dir, source_csv, controls_csv)
     date_stamp = datetime.now().strftime("%Y%m%d")
 
     # === Network Visualization ===
     net_data = build_network_data(dfs)
+    # The caseboard is a sibling file in output_dir; let map gaps deep-link to it.
+    # Must be set BEFORE net_json is serialized (the pitch map reuses net_json).
+    pitch2_tpl = os.path.join(_TPL_DIR, "_pitch_template2.html")
+    if os.path.isfile(pitch2_tpl):
+        net_data["pitch2Href"] = f"network_pitch2_{date_stamp}.html"
     cats_tagged = sum(1 for e in net_data["edges"] if e.get("category") and e["category"] not in ("","UNKNOWN"))
     print(f"  Network: {len(net_data['nodes'])} nodes, {len(net_data['edges'])} edges, {cats_tagged} categorized handoffs")
     if "gapEdgesUnplaced" in net_data:
@@ -770,12 +979,12 @@ def generate(input_dir, output_dir, source_csv=None):
         with open(pitch_path, "w", encoding="utf-8") as f: f.write(pitch_html)
         print(f"  -> {pitch_path} ({len(pitch_html):,} bytes)")
 
-    # Pitch build 2 — proof-first assurance caseboard.
-    pitch2_tpl = os.path.join(_TPL_DIR, "_pitch_template2.html")
+    # Pitch build 2 — proof-first assurance caseboard (pitch2_tpl defined above).
     if os.path.isfile(pitch2_tpl):
         pitch2_data = build_pitch2_data(dfs)
-        gap_count = pitch2_data["summary"]["classifications"].get("likely coverage gap", 0)
-        print(f"  Pitch2: {len(pitch2_data['findings'])} findings, {gap_count} likely gaps")
+        gap_cases = pitch2_data["summary"]["classifications"].get("likely coverage gap", 0)
+        print(f"  Pitch2: {pitch2_data['summary']['totalCases']} cases "
+              f"({len(pitch2_data['findings'])} findings), {gap_cases} likely-gap cases")
         pitch2_json = json.dumps(pitch2_data, separators=(",",":"))
         with open(pitch2_tpl, "r", encoding="utf-8") as f:
             pitch2_html = f.read().replace("%%DATA_INJECTION%%", "const DATA = " + pitch2_json + ";")
@@ -824,6 +1033,8 @@ if __name__ == "__main__":
     parser.add_argument("--output-dir", default=".", help="Directory for output HTML files")
     parser.add_argument("--source", default=None,
                         help="Source universe CSV for entity prose (hand-off description / overview); auto-detected if omitted")
+    parser.add_argument("--controls", default=None,
+                        help="Archer controls CSV — resolves SR/KPA names + receiver coverage in the caseboard; auto-detected if omitted")
     args = parser.parse_args()
     os.makedirs(args.output_dir, exist_ok=True)
-    generate(args.input_dir, args.output_dir, args.source)
+    generate(args.input_dir, args.output_dir, args.source, args.controls)

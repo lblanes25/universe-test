@@ -69,6 +69,9 @@ body.light #node-detail .nd-prose div { background: #f6f8fa; border-color: #d0d7
 #node-detail .gap-reason { font-size: 10.5px; color: #c9d1d9; line-height: 1.45; }
 #node-detail .gap-quote { font-size: 10px; color: #8b949e; font-style: italic; margin-top: 3px; }
 #node-detail .gap-rollup { font-size: 10px; color: #58a6ff; margin-top: 6px; }
+#node-detail .gap-open { display: inline-block; margin-top: 7px; font-size: 10.5px; font-weight: 600; color: #58a6ff; text-decoration: none; border: 1px solid #1f6feb; border-radius: 6px; padding: 3px 8px; }
+#node-detail .gap-open:hover { background: #1f6feb; color: #fff; }
+#tooltip .tt-open-hint, #node-detail .nd-open-hint { font-size: 9.5px; color: #8b949e; margin-top: 5px; font-style: italic; }
 body.light { background: #ffffff; color: #1f2328; }
 body.light #sidebar { background: #f6f8fa; border-right-color: #d0d7de; }
 body.light .panel { background: #ffffff; border-color: #d0d7de; }
@@ -102,7 +105,7 @@ body.light .cat-tag { background: #eaeef2; color: #1f2328; }
 <div id="sidebar">
 <div class="title-area">
   <h1>Audit Universe — Handoff Coverage Map</h1>
-  <p>Pick an Audit Leader to see their portfolio plus the outside entities that hand work in. <span style="color:#f85149;">Red = a likely coverage gap.</span> Click any node for detail. Color=risk, shape=coverage, size=connectivity.</p>
+  <p>Pick an Audit Leader to see their portfolio plus the outside entities that hand work in. <span style="color:#f85149;">Red = a likely coverage gap.</span> Click any node for detail; &#8984;/Ctrl-click a red gap to open it in the caseboard. Color=risk, shape=coverage, size=connectivity.</p>
 </div>
 
 <div class="panel">
@@ -276,6 +279,14 @@ function gapDashed(g){return g.countPassed===0;}
 // Plain-English gap labels for audit leaders (no internal task jargon).
 const GAP_LABELS = {5:'Receiving entity may not cover this risk', 3:'Embedded control may have no owner'};
 function _esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+// Open the assurance caseboard focused on this gap (deep link). Returns true if it navigated.
+function openCase(g){
+  if(DATA.pitch2Href && g && g.caseKey){
+    window.open(DATA.pitch2Href + '#case=' + encodeURIComponent(g.caseKey), '_blank', 'noopener');
+    return true;
+  }
+  return false;
+}
 // Shared gap section for tooltips/detail panel. cls is 'tt' or 'nd'.
 function gapHtml(g, cls){
   if(!gapVisible(g)) return '';
@@ -294,11 +305,16 @@ function gapHtml(g, cls){
       if(it.quote) h+='<div class="gap-quote">&ldquo;'+_esc(it.quote)+'&rdquo;</div>';
       h+='</div>';
     });
-    h+='<div class="gap-rollup">Adjudicate in <b>findings_rollup.xlsx</b> &rarr; Gaps by Entity</div>';
+    if(DATA.pitch2Href && g.caseKey){
+      h+='<a class="gap-open" href="'+_esc(DATA.pitch2Href)+'#case='+encodeURIComponent(g.caseKey)+'" target="_blank" rel="noopener">Open in caseboard &rarr;</a>';
+    } else {
+      h+='<div class="gap-rollup">Adjudicate in <b>findings_rollup.xlsx</b> &rarr; Gaps by Entity</div>';
+    }
   } else {
     // Hover tooltip: compact summary only.
     if(g.srIds&&g.srIds.length){h+='<div style="margin-top:3px;">'+g.srIds.slice(0,12).map(s=>'<span class="cat-tag">'+_esc(s)+'</span>').join('')+(g.srIds.length>12?' <span style="font-size:9px;color:#8b949e;">+'+(g.srIds.length-12)+'</span>':'')+'</div>';}
     if(g.example)h+='<div class="'+cls+'-risks">'+_esc(g.example)+'</div>';
+    if(DATA.pitch2Href && g.caseKey){h+='<div class="'+cls+'-open-hint">&#8984;/Ctrl-click to open in caseboard &rarr;</div>';}
   }
   return h;
 }
@@ -801,16 +817,34 @@ canvas.addEventListener('mousemove',e=>{
   if(hoveredEdge!==prevHoveredEdge) draw();
 });
 canvas.addEventListener('mouseup',e=>{
-  if(!dragMoved){const rect=canvas.getBoundingClientRect(),mx=e.clientX-rect.left,my=e.clientY-rect.top;let clicked=null;
+  if(!dragMoved){const rect=canvas.getBoundingClientRect(),mx=e.clientX-rect.left,my=e.clientY-rect.top;
+    const jump=e.metaKey||e.ctrlKey;  // Cmd/Ctrl-click a gap -> jump straight to the caseboard
+    let clicked=null;
     for(const n of nodes){if(!visibleNodes.has(n.id))continue;const p=screenPos(n),r=nodeRadius(n)*transform.k+4;
       if(Math.abs(mx-p.x)<r&&Math.abs(my-p.y)<r){clicked=n;break;}}
     if(clicked){
+      if(jump&&gapVisible(clicked.gap)&&openCase(clicked.gap)){e.preventDefault();isDragging=false;return;}
       // Pitch focus: clicking a node isolates it to its direct (1-hop) handoff neighbourhood.
       selectedNode=clicked.id;
       showNodeDetail(clicked);
       egoMode='1';egoCenter=clicked.id;updateVisibility();
       draw();
     } else {
+      // Cmd/Ctrl-click on a gap line (empty space between nodes) -> jump to the caseboard.
+      if(jump){
+        let hit=null,minDist=25;
+        visibleEdges.forEach(ed=>{
+          if(!gapVisible(ed.gap))return;
+          const a=nodeById[ed.source],b=nodeById[ed.target];if(!a||!b)return;
+          const pa=screenPos(a),pb=screenPos(b);
+          const dx=pb.x-pa.x,dy=pb.y-pa.y,len2=dx*dx+dy*dy;if(len2===0)return;
+          let t=((mx-pa.x)*dx+(my-pa.y)*dy)/len2;t=Math.max(0,Math.min(1,t));
+          const px=pa.x+t*dx,py=pa.y+t*dy;
+          const dist=Math.sqrt((mx-px)*(mx-px)+(my-py)*(my-py));
+          if(dist<minDist){minDist=dist;hit=ed;}
+        });
+        if(hit&&openCase(hit.gap)){e.preventDefault();isDragging=false;return;}
+      }
       // Clicked empty space — clear focus and restore the current view.
       selectedNode=null;egoMode='off';egoCenter=null;
       document.getElementById('node-detail-panel').style.display='none';updateVisibility();draw();
