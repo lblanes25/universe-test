@@ -7,15 +7,21 @@ Produces two self-contained HTML visualizations from pipeline output:
   2. pga_chord_sankey.html — PGA chord diagram with Sankey drill-down
 
 Usage:
-    python generate_network_viz.py [--input-dir DIR] [--output-dir DIR]
+    python src/generate_network_viz.py \
+        --input-dir data/output \
+        --output-dir data/output \
+        --source data/input/<universe.csv>
 
 Required files in input-dir:
-    layer1_output.xlsx
-    edge_derivation_output.xlsx
-    layer2_coverage_matrix.xlsx
+    layer1_output*.xlsx
+    edge_derivation_output*.xlsx
+    layer2_coverage_matrix*.xlsx
+  (latest YYYYMMDD-suffixed file is picked automatically)
 
 Optional:
-    handoff_categories.csv  (enables category-aware 2-hop in network viz)
+    --source <universe.csv>     surfaces hand-off description / overview in detail panel
+    handoff_categories.csv      enables category-aware 2-hop in network viz
+    findings_rollup*.xlsx       enables likely-gap overlay
 
 Dependencies:
     pip install pandas openpyxl

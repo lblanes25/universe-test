@@ -414,32 +414,61 @@ function getEgoNeighbors2(centerId) {
 const leaders = [...new Set(DATA.nodes.map(n=>n.auditLeader))].sort();
 const bus = [...new Set(DATA.nodes.map(n=>n.businessUnit))].sort();
 
+// BOX_COEFF scales every cluster box. If the largest clusters pile nodes against
+// their walls, nudge this up; if small clusters look too sparse, nudge it down.
+const BOX_COEFF = 1.0;
 function computeLayout(groupKey) {
   const groups = groupKey==='leader' ? leaders : bus;
-  const cols = Math.ceil(Math.sqrt(groups.length)), clusterW=400, clusterH=350, gap=120;
-  groups.forEach((g,gi) => {
-    const cn = DATA.nodes.filter(n => (groupKey==='leader'?n.auditLeader:n.businessUnit)===g);
-    const cx = (gi%cols)*(clusterW+gap)+clusterW/2, cy = Math.floor(gi/cols)*(clusterH+gap)+clusterH/2;
-    cn.forEach((n,i) => {
-      const angle=(i/cn.length)*Math.PI*2, r=40+Math.random()*80;
-      n.x=cx+Math.cos(angle)*r; n.y=cy+Math.sin(angle)*r;
-      n.cx=cx; n.cy=cy; n.clusterW=clusterW; n.clusterH=clusterH; n.clusterGroup=g; n.clusterIdx=gi;
-    });
-    for(let iter=0;iter<150;iter++){
-      for(let i=0;i<cn.length;i++) for(let j=i+1;j<cn.length;j++){
+  const gap=70, pad=26;
+  const groupOf = n => groupKey==='leader' ? n.auditLeader : n.businessUnit;
+
+  // Phase 1 — size each cluster box by its entity count (side grows with sqrt(count),
+  // clamped), then shelf-pack the boxes largest-first instead of using a uniform grid.
+  const boxes = groups.map((g,gi) => {
+    const cn = DATA.nodes.filter(n => groupOf(n)===g);
+    const side = Math.max(220, Math.min(900, BOX_COEFF*118*Math.sqrt(Math.max(cn.length,1))));
+    return { g, gi, cn, w: side*1.12, h: side, x:0, y:0 };
+  });
+  const totalArea = boxes.reduce((s,b)=>s+b.w*b.h,0), rowMaxW = Math.sqrt(totalArea)*1.5;
+  let px=0, py=0, rowH=0;
+  boxes.slice().sort((a,b)=> b.w*b.h - a.w*a.h).forEach(b => {
+    if(px>0 && px+b.w>rowMaxW){ px=0; py+=rowH+gap; rowH=0; }
+    b.x=px; b.y=py; px+=b.w+gap; rowH=Math.max(rowH,b.h);
+  });
+
+  // Precompute intra-cluster handoff edges once (one pass over all edges) so the
+  // relaxation loop below doesn't rescan the whole edge list every iteration.
+  const intraByGroup = {}; groups.forEach(g=>intraByGroup[g]=[]);
+  DATA.edges.forEach(e=>{
+    if(e.edgeType!=='handoff_to'&&e.edgeType!=='handoff_from') return;
+    const a=nodeById[e.source], b=nodeById[e.target]; if(!a||!b) return;
+    const ga=groupOf(a); if(ga===groupOf(b) && intraByGroup[ga]) intraByGroup[ga].push([a,b]);
+  });
+
+  // Phase 2 — lay out entities inside each box: seed on a phyllotaxis spiral (even,
+  // deterministic spread — no Math.random, so the layout is stable across reloads),
+  // then relax with light centering so the even spread mostly survives.
+  boxes.forEach(b => {
+    const cn=b.cn, n=cn.length, cx=b.x+b.w/2, cy=b.y+b.h/2, halfW=b.w/2-pad, halfH=b.h/2-pad;
+    const ga=2.399963; let maxr=0; const raw=[];
+    for(let i=0;i<n;i++){ const rr=Math.sqrt(i+0.5), th=i*ga; raw.push([Math.cos(th)*rr,Math.sin(th)*rr]); if(rr>maxr)maxr=rr; }
+    const s=Math.min(halfW,halfH)/Math.max(maxr,1);
+    cn.forEach((node,i)=>{ node.x=cx+raw[i][0]*s; node.y=cy+raw[i][1]*s;
+      node.cx=cx; node.cy=cy; node.clusterW=b.w; node.clusterH=b.h; node.clusterGroup=b.g; node.clusterIdx=b.gi; });
+    const target = 0.85*Math.sqrt((b.w*b.h)/Math.max(n,1));  // spacing scales with box -> density stays ~constant
+    const intra = intraByGroup[b.g];
+    for(let iter=0;iter<140;iter++){
+      for(let i=0;i<n;i++) for(let j=i+1;j<n;j++){
         let dx=cn[j].x-cn[i].x,dy=cn[j].y-cn[i].y,d=Math.sqrt(dx*dx+dy*dy)||1,f=800/(d*d);
         cn[i].x-=dx/d*f;cn[i].y-=dy/d*f;cn[j].x+=dx/d*f;cn[j].y+=dy/d*f;
       }
-      DATA.edges.forEach(e=>{
-        if(e.edgeType!=='handoff_to'&&e.edgeType!=='handoff_from') return;
-        const a=nodeById[e.source],b=nodeById[e.target];
-        if(!a||!b||(groupKey==='leader'?a.auditLeader:a.businessUnit)!==g||(groupKey==='leader'?b.auditLeader:b.businessUnit)!==g) return;
-        let dx=b.x-a.x,dy=b.y-a.y,d=Math.sqrt(dx*dx+dy*dy)||1,f=(d-60)*0.01;
-        a.x+=dx/d*f;a.y+=dy/d*f;b.x-=dx/d*f;b.y-=dy/d*f;
-      });
-      cn.forEach(n=>{n.x+=(cx-n.x)*0.02;n.y+=(cy-n.y)*0.02;});
+      for(const [a,b2] of intra){
+        let dx=b2.x-a.x,dy=b2.y-a.y,d=Math.sqrt(dx*dx+dy*dy)||1,f=(d-target)*0.01;
+        a.x+=dx/d*f;a.y+=dy/d*f;b2.x-=dx/d*f;b2.y-=dy/d*f;
+      }
+      cn.forEach(node=>{ node.x+=(cx-node.x)*0.006; node.y+=(cy-node.y)*0.006; });  // light centering
     }
-    cn.forEach(n=>{n.x=Math.max(cx-clusterW/2+30,Math.min(cx+clusterW/2-30,n.x));n.y=Math.max(cy-clusterH/2+30,Math.min(cy+clusterH/2-30,n.y));});
+    cn.forEach(node=>{ node.x=Math.max(cx-halfW,Math.min(cx+halfW,node.x)); node.y=Math.max(cy-halfH,Math.min(cy+halfH,node.y)); });
   });
 }
 computeLayout('leader');
@@ -626,21 +655,8 @@ function draw(){
     ctx.lineWidth=ew*Math.min(transform.k,1.5);
     ctx.setLineDash(isGapEdge&&gapDashed(e.gap)?[5,4]:st.dash);
     ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);ctx.stroke();
-    if((e.edgeType==='handoff_to'||e.edgeType==='handoff_from')&&!dim){
-      const dx=pb.x-pa.x,dy=pb.y-pa.y,len=Math.sqrt(dx*dx+dy*dy);
-      if(len>10){
-        const ang=Math.atan2(dy,dx),aS=Math.max(8,9*Math.min(transform.k,1.6));
-        // Arrowhead at full opacity so it reads against the partially-transparent edge stroke.
-        ctx.globalAlpha=1;
-        ctx.fillStyle=isGapEdge?'#f85149':'#e6edf3';
-        const nrB=nodeRadius(b)*transform.k,ax=pb.x-dx/len*nrB,ay=pb.y-dy/len*nrB;
-        ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(ax-aS*Math.cos(ang-0.4),ay-aS*Math.sin(ang-0.4));ctx.lineTo(ax-aS*Math.cos(ang+0.4),ay-aS*Math.sin(ang+0.4));ctx.closePath();ctx.fill();
-        if(bidirectional.has(e.source+'-'+e.target)){
-          const nrA=nodeRadius(a)*transform.k,bx=pa.x+dx/len*nrA,by=pa.y+dy/len*nrA,ang2=ang+Math.PI;
-          ctx.beginPath();ctx.moveTo(bx,by);ctx.lineTo(bx-aS*Math.cos(ang2-0.4),by-aS*Math.sin(ang2-0.4));ctx.lineTo(bx-aS*Math.cos(ang2+0.4),by-aS*Math.sin(ang2+0.4));ctx.closePath();ctx.fill();
-        }
-      }
-    }
+    // Direction arrows are drawn in a separate pass after the nodes (see below), at the
+    // edge midpoint and on top, so they're never buried under the node circles.
   }
   visibleEdges.forEach(e=>{if(!gapVisible(e.gap))drawEdgeStroke(e);});
   // Gap edges in a second pass so they're never occluded by later non-gap strokes.
@@ -648,6 +664,28 @@ function draw(){
   ctx.setLineDash([]);ctx.globalAlpha=1;
 
   nodes.forEach(n=>{if(!visibleNodes.has(n.id))return;let dim=false;if(sA&&n.id!==selectedSearch&&!sN.has(n.id))dim=true;if(selActive&&n.id!==selectedNode&&!selNeighbors.has(n.id))dim=true;drawNode(n,dim);});
+
+  // Handoff direction arrows — midpoint glyphs drawn on top of the nodes so they're
+  // never occluded, and culled below ~0.45 zoom (overview) where they'd just be noise.
+  if(transform.k>0.45){
+    const aFill=darkMode?'#e6edf3':'#1f2328';
+    visibleEdges.forEach(e=>{
+      if(e.edgeType!=='handoff_to'&&e.edgeType!=='handoff_from')return;
+      if(sA&&!(e.source===selectedSearch||e.target===selectedSearch))return;  // mirror dimmed-edge logic
+      const a=nodeById[e.source],b=nodeById[e.target];if(!a||!b)return;
+      const pa=screenPos(a),pb=screenPos(b);
+      const dx=pb.x-pa.x,dy=pb.y-pa.y,len=Math.sqrt(dx*dx+dy*dy);if(len<16)return;
+      // True flow: handoff_to goes source->target; handoff_from goes target->source.
+      const dir=e.edgeType==='handoff_to'?1:-1, ux=dx/len*dir, uy=dy/len*dir, ang=Math.atan2(uy,ux);
+      const aS=Math.max(6,Math.min(15,8*Math.min(transform.k,1.6)));
+      const mx=(pa.x+pb.x)/2+ux*aS*0.6, my=(pa.y+pb.y)/2+uy*aS*0.6;  // nudged off-centre so A->B and B->A read back-to-back
+      ctx.globalAlpha=1;ctx.fillStyle=gapVisible(e.gap)?'#f85149':aFill;
+      ctx.beginPath();ctx.moveTo(mx,my);
+      ctx.lineTo(mx-aS*Math.cos(ang-0.42),my-aS*Math.sin(ang-0.42));
+      ctx.lineTo(mx-aS*Math.cos(ang+0.42),my-aS*Math.sin(ang+0.42));
+      ctx.closePath();ctx.fill();
+    });
+  }
   // Search highlight ring
   if(sA&&nodeById[selectedSearch]&&visibleNodes.has(selectedSearch)){const sn=nodeById[selectedSearch],{x,y}=screenPos(sn),r=nodeRadius(sn)*transform.k+6;
     ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.strokeStyle='#58a6ff';ctx.lineWidth=2;ctx.stroke();}
