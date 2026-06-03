@@ -114,7 +114,7 @@ def _find_controls_csv(input_dir, explicit=None):
     return None
 
 
-def read_pipeline(input_dir, source_csv=None, controls_csv=None):
+def read_pipeline(input_dir, source_csv=None, controls_csv=None, findings_path=None):
     """Read all pipeline files and return raw DataFrames."""
     l1 = _find_latest(input_dir, "layer1_output")
     ed = _find_latest(input_dir, "edge_derivation_output")
@@ -124,6 +124,9 @@ def read_pipeline(input_dir, source_csv=None, controls_csv=None):
     fc = _find_findings_csv(input_dir)
     sc = _find_source_csv(input_dir, source_csv)
     cc = _find_controls_csv(input_dir, controls_csv)
+    fx = os.path.abspath(findings_path) if findings_path and os.path.isfile(findings_path) else None
+    if findings_path and fx is None:
+        print(f"  --findings {findings_path} not found — falling back to auto-detect")
     for name, p in [("layer1_output", l1), ("edge_derivation_output", ed), ("layer2_coverage_matrix", l2)]:
         if p is None:
             sys.exit(f"ERROR: Missing file: {name}*.xlsx in {input_dir}")
@@ -145,7 +148,15 @@ def read_pipeline(input_dir, source_csv=None, controls_csv=None):
     else:
         print(f"  No handoff_categories.csv — 2-hop will use structural tracing")
         dfs["categories"] = None
-    if fr is not None:
+    if fx is not None:
+        try:
+            dfs["findings"] = (pd.read_excel(fx, sheet_name="All Findings (Tagged)")
+                               if fx.lower().endswith((".xlsx", ".xlsm")) else pd.read_csv(fx))
+            print(f"  Using --findings {fx} — likely-gap overlay + caseboard")
+        except Exception:
+            print(f"  --findings present but unreadable — gap overlay disabled")
+            dfs["findings"] = None
+    elif fr is not None:
         try:
             dfs["findings"] = pd.read_excel(fr, sheet_name="All Findings (Tagged)")
             print(f"  Found findings_rollup.xlsx — enabling likely-gap overlay")
@@ -633,6 +644,7 @@ def build_pitch2_data(dfs):
                 specificRiskIds=_split_ids(row.get("specific_risk_ids")),
                 kpaIds=_split_ids(row.get("kpa_ids")),
                 evidenceLayer=_clean_value(row.get("evidence_layer"), ""),
+                requirementId=_clean_value(row.get("requirement_id"), ""),
                 manualRequirement=_clean_value(row.get("manual_requirement"), ""),
                 evidenceQuote=_clean_value(row.get("evidence_quote"), ""),
                 reasoning=_clean_value(row.get("reasoning"), ""),
@@ -683,6 +695,7 @@ def build_pitch2_data(dfs):
                 targetId=f["targetId"], targetName=f["targetName"],
                 classification=f["classification"], classificationLabel=f["classificationLabel"],
                 reasoning="", evidenceQuote="", manualRequirement="", evidenceLayer="",
+                requirementId="",
                 caseHeadline="", transferredSummary="", coverageSummary="", pointingAt="",
                 riskCategory=f["riskCategory"],
                 specificRiskIds=[], kpaIds=[], riskCategories=[],
@@ -705,6 +718,7 @@ def build_pitch2_data(dfs):
         if f["riskCategory"] and f["riskCategory"] not in c["riskCategories"]:
             c["riskCategories"].append(f["riskCategory"])
         for fld in ("reasoning", "evidenceQuote", "manualRequirement", "evidenceLayer",
+                    "requirementId",
                     "caseHeadline", "transferredSummary", "coverageSummary", "pointingAt"):
             if not c[fld] and f[fld]:
                 c[fld] = f[fld]
@@ -947,9 +961,9 @@ def nodeTotal_py(node):
     return sum(nodeTotal_py(c) for c in node["children"])
 
 
-def generate(input_dir, output_dir, source_csv=None, controls_csv=None):
+def generate(input_dir, output_dir, source_csv=None, controls_csv=None, findings_csv=None):
     print(f"Reading pipeline files from: {input_dir}")
-    dfs = read_pipeline(input_dir, source_csv, controls_csv)
+    dfs = read_pipeline(input_dir, source_csv, controls_csv, findings_csv)
     date_stamp = datetime.now().strftime("%Y%m%d")
 
     # === Network Visualization ===
@@ -1058,6 +1072,8 @@ if __name__ == "__main__":
                         help="Source universe CSV for entity prose (hand-off description / overview); auto-detected if omitted")
     parser.add_argument("--controls", default=None,
                         help="Archer controls CSV — resolves SR/KPA names + receiver coverage in the caseboard; auto-detected if omitted")
+    parser.add_argument("--findings", default=None,
+                        help="Explicit Stage 2 findings path (.csv or rollup .xlsx) — overrides auto-detect; use to point at an out-of-repo real-data run")
     args = parser.parse_args()
     os.makedirs(args.output_dir, exist_ok=True)
-    generate(args.input_dir, args.output_dir, args.source, args.controls)
+    generate(args.input_dir, args.output_dir, args.source, args.controls, args.findings)

@@ -12,12 +12,14 @@ You are evaluating audit entity handoffs per the framework and manual-review fin
 
 ## Manual review findings (Stage 1)
 
-Prioritized gaps:
-1. **Make audit-entity risk ownership explicit.** Every handoff should state which AE's register carries the risk and which AE concludes on whether it's managed. The manual relies too much on scope language; "applicable in both entities" (§3.2, 2554-2558) conflicts with one-owner accountability.
-2. **Require attribute-level handoff documentation.** Exact risk slice / control objective / embedded touchpoint / legal entity / period / population — not just receiving AE or broad category.
-3. **Explicitly address the coarse-handoff failure mode.** State that a program audit may own the enterprise program while a business-process audit still owns embedded process-level controls, with boundary documentation.
-4. **Strengthen handoff hygiene to match reliance sufficiency.** Reliance requires exact objective match, period, population, approach, geography/entity (§5.9, 7799-7812 and §5.8, 7672-7681). Handoff hygiene (§5.9, 7733-7758) doesn't.
-5. **Create a single coverage view / assurance map.** Current audit-universe completeness and RCO roll-up don't prove every risk/control slice has exactly one owner.
+Prioritized gaps (the `requirement_id` value in **bold-italic** is the controlled key — set each finding's `requirement_id` to one of these):
+1. ***risk_ownership*** — **Make audit-entity risk ownership explicit.** Every handoff should state which AE's register carries the risk and which AE concludes on whether it's managed. The manual relies too much on scope language; "applicable in both entities" (§3.2, 2554-2558) conflicts with one-owner accountability.
+2. ***attribute_documentation*** — **Require attribute-level handoff documentation.** Exact risk slice / control objective / embedded touchpoint / legal entity / period / population — not just receiving AE or broad category.
+3. ***coarse_handoff*** — **Explicitly address the coarse-handoff failure mode.** State that a program audit may own the enterprise program while a business-process audit still owns embedded process-level controls, with boundary documentation.
+4. ***handoff_hygiene*** — **Strengthen handoff hygiene to match reliance sufficiency.** Reliance requires exact objective match, period, population, approach, geography/entity (§5.9, 7799-7812 and §5.8, 7672-7681). Handoff hygiene (§5.9, 7733-7758) doesn't.
+5. ***assurance_map*** — **Create a single coverage view / assurance map.** Current audit-universe completeness and RCO roll-up don't prove every risk/control slice has exactly one owner.
+
+Use `requirement_id: other` only when a finding fits none of the five above (e.g. one of the silent/ambiguous items below).
 
 Silent/ambiguous:
 - **A.** Manual frames handoff-vs-reliance around scope mechanics, not risk ownership (§5.9, 7710-7712).
@@ -75,6 +77,7 @@ Emit exactly one top-level JSON code block matching this schema. No text outside
   "findings": [
     {{
       "task": 1,
+      "requirement_id": "risk_ownership | attribute_documentation | coarse_handoff | handoff_hygiene | assurance_map | other",
       "manual_requirement": "paraphrase or quote of the Stage 1 requirement this addresses",
       "focal_entity_id": "AE-nnn",
       "focal_entity_name": "...",
@@ -120,6 +123,7 @@ Emit exactly one top-level JSON code block matching this schema. No text outside
 
 Notes on filling the schema:
 - `task` is integer 1–5.
+- `requirement_id` is the **controlled key** for the Stage 1 requirement the finding addresses — exactly one of: `risk_ownership`, `attribute_documentation`, `coarse_handoff`, `handoff_hygiene`, `assurance_map`, `other`. This is what findings are grouped/themed on, so pick the closest fit; use `other` only when none apply. `manual_requirement` stays the free-text paraphrase/specifics — do not put theming weight on its wording.
 - `specific_risk_ids` and `kpa_ids` are arrays. Single-element arrays are fine; Task 5 findings may contain multiple.
 - `evidence_layer` must be one of: `control`, `category_summary`, `entity_prose`, `structured_handoffs`.
 - `classification` must be one of: `conforms`, `documentation issue`, `likely coverage gap`.

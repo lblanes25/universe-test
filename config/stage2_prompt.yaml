@@ -131,6 +131,26 @@ tasks:
 
       For each Task 5 finding also write the narrative fields (`case_headline`, `transferred_summary`, `coverage_summary`, `pointing_at`) specific to A and B — name what A handed off, what B actually tests (from B's control library/evidence), and the specific risk slice B does not own. `case_headline` must be a grammatical sentence using the risk category, not a pasted risk statement. Do not restate the risk category generically.
 
+# Stage 1 requirements — the CONTROLLED vocabulary a finding's `requirement_id`
+# selects from, so findings group by theme cleanly. The free-text
+# `manual_requirement` stays the per-finding paraphrase; `requirement_id` is the
+# stable key everything themes on. These map 1:1 to the prioritized gaps listed
+# in templates/prompt.md "Manual review findings (Stage 1)". `other` is the
+# escape hatch for findings that fit none of the five.
+requirements:
+  - value: "risk_ownership"
+    display: "Explicit risk ownership"
+  - value: "attribute_documentation"
+    display: "Attribute-level handoff documentation"
+  - value: "coarse_handoff"
+    display: "Coarse-handoff boundary"
+  - value: "handoff_hygiene"
+    display: "Handoff hygiene"
+  - value: "assurance_map"
+    display: "Single coverage view / assurance map"
+  - value: "other"
+    display: "Other / unmapped"
+
 # Display labels — see top-of-file comments on value vs display.
 classifications:
   - value: "conforms"

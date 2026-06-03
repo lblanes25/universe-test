@@ -8,8 +8,8 @@ Severed handoff edges: 134 / 199 (coverage remains via target/source context)
 
 | # | Focal | Target ctx | Source ctx | Avg tokens | Worst-case tokens | Isolated | Split from |
 |---|-------|------------|------------|------------|-------------------|----------|------------|
-| 001 | 3 | 3 | 2 | 22,412 | 31,511 |  |  |
-| 002 | 5 | 9 | 3 | 48,360 | 70,433 |  |  |
+| 001 | 5 | 9 | 3 | 48,360 | 70,433 |  |  |
+| 002 | 3 | 3 | 2 | 22,412 | 31,511 |  |  |
 | 003 | 7 | 13 | 2 | 58,746 | 86,054 |  |  |
 | 004 | 7 | 7 | 8 | 52,405 | 76,307 |  |  |
 | 005 | 6 | 14 | 7 | 70,979 | 104,206 |  | 5 |
@@ -24,8 +24,8 @@ Avg batch (mean/max): 41,599 / 70,979
 Worst-case batch (mean/max): 60,246 / 104,206
 
 ## Focal composition per batch
-- **batch_001:** focal=['AE-2', 'AE-22', 'AE-41']
-- **batch_002:** focal=['AE-12', 'AE-20', 'AE-38', 'AE-5', 'AE-9']
+- **batch_001:** focal=['AE-12', 'AE-20', 'AE-38', 'AE-5', 'AE-9']
+- **batch_002:** focal=['AE-2', 'AE-22', 'AE-41']
 - **batch_003:** focal=['AE-1', 'AE-15', 'AE-36', 'AE-4', 'AE-40', 'AE-46', 'AE-47']
 - **batch_004:** focal=['AE-13', 'AE-18', 'AE-3', 'AE-33', 'AE-34', 'AE-6', 'AE-7']
 - **batch_005:** focal=['AE-14', 'AE-27', 'AE-30', 'AE-39', 'AE-44', 'AE-8']

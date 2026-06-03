@@ -324,6 +324,19 @@ function reviewKind(task) {
   if (t === 4) return { label: 'Entity alignment', blurb: '' };
   return { label: 'Review', blurb: '' };
 }
+// Controlled Stage-1 requirement themes (mirror config/stage2_prompt.yaml `requirements`).
+const REQ_LABELS = {
+  risk_ownership: 'Explicit risk ownership',
+  attribute_documentation: 'Attribute-level handoff doc',
+  coarse_handoff: 'Coarse-handoff boundary',
+  handoff_hygiene: 'Handoff hygiene',
+  assurance_map: 'Assurance map',
+  other: 'Other / unmapped'
+};
+function reqLabel(id) {
+  if (!id) return '';
+  return REQ_LABELS[id] || id;
+}
 function classKind(value) {
   const v = String(value || '').toLowerCase();
   if (v.includes('coverage gap')) return 'gap';
@@ -447,6 +460,7 @@ function caseHeadline(c) {
     <div class="case-meta">
       ${chipHtml(label(c.classification), classKind(c.classification))}
       ${chipHtml(c.riskCategory, 'risk')}
+      ${c.requirementId ? chipHtml(reqLabel(c.requirementId), 'muted') : ''}
       ${chipHtml(target, 'info')}
       ${c.findingCount > 1 ? chipHtml(c.findingCount + ' findings', 'muted') : ''}
       ${c.gatePassed ? '' : chipHtml('Gate flagged', 'doc')}
@@ -764,7 +778,8 @@ function csvEscape(value) {
 function exportCsv() {
   const list = filteredCases();
   const headers = [
-    'Finding ID', 'Case Key', 'Review Kind', 'Classification', 'Source ID', 'Source Name',
+    'Finding ID', 'Case Key', 'Review Kind', 'Requirement Theme', 'Requirement ID',
+    'Classification', 'Source ID', 'Source Name',
     'Target ID', 'Target Name', 'Risk Category', 'Key Risks', 'KPAs', 'Covering Controls',
     'Recommended Action', 'Evidence Layer', 'Evidence Quote', 'Reasoning', 'Gate Passed',
     'Decision Status', 'Decision Owner', 'Decision Note', 'Decision Timestamp'
@@ -780,7 +795,8 @@ function exportCsv() {
     ids.forEach(fid => {
       const f = findingsById[fid] || {};
       csv += [
-        fid, c.caseKey, reviewKind(c.task).label, c.classification, c.sourceId, c.sourceName,
+        fid, c.caseKey, reviewKind(c.task).label, reqLabel(c.requirementId), c.requirementId || '',
+        c.classification, c.sourceId, c.sourceName,
         c.targetId, c.targetName, c.riskCategory, keyRisks, kpas, controls,
         action, f.evidenceLayer || c.evidenceLayer, f.evidenceQuote || c.evidenceQuote,
         f.reasoning || c.reasoning, (f.gatePassed === false ? 'No' : 'Yes'),

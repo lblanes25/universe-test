@@ -213,6 +213,9 @@ def _findings_to_rows(batch_id: int, response: dict) -> list[dict]:
             "kpa_ids": "; ".join(f.get("kpa_ids", []) or []),
             "evidence_layer": f.get("evidence_layer"),
             "classification": f.get("classification"),
+            # Controlled key for theming (Phase C). Absent in older corpora ->
+            # blank; summarize_findings then falls back to manual_requirement.
+            "requirement_id": f.get("requirement_id"),
             "manual_requirement": f.get("manual_requirement"),
             "evidence_quote": f.get("evidence_quote"),
             "reasoning": f.get("reasoning"),
@@ -295,7 +298,7 @@ def run(
         columns=[
             "batch_id", "task", "focal_entity_id", "focal_entity_name", "cross_entity_partner_id",
             "risk_category", "specific_risk_ids", "kpa_ids", "evidence_layer", "classification",
-            "manual_requirement", "evidence_quote", "reasoning",
+            "requirement_id", "manual_requirement", "evidence_quote", "reasoning",
             "case_headline", "transferred_summary", "coverage_summary", "pointing_at",
         ]
     )

@@ -23,6 +23,11 @@
         ],
         "properties": {
           "task": {"type": "integer", "minimum": 1, "maximum": 5},
+          "requirement_id": {
+            "type": ["string", "null"],
+            "enum": ["risk_ownership", "attribute_documentation", "coarse_handoff", "handoff_hygiene", "assurance_map", "other", null],
+            "description": "Controlled key for the Stage 1 requirement; the field findings are themed on. manual_requirement is the free-text paraphrase."
+          },
           "manual_requirement": {"type": "string"},
           "focal_entity_id": {"type": "string"},
           "focal_entity_name": {"type": "string"},

@@ -46,13 +46,16 @@ RISK_CATEGORIES = [
     "Funding & Liquidity", "Information Technology", "Information Security", "Model",
     "Market", "Operational", "Reputational", "Strategic & Business", "Third Party",
 ]
-# Paraphrases of the 5 Stage 1 manual requirements (see batch prompt §"Manual review").
+# The 5 Stage 1 manual requirements as (controlled requirement_id, free-text
+# paraphrase) pairs. requirement_id is the stable theming key; the paraphrase
+# stands in for the wording variation a real LLM run produces. See the batch
+# prompt §"Manual review" and config/stage2_prompt.yaml `requirements`.
 MANUAL_REQS = [
-    "Make audit-entity risk ownership explicit",
-    "Require attribute-level handoff documentation",
-    "Explicitly address the coarse-handoff failure mode",
-    "Strengthen handoff hygiene to match reliance sufficiency",
-    "Create a single coverage view / assurance map",
+    ("risk_ownership", "Make audit-entity risk ownership explicit"),
+    ("attribute_documentation", "Require attribute-level handoff documentation"),
+    ("coarse_handoff", "Explicitly address the coarse-handoff failure mode"),
+    ("handoff_hygiene", "Strengthen handoff hygiene to match reliance sufficiency"),
+    ("assurance_map", "Create a single coverage view / assurance map"),
 ]
 
 
@@ -106,9 +109,11 @@ def _pick_classification(rng: random.Random, gap_weight: float) -> str:
 def _finding(task, focal, focal_name, classification, evidence_layer, rng,
              partner=None, partner_name=None):
     risk = rng.choice(RISK_CATEGORIES)
+    req_id, req_text = rng.choice(MANUAL_REQS)
     f = {
         "task": task,
-        "manual_requirement": rng.choice(MANUAL_REQS),
+        "requirement_id": req_id,
+        "manual_requirement": req_text,
         "focal_entity_id": focal,
         "focal_entity_name": focal_name,
         "cross_entity_partner_id": partner,

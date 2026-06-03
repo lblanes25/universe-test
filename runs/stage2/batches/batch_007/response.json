@@ -2,6 +2,7 @@
   "findings": [
     {
       "task": 5,
+      "requirement_id": "risk_ownership",
       "manual_requirement": "Make audit-entity risk ownership explicit",
       "focal_entity_id": "AE-16",
       "focal_entity_name": "AE-16",
@@ -25,6 +26,7 @@
     },
     {
       "task": 3,
+      "requirement_id": "assurance_map",
       "manual_requirement": "Create a single coverage view / assurance map",
       "focal_entity_id": "AE-16",
       "focal_entity_name": "AE-16",
@@ -48,6 +50,7 @@
     },
     {
       "task": 1,
+      "requirement_id": "handoff_hygiene",
       "manual_requirement": "Strengthen handoff hygiene to match reliance sufficiency",
       "focal_entity_id": "AE-16",
       "focal_entity_name": "AE-16",
@@ -71,6 +74,7 @@
     },
     {
       "task": 2,
+      "requirement_id": "assurance_map",
       "manual_requirement": "Create a single coverage view / assurance map",
       "focal_entity_id": "AE-16",
       "focal_entity_name": "AE-16",
@@ -94,6 +98,7 @@
     },
     {
       "task": 4,
+      "requirement_id": "attribute_documentation",
       "manual_requirement": "Require attribute-level handoff documentation",
       "focal_entity_id": "AE-16",
       "focal_entity_name": "AE-16",
@@ -117,6 +122,7 @@
     },
     {
       "task": 5,
+      "requirement_id": "assurance_map",
       "manual_requirement": "Create a single coverage view / assurance map",
       "focal_entity_id": "AE-25",
       "focal_entity_name": "AE-25",
@@ -140,6 +146,7 @@
     },
     {
       "task": 3,
+      "requirement_id": "attribute_documentation",
       "manual_requirement": "Require attribute-level handoff documentation",
       "focal_entity_id": "AE-25",
       "focal_entity_name": "AE-25",
@@ -163,6 +170,7 @@
     },
     {
       "task": 1,
+      "requirement_id": "assurance_map",
       "manual_requirement": "Create a single coverage view / assurance map",
       "focal_entity_id": "AE-25",
       "focal_entity_name": "AE-25",
@@ -186,6 +194,7 @@
     },
     {
       "task": 2,
+      "requirement_id": "coarse_handoff",
       "manual_requirement": "Explicitly address the coarse-handoff failure mode",
       "focal_entity_id": "AE-25",
       "focal_entity_name": "AE-25",
@@ -209,6 +218,7 @@
     },
     {
       "task": 4,
+      "requirement_id": "handoff_hygiene",
       "manual_requirement": "Strengthen handoff hygiene to match reliance sufficiency",
       "focal_entity_id": "AE-25",
       "focal_entity_name": "AE-25",
@@ -232,6 +242,7 @@
     },
     {
       "task": 5,
+      "requirement_id": "risk_ownership",
       "manual_requirement": "Make audit-entity risk ownership explicit",
       "focal_entity_id": "AE-26",
       "focal_entity_name": "AE-26",
@@ -255,6 +266,7 @@
     },
     {
       "task": 3,
+      "requirement_id": "handoff_hygiene",
       "manual_requirement": "Strengthen handoff hygiene to match reliance sufficiency",
       "focal_entity_id": "AE-26",
       "focal_entity_name": "AE-26",
@@ -278,6 +290,7 @@
     },
     {
       "task": 1,
+      "requirement_id": "coarse_handoff",
       "manual_requirement": "Explicitly address the coarse-handoff failure mode",
       "focal_entity_id": "AE-26",
       "focal_entity_name": "AE-26",
@@ -301,6 +314,7 @@
     },
     {
       "task": 2,
+      "requirement_id": "coarse_handoff",
       "manual_requirement": "Explicitly address the coarse-handoff failure mode",
       "focal_entity_id": "AE-26",
       "focal_entity_name": "AE-26",
@@ -324,6 +338,7 @@
     },
     {
       "task": 4,
+      "requirement_id": "assurance_map",
       "manual_requirement": "Create a single coverage view / assurance map",
       "focal_entity_id": "AE-26",
       "focal_entity_name": "AE-26",
@@ -347,6 +362,7 @@
     },
     {
       "task": 5,
+      "requirement_id": "risk_ownership",
       "manual_requirement": "Make audit-entity risk ownership explicit",
       "focal_entity_id": "AE-28",
       "focal_entity_name": "AE-28",
@@ -370,6 +386,7 @@
     },
     {
       "task": 3,
+      "requirement_id": "coarse_handoff",
       "manual_requirement": "Explicitly address the coarse-handoff failure mode",
       "focal_entity_id": "AE-28",
       "focal_entity_name": "AE-28",
@@ -393,6 +410,7 @@
     },
     {
       "task": 1,
+      "requirement_id": "attribute_documentation",
       "manual_requirement": "Require attribute-level handoff documentation",
       "focal_entity_id": "AE-28",
       "focal_entity_name": "AE-28",
@@ -416,6 +434,7 @@
     },
     {
       "task": 2,
+      "requirement_id": "assurance_map",
       "manual_requirement": "Create a single coverage view / assurance map",
       "focal_entity_id": "AE-28",
       "focal_entity_name": "AE-28",
@@ -439,6 +458,7 @@
     },
     {
       "task": 4,
+      "requirement_id": "attribute_documentation",
       "manual_requirement": "Require attribute-level handoff documentation",
       "focal_entity_id": "AE-28",
       "focal_entity_name": "AE-28",
@@ -462,6 +482,7 @@
     },
     {
       "task": 5,
+      "requirement_id": "assurance_map",
       "manual_requirement": "Create a single coverage view / assurance map",
       "focal_entity_id": "AE-31",
       "focal_entity_name": "AE-31",
@@ -485,6 +506,7 @@
     },
     {
       "task": 3,
+      "requirement_id": "assurance_map",
       "manual_requirement": "Create a single coverage view / assurance map",
       "focal_entity_id": "AE-31",
       "focal_entity_name": "AE-31",
@@ -508,6 +530,7 @@
     },
     {
       "task": 1,
+      "requirement_id": "assurance_map",
       "manual_requirement": "Create a single coverage view / assurance map",
       "focal_entity_id": "AE-31",
       "focal_entity_name": "AE-31",
@@ -531,6 +554,7 @@
     },
     {
       "task": 2,
+      "requirement_id": "risk_ownership",
       "manual_requirement": "Make audit-entity risk ownership explicit",
       "focal_entity_id": "AE-31",
       "focal_entity_name": "AE-31",
@@ -554,6 +578,7 @@
     },
     {
       "task": 4,
+      "requirement_id": "risk_ownership",
       "manual_requirement": "Make audit-entity risk ownership explicit",
       "focal_entity_id": "AE-31",
       "focal_entity_name": "AE-31",

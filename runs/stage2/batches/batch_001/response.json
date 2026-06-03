@@ -2,6 +2,7 @@
   "findings": [
     {
       "task": 5,
+      "requirement_id": "coarse_handoff",
       "manual_requirement": "Explicitly address the coarse-handoff failure mode",
       "focal_entity_id": "AE-2",
       "focal_entity_name": "AE-2",
@@ -25,6 +26,7 @@
     },
     {
       "task": 3,
+      "requirement_id": "attribute_documentation",
       "manual_requirement": "Require attribute-level handoff documentation",
       "focal_entity_id": "AE-2",
       "focal_entity_name": "AE-2",
@@ -48,6 +50,7 @@
     },
     {
       "task": 1,
+      "requirement_id": "handoff_hygiene",
       "manual_requirement": "Strengthen handoff hygiene to match reliance sufficiency",
       "focal_entity_id": "AE-2",
       "focal_entity_name": "AE-2",
@@ -71,6 +74,7 @@
     },
     {
       "task": 2,
+      "requirement_id": "risk_ownership",
       "manual_requirement": "Make audit-entity risk ownership explicit",
       "focal_entity_id": "AE-2",
       "focal_entity_name": "AE-2",
@@ -94,6 +98,7 @@
     },
     {
       "task": 4,
+      "requirement_id": "attribute_documentation",
       "manual_requirement": "Require attribute-level handoff documentation",
       "focal_entity_id": "AE-2",
       "focal_entity_name": "AE-2",
@@ -117,6 +122,7 @@
     },
     {
       "task": 5,
+      "requirement_id": "handoff_hygiene",
       "manual_requirement": "Strengthen handoff hygiene to match reliance sufficiency",
       "focal_entity_id": "AE-22",
       "focal_entity_name": "AE-22",
@@ -140,6 +146,7 @@
     },
     {
       "task": 3,
+      "requirement_id": "handoff_hygiene",
       "manual_requirement": "Strengthen handoff hygiene to match reliance sufficiency",
       "focal_entity_id": "AE-22",
       "focal_entity_name": "AE-22",
@@ -163,6 +170,7 @@
     },
     {
       "task": 1,
+      "requirement_id": "coarse_handoff",
       "manual_requirement": "Explicitly address the coarse-handoff failure mode",
       "focal_entity_id": "AE-22",
       "focal_entity_name": "AE-22",
@@ -186,6 +194,7 @@
     },
     {
       "task": 2,
+      "requirement_id": "handoff_hygiene",
       "manual_requirement": "Strengthen handoff hygiene to match reliance sufficiency",
       "focal_entity_id": "AE-22",
       "focal_entity_name": "AE-22",
@@ -209,6 +218,7 @@
     },
     {
       "task": 4,
+      "requirement_id": "assurance_map",
       "manual_requirement": "Create a single coverage view / assurance map",
       "focal_entity_id": "AE-22",
       "focal_entity_name": "AE-22",
@@ -232,6 +242,7 @@
     },
     {
       "task": 5,
+      "requirement_id": "handoff_hygiene",
       "manual_requirement": "Strengthen handoff hygiene to match reliance sufficiency",
       "focal_entity_id": "AE-41",
       "focal_entity_name": "AE-41",
@@ -255,6 +266,7 @@
     },
     {
       "task": 3,
+      "requirement_id": "coarse_handoff",
       "manual_requirement": "Explicitly address the coarse-handoff failure mode",
       "focal_entity_id": "AE-41",
       "focal_entity_name": "AE-41",
@@ -278,6 +290,7 @@
     },
     {
       "task": 1,
+      "requirement_id": "handoff_hygiene",
       "manual_requirement": "Strengthen handoff hygiene to match reliance sufficiency",
       "focal_entity_id": "AE-41",
       "focal_entity_name": "AE-41",
@@ -301,6 +314,7 @@
     },
     {
       "task": 2,
+      "requirement_id": "assurance_map",
       "manual_requirement": "Create a single coverage view / assurance map",
       "focal_entity_id": "AE-41",
       "focal_entity_name": "AE-41",
@@ -324,6 +338,7 @@
     },
     {
       "task": 4,
+      "requirement_id": "attribute_documentation",
       "manual_requirement": "Require attribute-level handoff documentation",
       "focal_entity_id": "AE-41",
       "focal_entity_name": "AE-41",

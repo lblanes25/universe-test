@@ -68,6 +68,16 @@ def classification_displays() -> dict[str, str]:
     return {c["value"]: c["display"] for c in _load()["classifications"]}
 
 
+# ---------- requirement (Stage 1) labels ----------
+
+def requirement_values() -> set[str]:
+    return {r["value"] for r in _load().get("requirements", [])}
+
+
+def requirement_displays() -> dict[str, str]:
+    return {r["value"]: r["display"] for r in _load().get("requirements", [])}
+
+
 # ---------- evidence layer labels ----------
 
 def evidence_layer_values() -> set[str]:

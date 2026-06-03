@@ -2,6 +2,7 @@
   "findings": [
     {
       "task": 5,
+      "requirement_id": "risk_ownership",
       "manual_requirement": "Make audit-entity risk ownership explicit",
       "focal_entity_id": "AE-10",
       "focal_entity_name": "AE-10",
@@ -25,6 +26,7 @@
     },
     {
       "task": 3,
+      "requirement_id": "coarse_handoff",
       "manual_requirement": "Explicitly address the coarse-handoff failure mode",
       "focal_entity_id": "AE-10",
       "focal_entity_name": "AE-10",
@@ -48,6 +50,7 @@
     },
     {
       "task": 1,
+      "requirement_id": "assurance_map",
       "manual_requirement": "Create a single coverage view / assurance map",
       "focal_entity_id": "AE-10",
       "focal_entity_name": "AE-10",
@@ -71,6 +74,7 @@
     },
     {
       "task": 2,
+      "requirement_id": "coarse_handoff",
       "manual_requirement": "Explicitly address the coarse-handoff failure mode",
       "focal_entity_id": "AE-10",
       "focal_entity_name": "AE-10",
@@ -94,6 +98,7 @@
     },
     {
       "task": 4,
+      "requirement_id": "coarse_handoff",
       "manual_requirement": "Explicitly address the coarse-handoff failure mode",
       "focal_entity_id": "AE-10",
       "focal_entity_name": "AE-10",

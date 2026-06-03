@@ -16,7 +16,7 @@ Sheets:
   - Doc Issues by Risk Category   — documentation issues grouped by the 14 categories
   - Top Entities by Issue Count   — concentration: which entities have the most findings
   - Gaps by Entity                — one row per gap finding, reviewer-ready
-  - Manual Requirements           — findings grouped by the Stage 1 requirement they address
+  - By Requirement                — findings grouped by the controlled Stage 1 requirement_id (theme key)
   - By Audit Leader               — counts per audit leader (if nodes available)
   - By Business Unit              — counts per business unit (if nodes available)
   - By Line of Defense            — counts per LoD (if nodes available)
@@ -117,11 +117,16 @@ def _summary_sheet(df: pd.DataFrame) -> pd.DataFrame:
             counts = df[col].fillna("(blank)").value_counts()
             for k, v in counts.items():
                 rows.append({"metric": f"{col} = {k}", "count": int(v)})
-    if "manual_requirement" in df.columns:
+    if "requirement_id" in df.columns and df["requirement_id"].fillna("").astype(str).str.strip().ne("").any():
+        rid = df["requirement_id"].fillna("").astype(str).str.strip()
+        cited = rid.ne("")
+        rows.append({"metric": "findings with a requirement_id (theme key)", "count": int(cited.sum())})
+        rows.append({"metric": "distinct requirement themes", "count": int(rid[cited].nunique())})
+    elif "manual_requirement" in df.columns:
         mr = df["manual_requirement"].fillna("").astype(str).str.strip()
         cited = mr.ne("")
         rows.append({"metric": "findings citing a manual requirement", "count": int(cited.sum())})
-        rows.append({"metric": "distinct manual requirements referenced", "count": int(mr[cited].nunique())})
+        rows.append({"metric": "distinct manual requirements (free-text)", "count": int(mr[cited].nunique())})
     if "gate_passed" in df.columns:
         rows.append({"metric": "from gate-passing batches", "count": int(df["gate_passed"].sum())})
         rows.append({"metric": "from gate-failing batches", "count": int((~df["gate_passed"]).sum())})
@@ -154,35 +159,50 @@ def _by_risk_category(df: pd.DataFrame) -> pd.DataFrame:
     return grouped
 
 
-def _by_manual_requirement(df: pd.DataFrame, gap_value: str) -> pd.DataFrame:
-    """Group findings by the Stage 1 manual requirement they address.
+def _by_requirement(df: pd.DataFrame, gap_value: str) -> pd.DataFrame:
+    """Group findings by the controlled Stage 1 `requirement_id` (the theming key).
 
-    `manual_requirement` is a free-text paraphrase/quote of the Stage 1
-    requirement a finding evaluates against (see templates/prompt.md) — it is
-    NOT a boolean flag. Grouping is exact-string, so paraphrase variants of the
-    same requirement will not collapse. That's acceptable given the small fixed
-    set of Stage 1 requirements, and consistent with this module's handling of
-    entity-local KPA/SR IDs (see the module docstring).
+    `requirement_id` is the stable controlled value (see config/stage2_prompt.yaml
+    `requirements`); `manual_requirement` is a free-text paraphrase that fragments
+    under wording variation across a large run, so it's shown only as an example
+    column, never grouped on. Falls back to grouping on `manual_requirement` when
+    `requirement_id` is absent (older corpora produced before this key existed).
     """
     cols = [
-        "manual_requirement", "entity_count", "finding_count",
-        "gap_count", "affected_entities", "example_reasoning",
+        "requirement", "requirement_id", "entity_count", "finding_count",
+        "gap_count", "affected_entities", "example_manual_requirement",
     ]
-    if df.empty or "manual_requirement" not in df.columns:
+    if df.empty:
         return pd.DataFrame(columns=cols)
     work = df.copy()
-    work["manual_requirement"] = work["manual_requirement"].fillna("").astype(str).str.strip()
-    work.loc[work["manual_requirement"] == "", "manual_requirement"] = "(none)"
+    work["manual_requirement"] = (
+        work["manual_requirement"].fillna("").astype(str).str.strip()
+        if "manual_requirement" in work.columns else ""
+    )
+    displays = labels.requirement_displays()
+    has_req = (
+        "requirement_id" in work.columns
+        and work["requirement_id"].fillna("").astype(str).str.strip().ne("").any()
+    )
+    if has_req:
+        rid = work["requirement_id"].fillna("").astype(str).str.strip().replace("", "other")
+        work["requirement_id"] = rid
+        work["requirement"] = rid.map(lambda v: displays.get(v, v))
+    else:
+        # No controlled key in this corpus — group on free text (old behavior).
+        work["requirement_id"] = ""
+        work["requirement"] = work["manual_requirement"].replace("", "(none)")
     work["_is_gap"] = work["classification"].str.lower().eq(gap_value.lower())
     grouped = (
-        work.groupby("manual_requirement")
+        work.groupby("requirement")
         .agg(
+            requirement_id=("requirement_id", lambda s: next((x for x in s if x), "")),
             entity_count=("focal_entity_id", "nunique"),
             finding_count=("focal_entity_id", "size"),
             gap_count=("_is_gap", "sum"),
             affected_entities=("focal_entity_id",
                                 lambda s: "; ".join(sorted(set(s.dropna().astype(str))))),
-            example_reasoning=("reasoning",
+            example_manual_requirement=("manual_requirement",
                                 lambda s: next((x for x in s if isinstance(x, str) and x.strip()), "")),
         )
         .reset_index()
@@ -277,7 +297,7 @@ def run(
     gap_value = _classification_value("coverage gap")
     docs = findings[findings["classification"].str.lower().eq(doc_value.lower())]
     gaps = findings[findings["classification"].str.lower().eq(gap_value.lower())]
-    manual = _by_manual_requirement(findings, gap_value)
+    by_requirement = _by_requirement(findings, gap_value)
 
     sheets: dict[str, pd.DataFrame] = {
         "Summary": _summary_sheet(findings),
@@ -285,7 +305,7 @@ def run(
         "Doc Issues by Risk Category": _by_risk_category(docs),
         "Top Entities by Issue Count": _top_entities(findings, nodes),
         "Gaps by Entity": _gaps_by_entity(findings, gap_value),
-        "Manual Requirements": manual,
+        "By Requirement": by_requirement,
     }
 
     if nodes is not None and not nodes.empty:
@@ -303,10 +323,14 @@ def run(
     print(f"  total findings:    {len(findings)}")
     print(f"  likely gaps:       {len(gaps)}")
     print(f"  documentation:     {len(docs)}")
-    if "manual_requirement" in findings.columns:
+    if "requirement_id" in findings.columns and findings["requirement_id"].fillna("").astype(str).str.strip().ne("").any():
+        rid = findings["requirement_id"].fillna("").astype(str).str.strip()
+        cited = rid.ne("")
+        print(f"  requirements:      {int(cited.sum())} findings across {int(rid[cited].nunique())} requirement themes")
+    elif "manual_requirement" in findings.columns:
         mr = findings["manual_requirement"].fillna("").astype(str).str.strip()
         cited = mr.ne("")
-        print(f"  manual reqs:       {int(cited.sum())} findings cite {int(mr[cited].nunique())} distinct requirements")
+        print(f"  manual reqs:       {int(cited.sum())} findings cite {int(mr[cited].nunique())} distinct free-text requirements")
     if gate_map:
         passed = int(findings["gate_passed"].sum())
         failed = len(findings) - passed
