@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audit Universe Assurance Dashboard</title>
+<style>
+  /* Drawer width — the map keeps at least the other half on a desktop screen. */
+  :root { --dw: min(760px, 50vw); }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #0d1117; }
+
+  /* Map fills the viewport; it narrows to the left half while the drawer is open
+     (non-modal — the map and its left-sidebar search stay fully interactive). */
+  #frame-map {
+    position: fixed; top: 0; left: 0; height: 100%; width: 100%; border: 0;
+    transition: width 0.26s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  body.drawer-open #frame-map { width: calc(100% - var(--dw)); }
+
+  /* Right-side case drawer holding the caseboard iframe. No backdrop: the map
+     beside it stays clickable, so you can pick another gap without closing. */
+  #drawer {
+    position: fixed; top: 0; right: 0; height: 100%; width: var(--dw);
+    background: #ffffff;
+    box-shadow: -16px 0 40px rgba(2, 6, 23, 0.35);
+    transform: translateX(100%);
+    transition: transform 0.26s cubic-bezier(0.22, 0.61, 0.36, 1);
+    z-index: 21;
+    display: grid; grid-template-rows: auto minmax(0, 1fr);
+  }
+  #drawer.open { transform: translateX(0); }
+  .drawer-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 9px 12px; background: #0d1117; color: #e6edf3;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  }
+  .drawer-head .dh-title { font-size: 12.5px; font-weight: 650; letter-spacing: 0.2px; }
+  .drawer-head .dh-title span { color: #8b949e; font-weight: 500; }
+  .drawer-close {
+    border: 1px solid #30363d; background: #21262d; color: #e6edf3;
+    border-radius: 6px; width: 28px; height: 28px; font-size: 16px; line-height: 1;
+    cursor: pointer; flex: none;
+  }
+  .drawer-close:hover { background: #30363d; }
+  #frame-board { width: 100%; height: 100%; border: 0; background: #fff; }
+</style>
+</head>
+<body>
+  <iframe id="frame-map" srcdoc="%%MAP_SRCDOC%%"></iframe>
+
+  <aside id="drawer" aria-hidden="true">
+    <div class="drawer-head">
+      <div class="dh-title">Case detail <span>— Ctrl/Cmd-click any gap to switch</span></div>
+      <button class="drawer-close" id="drawer-close" title="Close (Esc)">&times;</button>
+    </div>
+    <iframe id="frame-board" srcdoc="%%BOARD_SRCDOC%%"></iframe>
+  </aside>
+
+<script>
+  const drawer = document.getElementById('drawer');
+  const board = document.getElementById('frame-board');
+
+  let boardReady = false;
+  let pendingKey = null;   // a case requested before the board iframe finished loading
+
+  function pushCase(key) {
+    if (!key) return;
+    if (boardReady) { board.contentWindow.postMessage({ type: 'auv:selectCase', caseKey: key }, '*'); }
+    else { pendingKey = key; }
+  }
+  function openDrawer() {
+    drawer.classList.add('open');
+    document.body.classList.add('drawer-open');   // narrows the map (non-modal split)
+    drawer.setAttribute('aria-hidden', 'false');
+  }
+  function closeDrawer() {
+    drawer.classList.remove('open');
+    document.body.classList.remove('drawer-open');
+    drawer.setAttribute('aria-hidden', 'true');
+  }
+
+  window.addEventListener('message', (e) => {
+    const m = e.data || {};
+    if (m.type === 'auv:ready') {
+      boardReady = true;
+      if (pendingKey) { pushCase(pendingKey); pendingKey = null; }
+    } else if (m.type === 'auv:openCase' && m.caseKey) {
+      pushCase(m.caseKey);
+      openDrawer();
+    }
+  });
+
+  document.getElementById('drawer-close').addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrawer(); });
+
+  // Deep-link parity: opening the dashboard at #case=<key> focuses that case once ready.
+  (function () {
+    const mm = (location.hash || '').match(/case=([^&]+)/);
+    if (!mm) return;
+    const key = decodeURIComponent(mm[1]);
+    const open = () => { pushCase(key); openDrawer(); };
+    if (boardReady) open(); else window.addEventListener('message', function once(e) {
+      if ((e.data || {}).type === 'auv:ready') { window.removeEventListener('message', once); open(); }
+    });
+  })();
+</script>
+</body>
+</html>

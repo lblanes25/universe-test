@@ -215,6 +215,17 @@ details.evidence[open] > summary::before { content: "▾ "; }
   .nav-pane { min-height: 420px; }
   .story { grid-template-columns: 1fr; }
 }
+
+/* Embedded in the dashboard drawer: the map is the navigator, so show only the
+   single case detail — full height, scrolling — and drop the list, filters, and
+   topbar. These selectors out-specify the max-width:1050px rules above so the
+   narrow drawer never falls back to the list-first mobile stack. */
+body.embedded, body.embedded #app { height: 100vh; overflow: hidden; }
+body.embedded #app { grid-template-rows: 1fr; }
+body.embedded .topbar { display: none; }
+body.embedded .nav-pane { display: none; }
+body.embedded .board { grid-template-columns: 1fr; padding: 10px; gap: 0; min-height: 0; }
+body.embedded .case-pane { min-height: 0; height: 100%; overflow-y: auto; }
 </style>
 </head>
 <body>
@@ -780,10 +791,32 @@ window.addEventListener('hashchange', () => {
   if (state.selectedCaseKey !== prev) renderAll();
 });
 
+// When embedded in the one-document dashboard, the parent shell pushes the selected
+// case here instead of a #case= navigation. Reuse the external-deep-link path so the
+// classification filter relaxes for a non-gap case (same as applyHashSelection).
+window.addEventListener('message', (e) => {
+  const m = e.data || {};
+  if (m.type === 'auv:selectCase' && m.caseKey && cases.some(c => c.caseKey === m.caseKey)) {
+    state.selectedCaseKey = m.caseKey;
+    // Clear any active search so a pushed case is never filtered out of view; externalLoad
+    // also relaxes the classification filter (see renderAll). Together they guarantee the
+    // pushed case shows even after the user had searched/filtered the list.
+    state.query = '';
+    searchInput.value = '';
+    externalLoad = true;
+    renderAll();
+  }
+});
+
+// In the dashboard drawer (an iframe), render detail-only: the map is the navigator.
+if (window.parent !== window) { document.body.classList.add('embedded'); }
+
 initControls();
 renderGenerated();
 applyHashSelection(true);
 renderAll();
+// Tell the parent shell (if any) we're ready to receive case selections.
+if (window.parent !== window) { try { window.parent.postMessage({ type: 'auv:ready' }, '*'); } catch (e) {} }
 </script>
 </body>
 </html>

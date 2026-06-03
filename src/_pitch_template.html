@@ -133,12 +133,6 @@ body.light .cat-tag { background: #eaeef2; color: #1f2328; }
   <label><input type="checkbox" id="tog-edge-tip" checked><span style="color:#8b949e;font-size:10px;">&#9432;</span> Edge tooltips</label>
 </div>
 
-<div class="panel" id="gap-panel">
-  <h3>Likely Coverage Gaps</h3>
-  <label><input type="checkbox" id="tog-gaps" checked><span class="edge-color" style="background:#f85149"></span> Show likely gaps</label>
-  <label class="pitch-hide"><input type="checkbox" id="tog-gaps-failed"><span style="color:#f85149;font-size:11px;">&#9476;&#9476;</span> Include failed-gate (dashed)</label>
-</div>
-
 <div class="panel pitch-hide">
   <h3>Risk Rating Filter</h3>
   <div class="filter-btns" id="risk-filter-btns">
@@ -230,14 +224,12 @@ body.light .cat-tag { background: #eaeef2; color: #1f2328; }
   <div class="legend">
     <div class="legend-item"><div class="legend-dot" style="background:#666"></div>In Scope</div>
     <div class="legend-item"><div class="legend-diamond" style="background:#666"></div>Not In Scope</div>
-    <div class="legend-item"><div class="legend-diamond" style="background:#666;border:2px solid #f85149"></div>Not In Scope + Overdue</div>
   </div>
   <div style="margin:6px 0 4px;font-size:10px;color:#8b949e;">Likely coverage gaps</div>
   <div class="legend">
-    <div class="legend-item"><span style="display:inline-block;width:16px;height:0;border-top:3px solid #f85149;margin-right:3px;"></span>Gap on a handoff (Task 5)</div>
-    <div class="legend-item"><div class="legend-dot" style="background:transparent;border:2px solid #f85149"></div>Coarse-handoff gap (Task 3)</div>
+    <div class="legend-item"><span style="display:inline-block;width:16px;height:0;border-top:3px solid #f85149;margin-right:3px;"></span>Cross-entity handoff gap</div>
+    <div class="legend-item"><div class="legend-dot" style="background:transparent;border:2px solid #f85149"></div>Embedded-control gap</div>
   </div>
-  <div style="font-size:10px;color:#8b949e;margin-top:4px;">Size = connectivity. Blue node = external entity handing work into the selected portfolio.</div>
 </div>
 </div>
 
@@ -279,13 +271,31 @@ function gapDashed(g){return g.countPassed===0;}
 // Plain-English gap labels for audit leaders (no internal task jargon).
 const GAP_LABELS = {5:'Receiving entity may not cover this risk', 3:'Embedded control may have no owner'};
 function _esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+// True when this map is embedded in the one-document dashboard (an iframe). In that
+// case a gap "open" posts to the parent shell instead of navigating to a sibling file.
+const EMBEDDED = window.parent !== window;
 // Open the assurance caseboard focused on this gap (deep link). Returns true if it navigated.
 function openCase(g){
+  if(g && g.caseKey && EMBEDDED){
+    window.parent.postMessage({type:'auv:openCase', caseKey:g.caseKey}, '*');
+    return true;
+  }
   if(DATA.pitch2Href && g && g.caseKey){
     window.open(DATA.pitch2Href + '#case=' + encodeURIComponent(g.caseKey), '_blank', 'noopener');
     return true;
   }
   return false;
+}
+// When embedded, the node-detail "Open in caseboard" anchor opens the drawer in-page
+// instead of navigating to a sibling file.
+if(EMBEDDED){
+  document.addEventListener('click', e => {
+    const a = e.target.closest && e.target.closest('.gap-open');
+    if(a && a.dataset.casekey){
+      e.preventDefault();
+      window.parent.postMessage({type:'auv:openCase', caseKey:a.dataset.casekey}, '*');
+    }
+  });
 }
 // Shared gap section for tooltips/detail panel. cls is 'tt' or 'nd'.
 function gapHtml(g, cls){
@@ -306,7 +316,7 @@ function gapHtml(g, cls){
       h+='</div>';
     });
     if(DATA.pitch2Href && g.caseKey){
-      h+='<a class="gap-open" href="'+_esc(DATA.pitch2Href)+'#case='+encodeURIComponent(g.caseKey)+'" target="_blank" rel="noopener">Open in caseboard &rarr;</a>';
+      h+='<a class="gap-open" data-casekey="'+_esc(g.caseKey)+'" href="'+_esc(DATA.pitch2Href||'#')+'#case='+encodeURIComponent(g.caseKey)+'"'+(EMBEDDED?'':' target="_blank" rel="noopener"')+'>Open in caseboard &rarr;</a>';
     } else {
       h+='<div class="gap-rollup">Adjudicate in <b>findings_rollup.xlsx</b> &rarr; Gaps by Entity</div>';
     }
@@ -314,7 +324,7 @@ function gapHtml(g, cls){
     // Hover tooltip: compact summary only.
     if(g.srIds&&g.srIds.length){h+='<div style="margin-top:3px;">'+g.srIds.slice(0,12).map(s=>'<span class="cat-tag">'+_esc(s)+'</span>').join('')+(g.srIds.length>12?' <span style="font-size:9px;color:#8b949e;">+'+(g.srIds.length-12)+'</span>':'')+'</div>';}
     if(g.example)h+='<div class="'+cls+'-risks">'+_esc(g.example)+'</div>';
-    if(DATA.pitch2Href && g.caseKey){h+='<div class="'+cls+'-open-hint">&#8984;/Ctrl-click to open in caseboard &rarr;</div>';}
+    if((EMBEDDED||DATA.pitch2Href) && g.caseKey){h+='<div class="'+cls+'-open-hint">&#8984;/Ctrl-click to open the case '+(EMBEDDED?'panel':'caseboard')+' &rarr;</div>';}
   }
   return h;
 }
@@ -627,7 +637,6 @@ function drawNode(n,dimmed){
     if(isPr){ctx.lineWidth=3*transform.k;ctx.strokeStyle='#f0f6fc';ctx.stroke();ctx.lineWidth=1.5*transform.k;ctx.strokeStyle='#000';ctx.stroke();}
     if(isHz){ctx.setLineDash([4,3]);ctx.lineWidth=2*transform.k;ctx.strokeStyle='#da3633';ctx.stroke();ctx.setLineDash([]);}
   }else{ctx.save();ctx.translate(x,y);ctx.rotate(Math.PI/4);const s=r*0.8;ctx.beginPath();ctx.rect(-s,-s,s*2,s*2);ctx.fillStyle=color;ctx.fill();
-    if(isOD){ctx.lineWidth=2.5*transform.k;ctx.strokeStyle='#1c2128';ctx.stroke();}
     if(isPr){ctx.lineWidth=3*transform.k;ctx.strokeStyle='#f0f6fc';ctx.stroke();}
     if(isHz){ctx.setLineDash([4,3]);ctx.lineWidth=2*transform.k;ctx.strokeStyle='#da3633';ctx.stroke();ctx.setLineDash([]);}
     ctx.restore();}
@@ -761,11 +770,9 @@ canvas.addEventListener('mousemove',e=>{
       h+='<div class="tt-row"><span class="tt-label">Audit Leader</span><span class="tt-val">'+n.auditLeader+'</span></div>';
       h+='<div class="tt-row"><span class="tt-label">Business Unit</span><span class="tt-val">'+n.businessUnit+'</span></div>';
       h+='<div class="tt-row"><span class="tt-label">Risk</span><span class="tt-val" style="color:'+(RISK_COLORS[n.riskRating]||'#95a5a6')+'">'+n.riskRating+'</span></div>';
-      h+='<div class="tt-row"><span class="tt-label">Connectivity</span><span class="tt-val">'+n.connectivityTotal+'</span></div>';
       h+='<div class="tt-row"><span class="tt-label">In Scope</span><span class="tt-val">'+n.inScope+'</span></div>';
       h+='<div class="tt-row"><span class="tt-label">Handoff To / From</span><span class="tt-val">'+n.handoffTo+' / '+n.handoffFrom+'</span></div>';
       h+=gapHtml(n.gap,'tt');
-      if(n.hcRisks)h+='<div class="tt-risks">'+n.hcRisks+'</div>';
       tooltip.innerHTML=h;tooltip.style.display='block';
       let tx=e.clientX-330+12,ty=e.clientY+12;if(tx+340>W)tx=e.clientX-330-350;if(ty+220>H)ty=e.clientY-220;
       tooltip.style.left=tx+'px';tooltip.style.top=ty+'px';
@@ -867,7 +874,6 @@ function showNodeDetail(n){
   h+='<div class="nd-row"><span class="nd-label">Audit Leader</span><span class="nd-val">'+n.auditLeader+'</span></div>';
   h+='<div class="nd-row"><span class="nd-label">Business Unit</span><span class="nd-val">'+n.businessUnit+'</span></div>';
   h+='<div class="nd-row"><span class="nd-label">Risk Rating</span><span class="nd-val" style="color:'+rc+'">'+n.riskRating+'</span></div>';
-  h+='<div class="nd-row"><span class="nd-label">Connectivity</span><span class="nd-val">'+n.connectivityTotal+'</span></div>';
   h+='<div class="nd-row"><span class="nd-label">In Scope</span><span class="nd-val">'+n.inScope+'</span></div>';
   h+='<div class="nd-row"><span class="nd-label">Handoff To / From</span><span class="nd-val">'+n.handoffTo+' / '+n.handoffFrom+'</span></div>';
   if(n.pga) h+='<div class="nd-row"><span class="nd-label">PGA/ASL</span><span class="nd-val">'+n.pga+'</span></div>';
@@ -877,7 +883,6 @@ function showNodeDetail(n){
     h+='</div>';
   }
   h+=gapHtml(n.gap,'nd');
-  if(n.hcRisks) h+='<div class="nd-risks" style="margin-top:5px;">'+n.hcRisks+'</div>';
   // Entity prose — collapsed by default so it costs no space until clicked.
   if(n.handoffDesc) h+='<details class="nd-prose"><summary>Hand-off description</summary><div>'+_esc(n.handoffDesc)+'</div></details>';
   if(n.overview) h+='<details class="nd-prose"><summary>Entity overview</summary><div>'+_esc(n.overview)+'</div></details>';

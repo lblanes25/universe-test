@@ -26,7 +26,7 @@ Optional:
 Dependencies:
     pip install pandas openpyxl
 """
-import argparse, glob, json, os, re, sys
+import argparse, glob, html, json, os, re, sys
 from datetime import datetime
 import pandas as pd
 
@@ -971,6 +971,8 @@ def generate(input_dir, output_dir, source_csv=None, controls_csv=None):
     print(f"  -> {net_path} ({len(net_html):,} bytes)")
 
     # Pitch build — same data, simplified controls (separate template, optional).
+    # pitch_html / pitch2_html are also reused by the combined dashboard below.
+    pitch_html = pitch2_html = None
     pitch_tpl = os.path.join(_TPL_DIR, "_pitch_template.html")
     if os.path.isfile(pitch_tpl):
         with open(pitch_tpl, "r", encoding="utf-8") as f:
@@ -991,6 +993,21 @@ def generate(input_dir, output_dir, source_csv=None, controls_csv=None):
         pitch2_path = os.path.join(output_dir, f"network_pitch2_{date_stamp}.html")
         with open(pitch2_path, "w", encoding="utf-8") as f: f.write(pitch2_html)
         print(f"  -> {pitch2_path} ({len(pitch2_html):,} bytes)")
+
+    # Combined dashboard — one self-contained file embedding the map + caseboard as
+    # isolated iframes (srcdoc). The map's gap-click bridges to the caseboard drawer via
+    # postMessage, so there's no sibling-file dependency. Reuses the strings built above;
+    # html.escape(quote=True) is exactly right for a srcdoc attribute (the attribute parser
+    # decodes the entities back into the original child document).
+    dash_tpl = os.path.join(_TPL_DIR, "_dashboard_template.html")
+    if os.path.isfile(dash_tpl) and pitch_html and pitch2_html:
+        with open(dash_tpl, "r", encoding="utf-8") as f:
+            dash_html = (f.read()
+                         .replace("%%MAP_SRCDOC%%", html.escape(pitch_html, quote=True))
+                         .replace("%%BOARD_SRCDOC%%", html.escape(pitch2_html, quote=True)))
+        dash_path = os.path.join(output_dir, f"network_dashboard_{date_stamp}.html")
+        with open(dash_path, "w", encoding="utf-8") as f: f.write(dash_html)
+        print(f"  -> {dash_path} ({len(dash_html):,} bytes)")
 
     # === PGA Chord + Sankey ===
     chord_data = build_chord_data(dfs)

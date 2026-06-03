@@ -17,9 +17,14 @@ env/
 .DS_Store
 Thumbs.db
 
-# Generated pipeline outputs
+# Generated pipeline outputs (including archived prior runs)
 data/output/*.xlsx
 data/output/*.html
+data/output/archive/
+
+# Local backups of templates / scripts (kept locally, not tracked)
+src/Archive/
+src/*_old.html
 
 # Stage 2 handoff review artifacts tracked so batches can be run from any clone.
 # This repo uses dummy data only; real data stays on local machines.
