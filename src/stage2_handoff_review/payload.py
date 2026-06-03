@@ -212,8 +212,27 @@ def build_target_context_payload(
     horizontal_flag: bool,
     include_control_description: bool = False,
 ) -> dict:
+    # Target context is read-only evidence for Tasks 3 and 5 (does the receiving
+    # entity cover, at the right control layer, what was handed off). Two trims
+    # keep high-out-degree focals under budget without losing the coverage signal:
+    #   1. Only applicable risk rows (drop Not Applicable) — N/A is noise here.
+    #   2. Lean per-control list: keep control_id, control_title, kpa_id and
+    #      specific_risk_id, but drop the per-control kpa_description /
+    #      specific_risk_description prose — those are the token driver and are
+    #      already carried once (deduped) by the SR/KPA coverage rollups below.
+    #      control_title stays because Task 3 judges program- vs embedded-level
+    #      from it, and the IDs preserve the control -> SR/KPA linkage Task 5 uses.
     header = _entity_header(row)
     controls = _control_records_for_entity(header["entity_id"], controls_df, include_description=include_control_description)
+    controls_lean = [
+        {
+            "control_id": c["control_id"],
+            "control_title": c["control_title"],
+            "kpa_id": c["kpa_id"],
+            "specific_risk_id": c["specific_risk_id"],
+        }
+        for c in controls
+    ]
     return {
         **header,
         "role": "target_context",
@@ -221,8 +240,8 @@ def build_target_context_payload(
         "handoff_description": str(row.get("Hand-off Description", "") or "").strip(),
         "handoffs_to": _resolve_partner_ids(_split_ids(row.get(_col("handoff_to"))), name_by_id, active_ids),
         "handoffs_from": _resolve_partner_ids(_split_ids(row.get(_col("handoff_from"))), name_by_id, active_ids),
-        "risks": _risk_rows_for_entity(row, applicable_only=False),
-        "controls_compact": controls,
+        "risks": _risk_rows_for_entity(row, applicable_only=True),
+        "controls_compact": controls_lean,
         "specific_risk_coverage": _coverage_rollup(controls, "specific_risk_id", "specific_risk_description"),
         "kpa_coverage": _coverage_rollup(controls, "kpa_id", "kpa_description"),
     }
