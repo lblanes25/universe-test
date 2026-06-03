@@ -660,7 +660,7 @@ def build_pitch2_data(dfs):
 
     rank = {"likely coverage gap": 0, "documentation issue": 1, "conforms": 2}
     findings.sort(key=lambda f: (
-        rank.get(f["classification"], 9),
+        rank.get(str(f["classification"]), 9),
         0 if f["gatePassed"] else 1,
         0 if f["task"] == 5 else 1,
         f["source"].get("auditLeader", ""),
@@ -706,7 +706,7 @@ def build_pitch2_data(dfs):
             cases_by_key[key] = c
             case_order.append(key)
         # Most-severe member drives the case classification (lowest rank wins).
-        if rank.get(f["classification"], 9) < rank.get(c["classification"], 9):
+        if rank.get(str(f["classification"]), 9) < rank.get(str(c["classification"]), 9):
             c["classification"] = f["classification"]
             c["classificationLabel"] = f["classificationLabel"]
         for sr in f["specificRiskIds"]:
@@ -741,7 +741,7 @@ def build_pitch2_data(dfs):
         cases.append(c)
 
     cases.sort(key=lambda c: (
-        rank.get(c["classification"], 9),
+        rank.get(str(c["classification"]), 9),
         0 if c["gatePassed"] else 1,
         0 if c["task"] == 5 else 1,
         (c["source"] or {}).get("auditLeader", ""),
@@ -752,7 +752,7 @@ def build_pitch2_data(dfs):
     def _count_by(items, key_fn):
         counts = {}
         for item in items:
-            key = key_fn(item) or "Unspecified"
+            key = str(key_fn(item) or "Unspecified")
             counts[key] = counts.get(key, 0) + 1
         return counts
 

@@ -31,7 +31,13 @@ def _asset_lookup(
         ents = sorted(grp["Audit Entity ID"].unique())
         primary = int((grp["Relationship"] == "primary").sum()) if has_rel else 0
         secondary = int((grp["Relationship"] == "secondary").sum()) if has_rel else 0
-        bus = sorted({bu_map.get(e) for e in ents if bu_map.get(e)})
+        bus = sorted(
+            {
+                str(bu_map.get(e)).strip()
+                for e in ents
+                if pd.notna(bu_map.get(e)) and str(bu_map.get(e)).strip()
+            }
+        )
         rows.append(
             {
                 "Asset Name": name,
