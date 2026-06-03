@@ -101,6 +101,8 @@ tasks:
 
       Do not rely on handoff-description prose specificity alone; many descriptions are generic, and coarse-handoff risk is often visible only by comparing the transferor's Specific Risks to what the transferee's controls actually cover.
 
+      For each Task 3 finding also write the narrative fields (`case_headline`, `transferred_summary`, `coverage_summary`, `pointing_at`) specific to this entity and its handoff — name the actual program/functional area it was handed to, what the program side actually does (from the evidence), and the embedded-process control left unowned. Do not restate the risk category generically.
+
   - id: 4
     display: "Overview / handoff / rationale / controls alignment"
     body: |
@@ -126,6 +128,8 @@ tasks:
       4. **Reciprocity check on B's handoff description / overview (secondary):** does B mention receiving work from A, or from entities like A? Silence is not itself a failure, but mentioned conflicts are a finding.
 
       Quote Specific Risk IDs and Descriptions as evidence in every Task 5 finding. This is the task where control-layer evidence is dispositive.
+
+      For each Task 5 finding also write the narrative fields (`case_headline`, `transferred_summary`, `coverage_summary`, `pointing_at`) specific to A and B — name what A handed off, what B actually tests (from B's control library/evidence), and the specific risk slice B does not own. `case_headline` must be a grammatical sentence using the risk category, not a pasted risk statement. Do not restate the risk category generically.
 
 # Display labels — see top-of-file comments on value vs display.
 classifications:

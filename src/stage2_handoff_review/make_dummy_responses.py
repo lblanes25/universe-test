@@ -120,7 +120,38 @@ def _finding(task, focal, focal_name, classification, evidence_layer, rng,
         "classification": classification,
         "reasoning": _reasoning(task, focal_name, partner_name, risk, classification),
     }
+    f.update(_narrative(task, focal_name, partner_name, risk, classification))
     return f
+
+
+def _narrative(task, focal_name, partner_name, risk, classification):
+    """LLM-authored narrative fields (Phase B). Templated here for the dummy run;
+    real Stage 2 fills these per the prompt. Empty for tasks without a case view."""
+    r = risk.lower()
+    blank = {"case_headline": "", "transferred_summary": "",
+             "coverage_summary": "", "pointing_at": ""}
+    if task == 5:
+        return {
+            "case_headline": (f"{focal_name} hands {r} to {partner_name}, but {partner_name}'s "
+                              f"controls don't show ownership of the specific {r} slice."),
+            "transferred_summary": (f"{focal_name}'s handoff description routes the {r} risk to "
+                                    f"{partner_name} as the receiving entity."),
+            "coverage_summary": (f"{partner_name}'s control library covers the {r} category at a "
+                                 f"framework level but not the specific risk statement transferred."),
+            "pointing_at": (f"the embedded {r} control inside {partner_name}'s process that should "
+                            f"test the transferred slice."),
+        }
+    if task == 3:
+        return {
+            "case_headline": (f"{focal_name} pushes {r} up to a program-level audit, leaving the "
+                              f"hands-on {r} control inside its own process unowned."),
+            "transferred_summary": (f"{focal_name} relies on a program/functional audit for {r} "
+                                    f"oversight rather than testing it inside its process."),
+            "coverage_summary": (f"The program side provides framework and monitoring for {r}, not "
+                                 f"the embedded-process control that runs inside {focal_name}."),
+            "pointing_at": (f"the embedded {r} control step inside {focal_name}'s own workflow."),
+        }
+    return blank
 
 
 def _reasoning(task, focal_name, partner_name, risk, classification):

@@ -216,6 +216,12 @@ def _findings_to_rows(batch_id: int, response: dict) -> list[dict]:
             "manual_requirement": f.get("manual_requirement"),
             "evidence_quote": f.get("evidence_quote"),
             "reasoning": f.get("reasoning"),
+            # Optional LLM-authored narrative (Phase B). Absent in older corpora —
+            # the caseboard falls back to field-stitched rendering when blank.
+            "case_headline": f.get("case_headline"),
+            "transferred_summary": f.get("transferred_summary"),
+            "coverage_summary": f.get("coverage_summary"),
+            "pointing_at": f.get("pointing_at"),
         })
     return rows
 
@@ -290,6 +296,7 @@ def run(
             "batch_id", "task", "focal_entity_id", "focal_entity_name", "cross_entity_partner_id",
             "risk_category", "specific_risk_ids", "kpa_ids", "evidence_layer", "classification",
             "manual_requirement", "evidence_quote", "reasoning",
+            "case_headline", "transferred_summary", "coverage_summary", "pointing_at",
         ]
     )
     findings_path = aggregated_root / "findings.csv"

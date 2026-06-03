@@ -144,6 +144,12 @@ select:focus, input:focus, textarea:focus { outline: 2px solid var(--blue-soft);
 }
 .story-explain .how { margin-top: 6px; color: var(--muted); }
 .story-explain b { color: var(--ink); }
+.story-col details.story-more { margin-top: 9px; }
+.story-col details.story-more > summary { cursor: pointer; font-size: 10.5px; color: var(--muted); list-style: none; }
+.story-col details.story-more > summary::-webkit-details-marker { display: none; }
+.story-col details.story-more > summary::before { content: "\25B8  "; }
+.story-col details.story-more[open] > summary::before { content: "\25BE  "; }
+.story-col details.story-more .more-body { margin-top: 6px; }
 .story { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; padding: 14px 18px; }
 .story-col { border: 1px solid var(--border); border-radius: 9px; padding: 12px; background: #fbfdff; min-width: 0; }
 .story-col.orphaned { border-color: #fecaca; background: #fff7f7; }
@@ -420,9 +426,13 @@ function caseHeadline(c) {
   const rk = reviewKind(c.task);
   const src = `${esc(c.sourceId)} ${esc(c.sourceName || '')}`.trim();
   let sentence;
-  if (c.task === 5) {
+  if (c.caseHeadline) {
+    // LLM-authored, entity- and handoff-specific (preferred when present).
+    sentence = esc(c.caseHeadline);
+  } else if (c.task === 5) {
     const tgt = c.targetId ? `${esc(c.targetId)} ${esc(c.targetName || '')}`.trim() : 'an unnamed downstream owner';
-    sentence = `${src} handed off <b>${esc(riskGist(c))}</b> to ${tgt}.`;
+    const area = (c.riskCategory && c.riskCategory !== 'Unspecified') ? esc(c.riskCategory) : 'a risk';
+    sentence = `${src} handed off <b>${area}</b> to ${tgt}.`;
   } else if (c.task === 3) {
     const area = (c.riskCategory && c.riskCategory !== 'Unspecified') ? esc(c.riskCategory) : 'a control area';
     sentence = `${src} handed off <b>${area}</b> at the program level — the embedded control may be owned by no one.`;
@@ -468,55 +478,71 @@ function controlItemsHtml(c) {
   return items + more;
 }
 
-// Task 3 = embedded control. There is no named receiver (entity-local), so the
-// generic Transferred/Covered/Orphaned band reads poorly. Tell the story instead:
-// what an embedded-control gap is, how the depth check found it, and what it points at.
+// Collapsible "supporting evidence" block inside a story column. Returns '' when empty.
+function storyMore(summary, bodyHtml) {
+  return bodyHtml
+    ? `<details class="story-more"><summary>${esc(summary)}</summary><div class="more-body">${bodyHtml}</div></details>`
+    : '';
+}
+// Risk statements + KPA lines, for the collapsible evidence drawer.
+function riskEvidenceHtml(c) {
+  const risks = riskLinesHtml(c.keyRisks);
+  const kpas = riskLinesHtml((c.kpas || []).filter(k => k.description && k.description !== k.id));
+  return (risks + kpas) || '';
+}
+// Raw SR/KPA ids as the literal pointer, for the collapsible evidence drawer.
+function pointerIdsHtml(c) {
+  const ids = [...(c.specificRiskIds || []), ...(c.kpaIds || [])];
+  return ids.length ? ids.map(id => `<code>${esc(id)}</code>`).join(' ') : '';
+}
+
+// Task 3 = embedded control (entity-local, no named receiver). Lead each column with the
+// LLM-authored narrative when present; otherwise fall back to plainer field-stitched text.
+// Raw evidence (risk statements, cited quote, IDs, own controls) is demoted to collapsibles.
 function renderStoryTask3(c) {
   const area = (c.riskCategory && c.riskCategory !== 'Unspecified') ? c.riskCategory : 'this risk';
   const srcName = c.sourceName || c.sourceId;
+  const hasN = c.caseHeadline || c.transferredSummary || c.coverageSummary || c.pointingAt;
 
-  const manual = c.manualRequirement
-    ? ` Manual rule: <b>${esc(c.manualRequirement)}</b>.` : '';
+  // Short, generic definition only — the entity-specific story now lives in the narrative fields.
   const explainer = `
     <div class="story-explain">
-      <div class="what"><b>What this means:</b> ${esc(srcName)} pushed ${esc(area)} up to a
-        company-wide program — the policy, framework, and monitoring that sit above day-to-day
-        operations. The catch: the hands-on control that actually runs inside ${esc(srcName)}'s own
-        process — the step in the workflow itself — can end up owned by no one.</div>
-      <div class="how"><b>How this was found:</b> the coarse-handoff depth check — ${esc(area)} is
-        monitored at the program level, but no embedded-process control covers it here.${manual}</div>
+      <div class="what"><b>Embedded-control gap:</b> a risk handed up to a program/functional audit
+        is owned there at the framework level, while the hands-on control inside this entity's own
+        process can end up owned by no one.</div>
     </div>`;
 
-  // Handed off (program level) — the risk slice that went up to a functional audit.
-  const risks = riskLinesHtml(c.keyRisks)
-    || '<div class="risk-line" style="color:var(--muted);font-style:italic;">No specific risk IDs named.</div>';
-  const kpas = riskLinesHtml((c.kpas || []).filter(k => k.description && k.description !== k.id));
+  // Handed off (program level).
+  const transferredLead = c.transferredSummary
+    ? `<p class="story-prose">${esc(c.transferredSummary)}</p>`
+    : `<p class="story-prose"><b>${esc(area)}</b> was pushed up to a program/functional audit.</p>`;
   const transferred = `
     <div class="story-col transferred">
       <h3>Handed off (program level)</h3>
       <p class="sub">What ${esc(c.sourceId)} pushed up to a program/functional audit</p>
-      <p class="story-prose"><b>${esc(area)}</b></p>
-      ${risks}
-      ${kpas}
+      ${transferredLead}
+      ${storyMore('Risk statements behind this', riskEvidenceHtml(c))}
     </div>`;
 
-  // Covered there — program-level proof, owned by the functional audit, not retained here.
+  // Covered there. No hardcoded framework claim — lead with the model's read of the coverage,
+  // and put the actual cited quote behind a drawer (it is often specific, not "framework").
+  const coveredLead = c.coverageSummary
+    ? `<p class="story-prose">${esc(c.coverageSummary)}</p>`
+    : `<p class="story-prose muted">Program/functional coverage for ${esc(area)} sits in another audit; what it actually tests is in the cited evidence below.</p>`;
   const covered = `
     <div class="story-col covered">
       <h3>Covered there</h3>
-      <p class="sub">Program level only</p>
-      ${c.evidenceQuote ? `<p class="story-prose quote">${esc(c.evidenceQuote)}</p>` : ''}
-      <p class="story-prose">Framework / oversight coverage lives in the functional/program audit —
-        it isn't retained on this entity.</p>
+      <p class="sub">What the program side does</p>
+      ${coveredLead}
+      ${storyMore('Cited evidence', c.evidenceQuote ? `<p class="story-prose quote">${esc(c.evidenceQuote)}</p>` : '')}
     </div>`;
 
-  // Orphaned here (embedded) — the model's read + the pointer + the (empty) local controls.
-  const pointerIds = [...(c.specificRiskIds || []), ...(c.kpaIds || [])]
-    .map(id => `<code>${esc(id)}</code>`).join(' ');
-  const pointer = `<p class="story-prose" style="margin-top:9px;">Pointing at: the embedded-process
-    control for <b>${esc(area)}</b> inside ${esc(srcName)}${pointerIds ? ' — ' + pointerIds : ''}.</p>`;
+  // Orphaned here — the model's read leads; pointer + IDs + own-controls demoted.
+  const pointer = c.pointingAt
+    ? `<p class="story-prose" style="margin-top:9px;"><b>Pointing at:</b> ${esc(c.pointingAt)}</p>`
+    : `<p class="story-prose" style="margin-top:9px;"><b>Pointing at:</b> the embedded-process control for ${esc(area)} inside ${esc(srcName)}.</p>`;
   const controls = controlItemsHtml(c)
-    || `<p class="story-prose muted">No embedded-process control on file here — nothing in this entity tests this slice.</p>`;
+    || `<p class="story-prose muted">Nothing in this entity's own controls tests this slice.</p>`;
   const orphaned = `
     <div class="story-col orphaned">
       <h3>Orphaned here (embedded)</h3>
@@ -524,8 +550,9 @@ function renderStoryTask3(c) {
       <div style="margin-bottom:8px;">${chipHtml(label(c.classification), classKind(c.classification))}</div>
       <div class="story-reason">${esc(c.reasoning || 'No reasoning recorded.')}</div>
       ${pointer}
-      <p class="sub" style="margin:10px 0 4px;">What ${esc(srcName)} still tests for ${esc(area)}</p>
-      ${controls}
+      ${storyMore('What we mean (IDs + this entity’s own controls)',
+          (pointerIdsHtml(c) ? `<div class="risk-line">${pointerIdsHtml(c)}</div>` : '')
+          + `<p class="sub" style="margin:8px 0 4px;">What ${esc(srcName)} still tests for ${esc(area)}</p>` + controls)}
     </div>`;
 
   return explainer + `<div class="story">${transferred}${covered}${orphaned}</div>`;
@@ -538,47 +565,53 @@ function renderStory(c) {
   const source = c.source || {};
   const target = c.target || null;
 
-  // TRANSFERRED — what A handed off
+  // TRANSFERRED — lead with the LLM summary; demote the raw handoff prose + risk statements.
   const srcProse = source.handoffDesc || source.overview || '';
-  let risks = riskLinesHtml(c.keyRisks);
-  let kpas = riskLinesHtml((c.kpas || []).filter(k => k.description && k.description !== k.id));
+  const transferredLead = c.transferredSummary
+    ? `<p class="story-prose">${esc(c.transferredSummary)}</p>`
+    : `<p class="story-prose${srcProse ? '' : ' muted'}">${esc(srcProse) || 'No hand-off description on file.'}</p>`;
+  const transferredMore = storyMore('Hand-off description & risk statements',
+    (c.transferredSummary && srcProse ? `<p class="story-prose">${esc(srcProse)}</p>` : '') + riskEvidenceHtml(c));
   const transferred = `
     <div class="story-col transferred">
       <h3>Transferred</h3>
       <p class="sub">What ${esc(c.sourceId)} handed off</p>
-      <p class="story-prose${srcProse ? '' : ' muted'}">${esc(srcProse) || 'No hand-off description on file.'}</p>
-      ${risks || '<div class="risk-line" style="color:var(--muted);font-style:italic;">No specific risk IDs named.</div>'}
-      ${kpas}
+      ${transferredLead}
+      ${transferredMore}
     </div>`;
 
-  // COVERED — what the receiver actually tests
+  // COVERED — lead with the LLM read of what the receiver covers + the matching controls (the real
+  // "what they test"); the receiver's profile prose + cited quote move behind a drawer so they no
+  // longer masquerade as tested controls.
   const recvName = target ? `${target.id} ${target.name || ''}` : c.sourceId;
   const recvProse = target ? (target.handoffDesc || target.overview || '') : (source.handoffDesc || source.overview || '');
   const controls = controlItemsHtml(c);
-  let coveredBody;
-  if (controls) {
-    coveredBody = controls;
-  } else if (!target) {
-    coveredBody = '<p class="story-prose muted">No receiving-entity profile — embedded / entity-local control.</p>';
-  } else {
-    coveredBody = '<p class="story-prose muted">No control in the export touches this risk area.</p>';
-  }
+  const coveredLead = c.coverageSummary
+    ? `<p class="story-prose">${esc(c.coverageSummary)}</p>`
+    : (controls ? '' : `<p class="story-prose muted">No control in the export touches this risk area.</p>`);
+  const coveredMore = storyMore('Receiver profile & cited evidence',
+    (recvProse ? `<p class="story-prose">${esc(recvProse)}</p>` : '')
+    + (c.evidenceQuote ? `<p class="story-prose quote">${esc(c.evidenceQuote)}</p>` : ''));
   const covered = `
     <div class="story-col covered">
       <h3>Covered</h3>
       <p class="sub">What ${esc(recvName.trim())} actually tests</p>
-      ${recvProse ? `<p class="story-prose">${esc(recvProse)}</p>` : ''}
-      ${c.evidenceQuote ? `<p class="story-prose quote">${esc(c.evidenceQuote)}</p>` : ''}
-      ${coveredBody}
+      ${coveredLead}
+      ${controls}
+      ${coveredMore}
     </div>`;
 
-  // ORPHANED — the verdict
+  // ORPHANED — the model's read; pointer + raw IDs demoted.
+  const pointer = c.pointingAt
+    ? `<p class="story-prose" style="margin-top:9px;"><b>Pointing at:</b> ${esc(c.pointingAt)}</p>` : '';
   const orphaned = `
     <div class="story-col orphaned">
       <h3>Orphaned</h3>
       <p class="sub">The model's read</p>
       <div style="margin-bottom:8px;">${chipHtml(label(c.classification), classKind(c.classification))}</div>
       <div class="story-reason">${esc(c.reasoning || 'No reasoning recorded.')}</div>
+      ${pointer}
+      ${storyMore('Risk IDs', pointerIdsHtml(c) ? `<div class="risk-line">${pointerIdsHtml(c)}</div>` : '')}
     </div>`;
 
   root.innerHTML = `<div class="story">${transferred}${covered}${orphaned}</div>`;

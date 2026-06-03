@@ -636,6 +636,10 @@ def build_pitch2_data(dfs):
                 manualRequirement=_clean_value(row.get("manual_requirement"), ""),
                 evidenceQuote=_clean_value(row.get("evidence_quote"), ""),
                 reasoning=_clean_value(row.get("reasoning"), ""),
+                caseHeadline=_clean_value(row.get("case_headline"), ""),
+                transferredSummary=_clean_value(row.get("transferred_summary"), ""),
+                coverageSummary=_clean_value(row.get("coverage_summary"), ""),
+                pointingAt=_clean_value(row.get("pointing_at"), ""),
                 gatePassed=_bool_value(row.get("gate_passed"), True),
                 source=source_ent,
                 target=target_ent,
@@ -679,6 +683,7 @@ def build_pitch2_data(dfs):
                 targetId=f["targetId"], targetName=f["targetName"],
                 classification=f["classification"], classificationLabel=f["classificationLabel"],
                 reasoning="", evidenceQuote="", manualRequirement="", evidenceLayer="",
+                caseHeadline="", transferredSummary="", coverageSummary="", pointingAt="",
                 riskCategory=f["riskCategory"],
                 specificRiskIds=[], kpaIds=[], riskCategories=[],
                 findingIds=[], findingCount=0, gatePassed=True,
@@ -699,7 +704,8 @@ def build_pitch2_data(dfs):
                 c["kpaIds"].append(kp)
         if f["riskCategory"] and f["riskCategory"] not in c["riskCategories"]:
             c["riskCategories"].append(f["riskCategory"])
-        for fld in ("reasoning", "evidenceQuote", "manualRequirement", "evidenceLayer"):
+        for fld in ("reasoning", "evidenceQuote", "manualRequirement", "evidenceLayer",
+                    "caseHeadline", "transferredSummary", "coverageSummary", "pointingAt"):
             if not c[fld] and f[fld]:
                 c[fld] = f[fld]
         c["findingIds"].append(f["id"])

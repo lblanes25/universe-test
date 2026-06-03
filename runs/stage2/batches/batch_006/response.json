@@ -4,7 +4,7 @@
       "task": 5,
       "manual_requirement": "Make audit-entity risk ownership explicit",
       "focal_entity_id": "AE-10",
-      "focal_entity_name": "Mortgage Servicing",
+      "focal_entity_name": "AE-10",
       "cross_entity_partner_id": "AE-6",
       "risk_category": "Financial Reporting",
       "specific_risk_ids": [
@@ -17,13 +17,17 @@
       "evidence_layer": "control",
       "evidence_quote": "\u201cFinancial Reporting risk is monitored at the program level.\u201d",
       "classification": "documentation issue",
-      "reasoning": "ACH Processing's controls cover the financial reporting risk Mortgage Servicing handed off."
+      "reasoning": "AE-6's controls cover the financial reporting risk AE-10 handed off.",
+      "case_headline": "AE-10 hands financial reporting to AE-6, but AE-6's controls don't show ownership of the specific financial reporting slice.",
+      "transferred_summary": "AE-10's handoff description routes the financial reporting risk to AE-6 as the receiving entity.",
+      "coverage_summary": "AE-6's control library covers the financial reporting category at a framework level but not the specific risk statement transferred.",
+      "pointing_at": "the embedded financial reporting control inside AE-6's process that should test the transferred slice."
     },
     {
       "task": 3,
       "manual_requirement": "Explicitly address the coarse-handoff failure mode",
       "focal_entity_id": "AE-10",
-      "focal_entity_name": "Mortgage Servicing",
+      "focal_entity_name": "AE-10",
       "cross_entity_partner_id": null,
       "risk_category": "Reputational",
       "specific_risk_ids": [
@@ -36,13 +40,17 @@
       "evidence_layer": "control",
       "evidence_quote": "\u201cReputational risk is monitored at the program level.\u201d",
       "classification": "conforms",
-      "reasoning": "Mortgage Servicing's embedded reputational controls align with the program-level handoff."
+      "reasoning": "AE-10's embedded reputational controls align with the program-level handoff.",
+      "case_headline": "AE-10 pushes reputational up to a program-level audit, leaving the hands-on reputational control inside its own process unowned.",
+      "transferred_summary": "AE-10 relies on a program/functional audit for reputational oversight rather than testing it inside its process.",
+      "coverage_summary": "The program side provides framework and monitoring for reputational, not the embedded-process control that runs inside AE-10.",
+      "pointing_at": "the embedded reputational control step inside AE-10's own workflow."
     },
     {
       "task": 1,
       "manual_requirement": "Create a single coverage view / assurance map",
       "focal_entity_id": "AE-10",
-      "focal_entity_name": "Mortgage Servicing",
+      "focal_entity_name": "AE-10",
       "cross_entity_partner_id": null,
       "risk_category": "Model",
       "specific_risk_ids": [
@@ -55,13 +63,17 @@
       "evidence_layer": "control",
       "evidence_quote": "\u201cModel risk is monitored at the program level.\u201d",
       "classification": "conforms",
-      "reasoning": "Manual requires explicit ownership; Mortgage Servicing documents the handoff in prose but does not state which register carries model risk."
+      "reasoning": "Manual requires explicit ownership; AE-10 documents the handoff in prose but does not state which register carries model risk.",
+      "case_headline": "",
+      "transferred_summary": "",
+      "coverage_summary": "",
+      "pointing_at": ""
     },
     {
       "task": 2,
       "manual_requirement": "Explicitly address the coarse-handoff failure mode",
       "focal_entity_id": "AE-10",
-      "focal_entity_name": "Mortgage Servicing",
+      "focal_entity_name": "AE-10",
       "cross_entity_partner_id": null,
       "risk_category": "Reputational",
       "specific_risk_ids": [
@@ -74,13 +86,17 @@
       "evidence_layer": "category_summary",
       "evidence_quote": "\u201cReputational risk is monitored at the program level.\u201d",
       "classification": "conforms",
-      "reasoning": "Mortgage Servicing describes a reputational handoff, but the residual rating is still applied with no acknowledgment of partial retention."
+      "reasoning": "AE-10 describes a reputational handoff, but the residual rating is still applied with no acknowledgment of partial retention.",
+      "case_headline": "",
+      "transferred_summary": "",
+      "coverage_summary": "",
+      "pointing_at": ""
     },
     {
       "task": 4,
       "manual_requirement": "Explicitly address the coarse-handoff failure mode",
       "focal_entity_id": "AE-10",
-      "focal_entity_name": "Mortgage Servicing",
+      "focal_entity_name": "AE-10",
       "cross_entity_partner_id": null,
       "risk_category": "Country",
       "specific_risk_ids": [
@@ -93,7 +109,11 @@
       "evidence_layer": "entity_prose",
       "evidence_quote": "\u201cCountry risk is monitored at the program level.\u201d",
       "classification": "conforms",
-      "reasoning": "Mortgage Servicing's overview describes activity that should generate country controls; the library is silent on that process's KPA."
+      "reasoning": "AE-10's overview describes activity that should generate country controls; the library is silent on that process's KPA.",
+      "case_headline": "",
+      "transferred_summary": "",
+      "coverage_summary": "",
+      "pointing_at": ""
     }
   ],
   "ranked_summary": {

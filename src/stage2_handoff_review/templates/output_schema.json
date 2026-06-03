@@ -39,7 +39,11 @@
             "enum": ["conforms", "documentation issue", "likely coverage gap"]
           },
           "reasoning": {"type": "string"},
-          "cross_entity_partner_id": {"type": ["string", "null"]}
+          "cross_entity_partner_id": {"type": ["string", "null"]},
+          "case_headline": {"type": ["string", "null"]},
+          "transferred_summary": {"type": ["string", "null"]},
+          "coverage_summary": {"type": ["string", "null"]},
+          "pointing_at": {"type": ["string", "null"]}
         }
       }
     },

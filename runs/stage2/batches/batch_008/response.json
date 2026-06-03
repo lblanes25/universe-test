@@ -4,8 +4,8 @@
       "task": 5,
       "manual_requirement": "Require attribute-level handoff documentation",
       "focal_entity_id": "AE-11",
-      "focal_entity_name": "Trade Finance",
-      "cross_entity_partner_id": "AE-31",
+      "focal_entity_name": "AE-11",
+      "cross_entity_partner_id": "AE-22",
       "risk_category": "Information Technology",
       "specific_risk_ids": [
         "SR-297",
@@ -17,13 +17,17 @@
       "evidence_layer": "control",
       "evidence_quote": "\u201cInformation Technology risk is monitored at the program level.\u201d",
       "classification": "likely coverage gap",
-      "reasoning": "Trade Finance transfers the information technology slice to IT Infrastructure; IT Infrastructure's control library covers the category but not the specific risk statement, leaving it without an owner."
+      "reasoning": "AE-11 transfers the information technology slice to AE-22; AE-22's control library covers the category but not the specific risk statement, leaving it without an owner.",
+      "case_headline": "AE-11 hands information technology to AE-22, but AE-22's controls don't show ownership of the specific information technology slice.",
+      "transferred_summary": "AE-11's handoff description routes the information technology risk to AE-22 as the receiving entity.",
+      "coverage_summary": "AE-22's control library covers the information technology category at a framework level but not the specific risk statement transferred.",
+      "pointing_at": "the embedded information technology control inside AE-22's process that should test the transferred slice."
     },
     {
       "task": 3,
       "manual_requirement": "Create a single coverage view / assurance map",
       "focal_entity_id": "AE-11",
-      "focal_entity_name": "Trade Finance",
+      "focal_entity_name": "AE-11",
       "cross_entity_partner_id": null,
       "risk_category": "External Fraud",
       "specific_risk_ids": [
@@ -36,13 +40,17 @@
       "evidence_layer": "control",
       "evidence_quote": "\u201cExternal Fraud risk is monitored at the program level.\u201d",
       "classification": "likely coverage gap",
-      "reasoning": "Trade Finance hands off external fraud at the program level; the receiving controls are framework/oversight only, not the embedded-process control."
+      "reasoning": "AE-11 hands off external fraud at the program level; the receiving controls are framework/oversight only, not the embedded-process control.",
+      "case_headline": "AE-11 pushes external fraud up to a program-level audit, leaving the hands-on external fraud control inside its own process unowned.",
+      "transferred_summary": "AE-11 relies on a program/functional audit for external fraud oversight rather than testing it inside its process.",
+      "coverage_summary": "The program side provides framework and monitoring for external fraud, not the embedded-process control that runs inside AE-11.",
+      "pointing_at": "the embedded external fraud control step inside AE-11's own workflow."
     },
     {
       "task": 1,
       "manual_requirement": "Strengthen handoff hygiene to match reliance sufficiency",
       "focal_entity_id": "AE-11",
-      "focal_entity_name": "Trade Finance",
+      "focal_entity_name": "AE-11",
       "cross_entity_partner_id": null,
       "risk_category": "Information Security",
       "specific_risk_ids": [
@@ -55,13 +63,17 @@
       "evidence_layer": "control",
       "evidence_quote": "\u201cInformation Security risk is monitored at the program level.\u201d",
       "classification": "likely coverage gap",
-      "reasoning": "Manual requires explicit ownership; Trade Finance documents the handoff in prose but does not state which register carries information security risk."
+      "reasoning": "Manual requires explicit ownership; AE-11 documents the handoff in prose but does not state which register carries information security risk.",
+      "case_headline": "",
+      "transferred_summary": "",
+      "coverage_summary": "",
+      "pointing_at": ""
     },
     {
       "task": 2,
       "manual_requirement": "Require attribute-level handoff documentation",
       "focal_entity_id": "AE-11",
-      "focal_entity_name": "Trade Finance",
+      "focal_entity_name": "AE-11",
       "cross_entity_partner_id": null,
       "risk_category": "Information Security",
       "specific_risk_ids": [
@@ -74,13 +86,17 @@
       "evidence_layer": "category_summary",
       "evidence_quote": "\u201cInformation Security risk is monitored at the program level.\u201d",
       "classification": "documentation issue",
-      "reasoning": "Trade Finance describes a information security handoff, but the residual rating is still applied with no acknowledgment of partial retention."
+      "reasoning": "AE-11 describes a information security handoff, but the residual rating is still applied with no acknowledgment of partial retention.",
+      "case_headline": "",
+      "transferred_summary": "",
+      "coverage_summary": "",
+      "pointing_at": ""
     },
     {
       "task": 4,
       "manual_requirement": "Make audit-entity risk ownership explicit",
       "focal_entity_id": "AE-11",
-      "focal_entity_name": "Trade Finance",
+      "focal_entity_name": "AE-11",
       "cross_entity_partner_id": null,
       "risk_category": "Reputational",
       "specific_risk_ids": [
@@ -93,14 +109,18 @@
       "evidence_layer": "entity_prose",
       "evidence_quote": "\u201cReputational risk is monitored at the program level.\u201d",
       "classification": "documentation issue",
-      "reasoning": "Trade Finance's overview describes activity that should generate reputational controls; the library is silent on that process's KPA."
+      "reasoning": "AE-11's overview describes activity that should generate reputational controls; the library is silent on that process's KPA.",
+      "case_headline": "",
+      "transferred_summary": "",
+      "coverage_summary": "",
+      "pointing_at": ""
     },
     {
       "task": 5,
       "manual_requirement": "Strengthen handoff hygiene to match reliance sufficiency",
       "focal_entity_id": "AE-23",
-      "focal_entity_name": "Sanctions Screening",
-      "cross_entity_partner_id": "AE-15",
+      "focal_entity_name": "AE-23",
+      "cross_entity_partner_id": "AE-14",
       "risk_category": "Third Party",
       "specific_risk_ids": [
         "SR-210",
@@ -112,13 +132,17 @@
       "evidence_layer": "control",
       "evidence_quote": "\u201cThird Party risk is monitored at the program level.\u201d",
       "classification": "likely coverage gap",
-      "reasoning": "Sanctions Screening transfers the third party slice to Asset Management; Asset Management's control library covers the category but not the specific risk statement, leaving it without an owner."
+      "reasoning": "AE-23 transfers the third party slice to AE-14; AE-14's control library covers the category but not the specific risk statement, leaving it without an owner.",
+      "case_headline": "AE-23 hands third party to AE-14, but AE-14's controls don't show ownership of the specific third party slice.",
+      "transferred_summary": "AE-23's handoff description routes the third party risk to AE-14 as the receiving entity.",
+      "coverage_summary": "AE-14's control library covers the third party category at a framework level but not the specific risk statement transferred.",
+      "pointing_at": "the embedded third party control inside AE-14's process that should test the transferred slice."
     },
     {
       "task": 3,
       "manual_requirement": "Make audit-entity risk ownership explicit",
       "focal_entity_id": "AE-23",
-      "focal_entity_name": "Sanctions Screening",
+      "focal_entity_name": "AE-23",
       "cross_entity_partner_id": null,
       "risk_category": "Reputational",
       "specific_risk_ids": [
@@ -131,13 +155,17 @@
       "evidence_layer": "control",
       "evidence_quote": "\u201cReputational risk is monitored at the program level.\u201d",
       "classification": "likely coverage gap",
-      "reasoning": "Sanctions Screening hands off reputational at the program level; the receiving controls are framework/oversight only, not the embedded-process control."
+      "reasoning": "AE-23 hands off reputational at the program level; the receiving controls are framework/oversight only, not the embedded-process control.",
+      "case_headline": "AE-23 pushes reputational up to a program-level audit, leaving the hands-on reputational control inside its own process unowned.",
+      "transferred_summary": "AE-23 relies on a program/functional audit for reputational oversight rather than testing it inside its process.",
+      "coverage_summary": "The program side provides framework and monitoring for reputational, not the embedded-process control that runs inside AE-23.",
+      "pointing_at": "the embedded reputational control step inside AE-23's own workflow."
     },
     {
       "task": 1,
       "manual_requirement": "Make audit-entity risk ownership explicit",
       "focal_entity_id": "AE-23",
-      "focal_entity_name": "Sanctions Screening",
+      "focal_entity_name": "AE-23",
       "cross_entity_partner_id": null,
       "risk_category": "Market",
       "specific_risk_ids": [
@@ -150,13 +178,17 @@
       "evidence_layer": "entity_prose",
       "evidence_quote": "\u201cMarket risk is monitored at the program level.\u201d",
       "classification": "documentation issue",
-      "reasoning": "Manual requires explicit ownership; Sanctions Screening documents the handoff in prose but does not state which register carries market risk."
+      "reasoning": "Manual requires explicit ownership; AE-23 documents the handoff in prose but does not state which register carries market risk.",
+      "case_headline": "",
+      "transferred_summary": "",
+      "coverage_summary": "",
+      "pointing_at": ""
     },
     {
       "task": 2,
       "manual_requirement": "Create a single coverage view / assurance map",
       "focal_entity_id": "AE-23",
-      "focal_entity_name": "Sanctions Screening",
+      "focal_entity_name": "AE-23",
       "cross_entity_partner_id": null,
       "risk_category": "Third Party",
       "specific_risk_ids": [
@@ -169,13 +201,17 @@
       "evidence_layer": "category_summary",
       "evidence_quote": "\u201cThird Party risk is monitored at the program level.\u201d",
       "classification": "documentation issue",
-      "reasoning": "Sanctions Screening describes a third party handoff, but the residual rating is still applied with no acknowledgment of partial retention."
+      "reasoning": "AE-23 describes a third party handoff, but the residual rating is still applied with no acknowledgment of partial retention.",
+      "case_headline": "",
+      "transferred_summary": "",
+      "coverage_summary": "",
+      "pointing_at": ""
     },
     {
       "task": 4,
       "manual_requirement": "Strengthen handoff hygiene to match reliance sufficiency",
       "focal_entity_id": "AE-23",
-      "focal_entity_name": "Sanctions Screening",
+      "focal_entity_name": "AE-23",
       "cross_entity_partner_id": null,
       "risk_category": "Third Party",
       "specific_risk_ids": [
@@ -188,51 +224,63 @@
       "evidence_layer": "entity_prose",
       "evidence_quote": "\u201cThird Party risk is monitored at the program level.\u201d",
       "classification": "documentation issue",
-      "reasoning": "Sanctions Screening's overview describes activity that should generate third party controls; the library is silent on that process's KPA."
+      "reasoning": "AE-23's overview describes activity that should generate third party controls; the library is silent on that process's KPA.",
+      "case_headline": "",
+      "transferred_summary": "",
+      "coverage_summary": "",
+      "pointing_at": ""
     },
     {
       "task": 5,
-      "manual_requirement": "Strengthen handoff hygiene to match reliance sufficiency",
+      "manual_requirement": "Explicitly address the coarse-handoff failure mode",
       "focal_entity_id": "AE-32",
-      "focal_entity_name": "Cybersecurity",
-      "cross_entity_partner_id": "AE-15",
-      "risk_category": "Funding & Liquidity",
+      "focal_entity_name": "AE-32",
+      "cross_entity_partner_id": "AE-9",
+      "risk_category": "Reputational",
       "specific_risk_ids": [
-        "SR-615",
-        "SR-738"
+        "SR-818",
+        "SR-465"
       ],
       "kpa_ids": [
-        "KPA-302"
+        "KPA-759"
       ],
       "evidence_layer": "control",
-      "evidence_quote": "\u201cFunding & Liquidity risk is monitored at the program level.\u201d",
-      "classification": "documentation issue",
-      "reasoning": "Asset Management's controls cover the funding & liquidity risk Cybersecurity handed off."
+      "evidence_quote": "\u201cReputational risk is monitored at the program level.\u201d",
+      "classification": "likely coverage gap",
+      "reasoning": "AE-32 transfers the reputational slice to AE-9; AE-9's control library covers the category but not the specific risk statement, leaving it without an owner.",
+      "case_headline": "AE-32 hands reputational to AE-9, but AE-9's controls don't show ownership of the specific reputational slice.",
+      "transferred_summary": "AE-32's handoff description routes the reputational risk to AE-9 as the receiving entity.",
+      "coverage_summary": "AE-9's control library covers the reputational category at a framework level but not the specific risk statement transferred.",
+      "pointing_at": "the embedded reputational control inside AE-9's process that should test the transferred slice."
     },
     {
       "task": 3,
-      "manual_requirement": "Create a single coverage view / assurance map",
+      "manual_requirement": "Explicitly address the coarse-handoff failure mode",
       "focal_entity_id": "AE-32",
-      "focal_entity_name": "Cybersecurity",
+      "focal_entity_name": "AE-32",
       "cross_entity_partner_id": null,
-      "risk_category": "Funding & Liquidity",
+      "risk_category": "External Fraud",
       "specific_risk_ids": [
-        "SR-391",
-        "SR-622"
+        "SR-253",
+        "SR-464"
       ],
       "kpa_ids": [
-        "KPA-772"
+        "KPA-641"
       ],
       "evidence_layer": "control",
-      "evidence_quote": "\u201cFunding & Liquidity risk is monitored at the program level.\u201d",
-      "classification": "likely coverage gap",
-      "reasoning": "Cybersecurity hands off funding & liquidity at the program level; the receiving controls are framework/oversight only, not the embedded-process control."
+      "evidence_quote": "\u201cExternal Fraud risk is monitored at the program level.\u201d",
+      "classification": "documentation issue",
+      "reasoning": "AE-32's embedded external fraud controls align with the program-level handoff.",
+      "case_headline": "AE-32 pushes external fraud up to a program-level audit, leaving the hands-on external fraud control inside its own process unowned.",
+      "transferred_summary": "AE-32 relies on a program/functional audit for external fraud oversight rather than testing it inside its process.",
+      "coverage_summary": "The program side provides framework and monitoring for external fraud, not the embedded-process control that runs inside AE-32.",
+      "pointing_at": "the embedded external fraud control step inside AE-32's own workflow."
     },
     {
       "task": 1,
       "manual_requirement": "Require attribute-level handoff documentation",
       "focal_entity_id": "AE-32",
-      "focal_entity_name": "Cybersecurity",
+      "focal_entity_name": "AE-32",
       "cross_entity_partner_id": null,
       "risk_category": "Funding & Liquidity",
       "specific_risk_ids": [
@@ -244,14 +292,18 @@
       ],
       "evidence_layer": "entity_prose",
       "evidence_quote": "\u201cFunding & Liquidity risk is monitored at the program level.\u201d",
-      "classification": "likely coverage gap",
-      "reasoning": "Manual requires explicit ownership; Cybersecurity documents the handoff in prose but does not state which register carries funding & liquidity risk."
+      "classification": "conforms",
+      "reasoning": "Manual requires explicit ownership; AE-32 documents the handoff in prose but does not state which register carries funding & liquidity risk.",
+      "case_headline": "",
+      "transferred_summary": "",
+      "coverage_summary": "",
+      "pointing_at": ""
     },
     {
       "task": 2,
       "manual_requirement": "Strengthen handoff hygiene to match reliance sufficiency",
       "focal_entity_id": "AE-32",
-      "focal_entity_name": "Cybersecurity",
+      "focal_entity_name": "AE-32",
       "cross_entity_partner_id": null,
       "risk_category": "Financial Reporting",
       "specific_risk_ids": [
@@ -264,13 +316,17 @@
       "evidence_layer": "category_summary",
       "evidence_quote": "\u201cFinancial Reporting risk is monitored at the program level.\u201d",
       "classification": "documentation issue",
-      "reasoning": "Cybersecurity describes a financial reporting handoff, but the residual rating is still applied with no acknowledgment of partial retention."
+      "reasoning": "AE-32 describes a financial reporting handoff, but the residual rating is still applied with no acknowledgment of partial retention.",
+      "case_headline": "",
+      "transferred_summary": "",
+      "coverage_summary": "",
+      "pointing_at": ""
     },
     {
       "task": 4,
       "manual_requirement": "Require attribute-level handoff documentation",
       "focal_entity_id": "AE-32",
-      "focal_entity_name": "Cybersecurity",
+      "focal_entity_name": "AE-32",
       "cross_entity_partner_id": null,
       "risk_category": "Country",
       "specific_risk_ids": [
@@ -283,14 +339,18 @@
       "evidence_layer": "entity_prose",
       "evidence_quote": "\u201cCountry risk is monitored at the program level.\u201d",
       "classification": "documentation issue",
-      "reasoning": "Cybersecurity's overview describes activity that should generate country controls; the library is silent on that process's KPA."
+      "reasoning": "AE-32's overview describes activity that should generate country controls; the library is silent on that process's KPA.",
+      "case_headline": "",
+      "transferred_summary": "",
+      "coverage_summary": "",
+      "pointing_at": ""
     },
     {
       "task": 5,
       "manual_requirement": "Make audit-entity risk ownership explicit",
       "focal_entity_id": "AE-35",
-      "focal_entity_name": "Application Development",
-      "cross_entity_partner_id": "AE-1",
+      "focal_entity_name": "AE-35",
+      "cross_entity_partner_id": "AE-22",
       "risk_category": "Country",
       "specific_risk_ids": [
         "SR-915",
@@ -302,13 +362,17 @@
       "evidence_layer": "control",
       "evidence_quote": "\u201cCountry risk is monitored at the program level.\u201d",
       "classification": "documentation issue",
-      "reasoning": "Consumer Lending's controls cover the country risk Application Development handed off."
+      "reasoning": "AE-22's controls cover the country risk AE-35 handed off.",
+      "case_headline": "AE-35 hands country to AE-22, but AE-22's controls don't show ownership of the specific country slice.",
+      "transferred_summary": "AE-35's handoff description routes the country risk to AE-22 as the receiving entity.",
+      "coverage_summary": "AE-22's control library covers the country category at a framework level but not the specific risk statement transferred.",
+      "pointing_at": "the embedded country control inside AE-22's process that should test the transferred slice."
     },
     {
       "task": 3,
       "manual_requirement": "Create a single coverage view / assurance map",
       "focal_entity_id": "AE-35",
-      "focal_entity_name": "Application Development",
+      "focal_entity_name": "AE-35",
       "cross_entity_partner_id": null,
       "risk_category": "Credit",
       "specific_risk_ids": [
@@ -321,13 +385,17 @@
       "evidence_layer": "control",
       "evidence_quote": "\u201cCredit risk is monitored at the program level.\u201d",
       "classification": "likely coverage gap",
-      "reasoning": "Application Development hands off credit at the program level; the receiving controls are framework/oversight only, not the embedded-process control."
+      "reasoning": "AE-35 hands off credit at the program level; the receiving controls are framework/oversight only, not the embedded-process control.",
+      "case_headline": "AE-35 pushes credit up to a program-level audit, leaving the hands-on credit control inside its own process unowned.",
+      "transferred_summary": "AE-35 relies on a program/functional audit for credit oversight rather than testing it inside its process.",
+      "coverage_summary": "The program side provides framework and monitoring for credit, not the embedded-process control that runs inside AE-35.",
+      "pointing_at": "the embedded credit control step inside AE-35's own workflow."
     },
     {
       "task": 1,
       "manual_requirement": "Create a single coverage view / assurance map",
       "focal_entity_id": "AE-35",
-      "focal_entity_name": "Application Development",
+      "focal_entity_name": "AE-35",
       "cross_entity_partner_id": null,
       "risk_category": "Country",
       "specific_risk_ids": [
@@ -340,13 +408,17 @@
       "evidence_layer": "control",
       "evidence_quote": "\u201cCountry risk is monitored at the program level.\u201d",
       "classification": "documentation issue",
-      "reasoning": "Manual requires explicit ownership; Application Development documents the handoff in prose but does not state which register carries country risk."
+      "reasoning": "Manual requires explicit ownership; AE-35 documents the handoff in prose but does not state which register carries country risk.",
+      "case_headline": "",
+      "transferred_summary": "",
+      "coverage_summary": "",
+      "pointing_at": ""
     },
     {
       "task": 2,
       "manual_requirement": "Make audit-entity risk ownership explicit",
       "focal_entity_id": "AE-35",
-      "focal_entity_name": "Application Development",
+      "focal_entity_name": "AE-35",
       "cross_entity_partner_id": null,
       "risk_category": "Country",
       "specific_risk_ids": [
@@ -359,13 +431,17 @@
       "evidence_layer": "category_summary",
       "evidence_quote": "\u201cCountry risk is monitored at the program level.\u201d",
       "classification": "likely coverage gap",
-      "reasoning": "Application Development describes a country handoff, but the residual rating is still applied with no acknowledgment of partial retention."
+      "reasoning": "AE-35 describes a country handoff, but the residual rating is still applied with no acknowledgment of partial retention.",
+      "case_headline": "",
+      "transferred_summary": "",
+      "coverage_summary": "",
+      "pointing_at": ""
     },
     {
       "task": 4,
       "manual_requirement": "Require attribute-level handoff documentation",
       "focal_entity_id": "AE-35",
-      "focal_entity_name": "Application Development",
+      "focal_entity_name": "AE-35",
       "cross_entity_partner_id": null,
       "risk_category": "Reputational",
       "specific_risk_ids": [
@@ -378,7 +454,11 @@
       "evidence_layer": "entity_prose",
       "evidence_quote": "\u201cReputational risk is monitored at the program level.\u201d",
       "classification": "conforms",
-      "reasoning": "Application Development's overview describes activity that should generate reputational controls; the library is silent on that process's KPA."
+      "reasoning": "AE-35's overview describes activity that should generate reputational controls; the library is silent on that process's KPA.",
+      "case_headline": "",
+      "transferred_summary": "",
+      "coverage_summary": "",
+      "pointing_at": ""
     }
   ],
   "ranked_summary": {
@@ -386,7 +466,7 @@
       {
         "focal_entity_id": "AE-11",
         "confidence": "high",
-        "summary": "Trade Finance hands off a risk slice that the receiver does not fully cover.",
+        "summary": "AE-11 hands off a risk slice that the receiver does not fully cover.",
         "specific_risk_ids": [
           "SR-243",
           "SR-448"
@@ -395,7 +475,7 @@
       {
         "focal_entity_id": "AE-11",
         "confidence": "medium",
-        "summary": "Trade Finance hands off a risk slice that the receiver does not fully cover.",
+        "summary": "AE-11 hands off a risk slice that the receiver does not fully cover.",
         "specific_risk_ids": [
           "SR-774",
           "SR-687"
@@ -404,7 +484,7 @@
       {
         "focal_entity_id": "AE-23",
         "confidence": "high",
-        "summary": "Sanctions Screening hands off a risk slice that the receiver does not fully cover.",
+        "summary": "AE-23 hands off a risk slice that the receiver does not fully cover.",
         "specific_risk_ids": [
           "SR-861",
           "SR-406"

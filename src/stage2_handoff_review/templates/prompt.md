@@ -85,7 +85,11 @@ Emit exactly one top-level JSON code block matching this schema. No text outside
       "evidence_quote": "quoted text from the relevant field(s)",
       "classification": "conforms | documentation issue | likely coverage gap",
       "reasoning": "1-3 sentences",
-      "cross_entity_partner_id": "AE-nnn for Task 5, else null"
+      "cross_entity_partner_id": "AE-nnn for Task 5, else null",
+      "case_headline": "one plain sentence stating this entity's specific gap (Task 3 & 5)",
+      "transferred_summary": "1-2 sentences: what this entity actually handed off, in its own terms (Task 3 & 5)",
+      "coverage_summary": "1-2 sentences: what the receiving/program side actually does for it, and why that is not the embedded control needed (Task 3 & 5)",
+      "pointing_at": "1 sentence naming the specific embedded control / risk slice left unowned (Task 3 & 5)"
     }}
   ],
   "ranked_summary": {{
@@ -122,3 +126,4 @@ Notes on filling the schema:
 - `cross_entity_partner_id` is required and non-null for Task 5 findings; null otherwise.
 - Quote exact text in `evidence_quote` where possible. Truncate long quotes but preserve identifying phrasing.
 - Produce findings only for entities listed in the focal section above.
+- **Narrative fields (`case_headline`, `transferred_summary`, `coverage_summary`, `pointing_at`)** are required for **Task 3 and Task 5** findings and may be empty strings for Tasks 1/2/4. Write them as plain prose **specific to this entity and its handoff** — name the actual entities, channels, and risk slice from the evidence; do **not** restate the risk category generically. These are read by non-technical auditors as the headline story; `evidence_quote`, `specific_risk_ids`, and `kpa_ids` remain the supporting evidence behind them. Ground every narrative claim in the same evidence you cite (handoff description, control/quote, risk statements) — do not introduce facts not present in the payload.
