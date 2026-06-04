@@ -12,8 +12,10 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from src.pipeline import DEFAULT_INPUT, DEFAULT_PLAN, OUTPUT_DIR, run
+from src.stage1_filter import collapse_duplicate_entities
 from src.stage6_edges import build_master_edges
-from src.stage2_handoff_review.summarize_findings import _by_manual_requirement
+from src.stage2_handoff_review.summarize_findings import _by_requirement
+from src.utils.columns import col
 from src.utils.standardization import normalize_policy_id, split_multi
 
 
@@ -100,12 +102,15 @@ class CoverageTests(unittest.TestCase):
             self.assertTrue(set(flags["Priority"]).issubset({"HIGH", "MEDIUM", "LOW"}))
 
     def test_output_workbooks_exist(self) -> None:
-        for name in (
-            "layer1_output.xlsx",
-            "edge_derivation_output.xlsx",
-            "layer2_coverage_matrix.xlsx",
+        # The pipeline date-stamps every workbook (e.g. layer1_output_YYYYMMDD.xlsx),
+        # so match the dated form rather than a bare name.
+        import glob
+        for base in (
+            "layer1_output",
+            "edge_derivation_output",
+            "layer2_coverage_matrix",
         ):
-            self.assertTrue((OUTPUT_DIR / name).exists(), f"missing {name}")
+            self.assertTrue(glob.glob(str(OUTPUT_DIR / f"{base}_*.xlsx")), f"missing {base}_*.xlsx")
 
 
 class ManualRequirementRollupTests(unittest.TestCase):
@@ -126,27 +131,64 @@ class ManualRequirementRollupTests(unittest.TestCase):
         )
 
     def test_groups_and_counts(self) -> None:
-        out = _by_manual_requirement(self._frame(), self.GAP)
+        out = _by_requirement(self._frame(), self.GAP)
         self.assertEqual(len(out), 3)
-        row = out[out["manual_requirement"] == "Make ownership explicit"].iloc[0]
+        row = out[out["requirement"] == "Make ownership explicit"].iloc[0]
         self.assertEqual(int(row["finding_count"]), 2)
         self.assertEqual(int(row["gap_count"]), 1)
         self.assertEqual(int(row["entity_count"]), 2)
 
     def test_blank_rolls_into_none(self) -> None:
-        out = _by_manual_requirement(self._frame(), self.GAP)
-        self.assertIn("(none)", set(out["manual_requirement"]))
-        self.assertNotIn("", set(out["manual_requirement"]))
+        out = _by_requirement(self._frame(), self.GAP)
+        self.assertIn("(none)", set(out["requirement"]))
+        self.assertNotIn("", set(out["requirement"]))
 
     def test_sorted_by_gap_then_finding_count(self) -> None:
-        out = _by_manual_requirement(self._frame(), self.GAP)
+        out = _by_requirement(self._frame(), self.GAP)
         # Highest gap_count first; ties broken by finding_count desc.
-        self.assertEqual(out.iloc[0]["manual_requirement"], "Make ownership explicit")
+        self.assertEqual(out.iloc[0]["requirement"], "Make ownership explicit")
 
     def test_empty_input_returns_typed_columns(self) -> None:
-        out = _by_manual_requirement(pd.DataFrame(), self.GAP)
+        out = _by_requirement(pd.DataFrame(), self.GAP)
         self.assertEqual(len(out), 0)
         self.assertIn("gap_count", out.columns)
+
+
+class CollapseDuplicateEntitiesTests(unittest.TestCase):
+    ID = col("entity_id")
+    BU = col("business_unit")
+
+    def _frame(self) -> pd.DataFrame:
+        # AE-1 spans two business units (two rows differing only by BU); AE-2 single row.
+        return pd.DataFrame(
+            [
+                {self.ID: "AE-1", self.BU: "Retail Bank", "Audit Leader": "Chen", "Compliance Residual Risk": "High"},
+                {self.ID: "AE-1", self.BU: "Commercial Bank", "Audit Leader": "Chen", "Compliance Residual Risk": "High"},
+                {self.ID: "AE-2", self.BU: "Markets", "Audit Leader": "Patel", "Compliance Residual Risk": "Low"},
+            ]
+        )
+
+    def test_collapses_multi_bu_into_one_row(self) -> None:
+        out, dup, conflicts = collapse_duplicate_entities(self._frame())
+        self.assertEqual(len(out), 2)
+        self.assertEqual(dup, 1)
+        self.assertEqual(conflicts, [])
+        ae1 = out[out[self.ID] == "AE-1"].iloc[0]
+        self.assertEqual(ae1[self.BU], "Retail Bank; Commercial Bank")
+        self.assertEqual(ae1["Audit Leader"], "Chen")  # non-BU field preserved
+
+    def test_no_duplicates_is_passthrough(self) -> None:
+        df = self._frame().drop_duplicates(subset=self.ID)
+        out, dup, conflicts = collapse_duplicate_entities(df)
+        self.assertEqual(len(out), len(df))
+        self.assertEqual(dup, 0)
+        self.assertEqual(conflicts, [])
+
+    def test_conflicting_rating_is_flagged(self) -> None:
+        df = self._frame()
+        df.loc[1, "Compliance Residual Risk"] = "Critical"  # AE-1's two rows now disagree
+        out, dup, conflicts = collapse_duplicate_entities(df)
+        self.assertEqual(conflicts, ["AE-1"])
 
 
 if __name__ == "__main__":

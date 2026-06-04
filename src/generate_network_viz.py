@@ -318,8 +318,16 @@ def build_network_data(dfs):
             cat_lookup[key] = str(r["Handoff Category"])
         all_cats = sorted(set(cat_lookup.values()))
 
-    cov_idx = dfs["coverage"].set_index("Audit Entity ID")
-    dep_idx = dfs["dep_profile"].set_index("Audit Entity ID")
+    # Defensive: drop any duplicate columns or duplicate Audit Entity ID rows
+    # before indexing, so cov_idx.loc[eid] / dep_idx.loc[eid] always return a
+    # single Series. The pipeline now collapses multi-BU duplicates upstream;
+    # this guard keeps a stray duplicate from ever crashing the render.
+    def _clean_index(df):
+        df = df.loc[:, ~df.columns.duplicated()]
+        df = df.drop_duplicates(subset="Audit Entity ID")
+        return df.set_index("Audit Entity ID")
+    cov_idx = _clean_index(dfs["coverage"])
+    dep_idx = _clean_index(dfs["dep_profile"])
 
     node_list = []
     for _, row in dfs["nodes"].iterrows():
